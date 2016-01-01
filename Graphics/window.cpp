@@ -66,4 +66,7 @@ bool Window::init()
 void Window::getMousePos(double* x, double* y)
 {
 	glfwGetCursorPos(m_Window, x, y);
+	*y = m_Height - *y;
+	//*x = *x * 16 / 1280;
+	//*y = 9 - (*y * 9 / 720);
 }

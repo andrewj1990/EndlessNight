@@ -28,3 +28,10 @@ void Layer::render()
 	m_Renderer->flush();
 
 }
+
+void Layer::setProjectionMatrix(const glm::mat4 projectionMatrix)
+{
+	m_Shader->bind();
+	m_Shader->setUniformMat4("pr_matrix", projectionMatrix);
+	m_Shader->unbind();
+}

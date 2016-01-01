@@ -14,6 +14,7 @@ public:
 
 	void add(Renderable* renderable);
 	void render();
+	void setProjectionMatrix(const glm::mat4 projectionMatrix);
 
 private:
 	BatchRenderer* m_Renderer;

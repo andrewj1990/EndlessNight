@@ -5,20 +5,21 @@
 #include "buffers/indexbuffer.h"
 #include "renderable.h"
 
-#define RENDERER_MAX_SPRITES	100000
-#define RENDERER_VERTEX_SIZE	sizeof(VertexData)
-#define RENDERER_SPRITE_SIZE	RENDERER_VERTEX_SIZE * 4
-#define RENDERER_BUFFER_SIZE	RENDERER_SPRITE_SIZE * RENDERER_MAX_SPRITES
-#define RENDERER_INDICES_SIZE	RENDERER_MAX_SPRITES * 6
-
-#define SHADER_VERTEX_INDEX	0
-#define SHADER_COLOUR_INDEX 1
-
 struct VertexData
 {
 	glm::vec3 vertex;
 	unsigned int colour;
 };
+
+const int RENDERER_MAX_SPRITES = 100000;
+const int RENDERER_VERTEX_SIZE = sizeof(VertexData);
+const int RENDERER_SPRITE_SIZE = RENDERER_VERTEX_SIZE * 4;
+const int RENDERER_BUFFER_SIZE = RENDERER_SPRITE_SIZE * RENDERER_MAX_SPRITES;
+const int RENDERER_INDICES_SIZE = RENDERER_MAX_SPRITES * 6;
+
+constexpr int SHADER_VERTEX_INDEX = 0;
+constexpr int SHADER_COLOUR_INDEX = 1;
+
 
 class BatchRenderer
 {

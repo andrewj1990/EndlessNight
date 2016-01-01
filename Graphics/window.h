@@ -16,6 +16,9 @@ public:
 	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	void getMousePos(double* x, double* y);
 
+	inline const int& getWidth() const { return m_Width; }
+	inline const int& getHeight() const { return m_Height; }
+
 private:
 	bool init();
 
