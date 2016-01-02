@@ -3,7 +3,7 @@
 Particle::Particle(int x, int y, Layer& layer)
 	: m_NumParticles(10), m_Life(0), m_Destroy(false), m_Layer(layer)
 {
-
+	m_TotalLife = 50 + (rand() % 50);
 	dx = 0.5f - (rand() % 1000 / 1000.0f);
 	dy = 0.5f - (rand() % 1000 / 1000.0f);
 	//dx /= 100.0f;
@@ -12,11 +12,16 @@ Particle::Particle(int x, int y, Layer& layer)
 	m_Layer.add(m_Sprite);
 }
 
+Particle::~Particle()
+{
+	delete m_Sprite;
+}
+
 void Particle::update()
 {
 	// set to destroy particle if life runs out
 	m_Life++;
-	if (++m_Life > 10000)
+	if (++m_Life > m_TotalLife)
 	{
 		m_Destroy = true;
 	}

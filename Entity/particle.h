@@ -13,11 +13,12 @@ public:
 
 	void update();
 	void render();
-	inline bool shouldDestroy() const;
+	bool shouldDestroy() const;
 
 private:
 	int m_NumParticles;
 	int m_Life;
+	int m_TotalLife;
 	float dx;
 	float dy;
 

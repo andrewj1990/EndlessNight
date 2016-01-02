@@ -4,6 +4,7 @@ Level::Level(Window& window)
 	: m_Window(window)
 {
 	m_Shader = new Shader("Shaders/vertShader.vert", "Shaders/fragShader.frag");
+
 	ox = m_Window.getWidth();
 	oy = m_Window.getHeight();
 	glm::mat4 ortho = glm::ortho(0.0f, ox, 0.0f, oy, -1.0f, 1.0f);
@@ -17,58 +18,28 @@ Level::Level(Window& window)
 		}
 	}
 
-	m_Player = new Player(5, 5, *m_Layer);
+	Platform* platform = new Platform(*m_Layer, m_Window.getWidth() / 3, 0, m_Window.getWidth() / 2, m_Window.getHeight() / 2);
+	m_Platforms.push_back(platform);
+	m_Player = new Player(m_Window.getWidth() / 2, m_Window.getHeight() / 2, *m_Layer, *this, m_Window);
 }
 
 void Level::update()
 {
-	double x, y;
-	m_Window.getMousePos(&x, &y);
+	m_Player->update();
 
-	//std::cout << "x : " << x << ", y : " << y << "\n";
-
-	//m_Player->update(x, y);
-	if (glfwGetKey(m_Window.getWindow(), GLFW_KEY_UP))
+	// check if any particles need to be deleted
+	for (auto i = m_Particles.begin(); i != m_Particles.end(); )
 	{
-		glm::mat4 ortho = glm::ortho(0.0f, ++ox, 0.0f, ++oy, -1.0f, 1.0f);
-		m_Layer->setProjectionMatrix(ortho);
-	}
-
-	if (glfwGetKey(m_Window.getWindow(), GLFW_KEY_DOWN))
-	{
-		glm::mat4 ortho = glm::ortho(0.0f, --ox, 0.0f, --oy, -1.0f, 1.0f);
-		m_Layer->setProjectionMatrix(ortho);
-	}
-
-
-	if (glfwGetKey(m_Window.getWindow(), GLFW_KEY_SPACE))
-	{
-		m_Particles.push_back(new Particle(x, y, *m_Layer));
-	}
-
-	for (Particle* particle : m_Particles)
-	{
-		particle->update();
-	}
-
-	double speed = 5;
-	x = m_Player->getX();
-	y = m_Player->getY();
-	if (glfwGetKey(m_Window.getWindow(), GLFW_KEY_W)) {
-		m_Player->update(0, speed);
-		m_Particles.push_back(new Particle(x, y, *m_Layer));
-	}
-	if (glfwGetKey(m_Window.getWindow(), GLFW_KEY_S)) {
-		m_Player->update(0, -speed);
-		m_Particles.push_back(new Particle(x, y, *m_Layer));
-	}
-	if (glfwGetKey(m_Window.getWindow(), GLFW_KEY_A)) {
-		m_Player->update(-speed, 0);
-		m_Particles.push_back(new Particle(x, y, *m_Layer));
-	}
-	if (glfwGetKey(m_Window.getWindow(), GLFW_KEY_D)) {
-		m_Player->update(speed, 0);
-		m_Particles.push_back(new Particle(x, y, *m_Layer));
+		if ((*i)->shouldDestroy())
+		{
+			delete *i;
+			i = m_Particles.erase(i);
+		}
+		else
+		{
+			(*i)->update();
+			++i;
+		}
 	}
 
 }
@@ -79,4 +50,9 @@ void Level::render()
 	m_Window.getMousePos(&x, &y);
 	m_Shader->setUniform2f("light_pos", glm::vec2(x * 16 / 1280, 9 - (y * 9 / 720)));
 	m_Layer->render();
+}
+
+void Level::addParticle(Particle* particle)
+{
+	m_Particles.push_back(particle);
 }

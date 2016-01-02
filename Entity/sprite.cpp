@@ -7,6 +7,11 @@ Sprite::Sprite(const glm::vec3 & position, const glm::vec2 size, const glm::vec4
 
 }
 
+Sprite::~Sprite()
+{
+
+}
+
 void Sprite::setPosition(double x, double y)
 {
 	m_Position.x = x;

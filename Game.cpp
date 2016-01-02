@@ -18,7 +18,7 @@
 
 int main(int argc, char** argv)
 {
-	Window window(1280, 720, "First Night");
+	Window window(1280, 720, "Endless Night");
 	Level level(window);
 
 	Timer time;
