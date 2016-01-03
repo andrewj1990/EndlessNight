@@ -12,6 +12,7 @@
 #include "../Entity/player.h"
 #include "../Entity/particle.h"
 #include "../Entity/platform.h"
+#include "zone.h"
 
 class Player;
 
@@ -24,8 +25,12 @@ public:
 	void render();
 
 	void addParticle(Particle* particle);
+	void addPlatform(Platform* platform);
+
+	void moveCamera(const float& x, const float& y);
 	
 	std::vector<Platform*>& getPlatforms() { return m_Platforms; }
+
 
 private:
 	Layer* m_Layer;
@@ -34,10 +39,10 @@ private:
 
 	Player* m_Player;
 
+	glm::mat4 m_Ortho;
+	glm::vec2 m_Offset;
+
 	std::vector<Particle*> m_Particles;
 	std::vector<Platform*> m_Platforms;
-
-	float ox;
-	float oy;
 
 };

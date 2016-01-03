@@ -9,11 +9,14 @@ class Particle
 {
 public:
 	Particle(int x, int y, Layer& layer);
+	Particle(int x, int y, Layer& layer, glm::vec4 colour);
 	~Particle();
 
 	void update();
 	void render();
 	bool shouldDestroy() const;
+
+	Sprite* getSprite() const { return m_Sprite; }
 
 private:
 	int m_NumParticles;

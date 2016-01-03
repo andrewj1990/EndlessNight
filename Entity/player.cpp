@@ -36,21 +36,25 @@ void Player::update()
 	double dx = 0;
 	double dy = 0;
 
-	if (glfwGetKey(m_Window.getWindow(), GLFW_KEY_W)) {
+	if (glfwGetKey(m_Window.getWindow(), GLFW_KEY_SPACE)) {
 		dy += m_PlayerSpeed + 10;
+		//m_Level.addParticle(new Particle(m_X, m_Y, m_Layer));
 	}
 	if (glfwGetKey(m_Window.getWindow(), GLFW_KEY_S)) {
 		dy -= m_PlayerSpeed;
+		//m_Level.addParticle(new Particle(m_X, m_Y, m_Layer));
 	}
 	if (glfwGetKey(m_Window.getWindow(), GLFW_KEY_A)) {
 		dx -= m_PlayerSpeed;
+		//m_Level.addParticle(new Particle(m_X, m_Y, m_Layer));
 	}
 	if (glfwGetKey(m_Window.getWindow(), GLFW_KEY_D)) {
 		dx += m_PlayerSpeed;
+		//m_Level.addParticle(new Particle(m_X, m_Y, m_Layer));
 	}
 
 	// gravity
-	if (!collision(m_X, m_Y - m_PlayerSpeed))
+	if (!collision(m_X, m_Y - m_PlayerSpeed, true, dx, dy))
 	{
 		move(0, -m_PlayerSpeed);
 	}
@@ -86,11 +90,17 @@ void Player::move(const double& dx, const double& dy)
 		sprite->addDirection(dx, dy);
 	}
 
+	/*glGetUniformMat4()
+	glm::mat4 t = glm::translate(ortho, glm::vec3(1, 0, 0));
+	m_Layer->setProjectionMatrix(t);
+*/
+	m_Level.moveCamera(dx, dy);
+
 	m_X += dx;
 	m_Y += dy;
 }
 
-bool Player::collision(int x, int y)
+bool Player::collision(int x, int y, bool spawn_particles, int dx, int dy)
 {
 	// look at all the platforms in the level and check for any collisions
 	std::vector<Platform*>& platforms = m_Level.getPlatforms();
@@ -104,8 +114,16 @@ bool Player::collision(int x, int y)
 		//std::cout << "x : " << x << ", y : " << y << " | px : " << px << ", py : " << py
 		//	<< ", px2 : " << (px + w) << ", py2 : " << (py + h) << "\n";
 		
-		if (x < px + w && x > px && y > py && y < py + h) return true;
-		
+		if (x < px + w && x > px && y > py && y < py + h)
+		{
+			// get the platforms colour and spawn particles according to the platfroms colour
+			if (spawn_particles && (dx != 0 || dy != 0))
+			{
+				glm::vec4 colour = platform->getSprite()->getColour();
+				m_Level.addParticle(new Particle(m_X, m_Y, m_Layer, colour));
+			}
+			return true;
+		}
 	}
 
 	return false;

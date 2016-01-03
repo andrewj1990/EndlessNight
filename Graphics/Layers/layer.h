@@ -13,8 +13,11 @@ public:
 	Layer(Shader* shader, const glm::mat4 projectionMatrix);
 
 	void add(Renderable* renderable);
+	void remove(Renderable* ptr);
+
 	void render();
 	void setProjectionMatrix(const glm::mat4 projectionMatrix);
+	glm::mat4 getProjectionMatrix() { return m_ProjectionMatrix; }
 
 private:
 	BatchRenderer* m_Renderer;

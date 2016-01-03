@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Graphics/renderable.h"
+#include <iostream>
 
 class Sprite : public Renderable
 {
@@ -10,6 +11,8 @@ public:
 
 	void setPosition(double x, double y);
 	void addDirection(double dx, double dy);
+
+	void fade();
 
 private:
 

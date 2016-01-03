@@ -13,6 +13,8 @@ public:
 	void add(Layer& layer);
 	void render();
 
+	Sprite* getSprite() { return m_Sprite; }
+
 	const int& getX() { return m_X; }
 	const int& getY() { return m_Y; }
 	const int& getWidth() { return m_Width; }
