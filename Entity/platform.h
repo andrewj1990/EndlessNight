@@ -1,31 +1,17 @@
 #pragma once
 
 #include <cstdlib>
-#include "../Entity/sprite.h"
-#include "../Graphics/Layers/layer.h"
+#include "entity.h"
 
-class Platform
+class Platform : public Entity
 {
 public:
-	Platform(Layer& layer);
-	Platform(Layer& layer, int x, int y, int width, int height);
-
-	void add(Layer& layer);
-	void render();
-
-	Sprite* getSprite() { return m_Sprite; }
-
-	const int& getX() { return m_X; }
-	const int& getY() { return m_Y; }
-	const int& getWidth() { return m_Width; }
-	const int& getHeight() { return m_Height; }
+	Platform(Level& level);
+	Platform(int x, int y, int width, int height, Level& level);
+	
+	void update() override;
+	void render() override;
 
 private:
-	int m_X;
-	int m_Y;
-	int m_Width;
-	int m_Height;
-
-	Sprite* m_Sprite;
 
 };

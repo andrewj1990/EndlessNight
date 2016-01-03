@@ -17,7 +17,7 @@ public:
 	void init();
 
 private:
-	std::vector<Platform*> m_Platforms;
+	std::vector<Entity*> m_Platforms;
 	const Window& m_Window;
 	Layer& m_Layer;
 	Level& m_Level;

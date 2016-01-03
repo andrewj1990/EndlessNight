@@ -1,31 +1,22 @@
 #pragma once
 
 #include <vector>
-#include "sprite.h"
-#include "../Graphics/Layers/layer.h"
 #include <ctime>
+#include "entity.h"
 
-class Particle
+class Particle : public Entity
 {
 public:
-	Particle(int x, int y, Layer& layer);
-	Particle(int x, int y, Layer& layer, glm::vec4 colour);
-	~Particle();
+	Particle(int x, int y, Level& level);
+	Particle(int x, int y, Level& level, glm::vec4 colour);
+	~Particle() override;
 
-	void update();
-	void render();
-	bool shouldDestroy() const;
-
-	Sprite* getSprite() const { return m_Sprite; }
+	void update() override;
+	void render() override;
 
 private:
 	int m_NumParticles;
-	int m_Life;
 	int m_TotalLife;
 	float dx;
 	float dy;
-
-	bool m_Destroy;
-	Sprite* m_Sprite;
-	Layer& m_Layer;
 };

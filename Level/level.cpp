@@ -17,9 +17,10 @@ Level::Level(Window& window)
 	//	}
 	//}
 
-	Platform* platform = new Platform(*m_Layer, m_Window.getWidth() / 3, 0, m_Window.getWidth() / 2, m_Window.getHeight() / 2);
+	Platform* platform = new Platform(m_Window.getWidth() / 3, 0, m_Window.getWidth() / 2, m_Window.getHeight() / 2, *this);
 	m_Platforms.push_back(platform);
-	m_Player = new Player(m_Window.getWidth() / 2, m_Window.getHeight() / 2, *m_Layer, *this, m_Window);
+	m_Player = new Player(m_Window.getWidth() / 2, m_Window.getHeight() / 2, *this);
+
 	Zone* zone1 = new Zone(1280, 720, m_Window, *m_Layer, *this);
 	Zone* zone2 = new Zone(1280, 0, m_Window, *m_Layer, *this);
 	Zone* zone3 = new Zone(1280, -720, m_Window, *m_Layer, *this);
@@ -42,9 +43,11 @@ void Level::update()
 	x += m_Offset.x;
 	y += m_Offset.y;
 	//std::cout << "x : " << x << ", y : " << y << "\n";
+
+
 	if (glfwGetMouseButton(m_Window.getWindow(), GLFW_MOUSE_BUTTON_1))
 	{
-		m_Particles.push_back(new Particle(x, y, *m_Layer));
+		m_Particles.push_back(new Particle(x, y, *this));
 	}
 
 	m_Player->update();
@@ -70,18 +73,17 @@ void Level::update()
 
 void Level::render()
 {
-	double x, y;
-	m_Window.getMousePos(&x, &y);
-	m_Shader->setUniform2f("light_pos", glm::vec2(x * 16 / 1280, 9 - (y * 9 / 720)));
+	m_Shader->setUniform2f("light_pos", glm::vec2(m_Player->getX(), m_Player->getY()));
 	m_Layer->render();
 }
 
-void Level::addParticle(Particle* particle)
+void Level::addParticle(Entity* particle)
 {
 	m_Particles.push_back(particle);
+//	m_Layer->add(particle->getSprite());
 }
 
-void Level::addPlatform(Platform* platform)
+void Level::addPlatform(Entity* platform)
 {
 	m_Platforms.push_back(platform);
 }

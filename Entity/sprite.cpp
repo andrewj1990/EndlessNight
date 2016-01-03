@@ -26,6 +26,5 @@ void Sprite::addDirection(double dx, double dy)
 
 void Sprite::fade()
 {
-//	std::cout << m_Colour.w << "\n";
 	m_Colour.w -= 0.01f;
 }

@@ -1,7 +1,7 @@
 #include "player.h"
 
-Player::Player(const int& x, const int& y, Layer& layer, Level& level, Window& window)
-	: m_X(x), m_Y(y), m_Layer(layer), m_Level(level), m_Window(window)
+Player::Player(const int& x, const int& y, Level& level)
+	: Entity(x, y, level)
 {
 	m_PlayerSpeed = 3.0;
 	init();
@@ -25,9 +25,10 @@ void Player::init()
 	m_PlayerBody.push_back(new Sprite(glm::vec3(m_X + 0.5f, m_Y - leg_height, 0), glm::vec2(leg_width, leg_height), glm::vec4(1, 0, 0, 1)));
 	m_PlayerBody.push_back(new Sprite(glm::vec3(m_X + body_width - leg_width - 0.5f, m_Y - leg_height, 0), glm::vec2(leg_width, leg_height), glm::vec4(1, 1, 0, 1)));
 
+	// add all the body pieces to the level
 	for (Sprite* sprite : m_PlayerBody)
 	{
-		m_Layer.add(sprite);
+		addToLevel(sprite);
 	}
 }
 
@@ -36,21 +37,19 @@ void Player::update()
 	double dx = 0;
 	double dy = 0;
 
-	if (glfwGetKey(m_Window.getWindow(), GLFW_KEY_SPACE)) {
+	if (glfwGetKey(m_Level.getWindow(), GLFW_KEY_SPACE)) {
 		dy += m_PlayerSpeed + 10;
-		//m_Level.addParticle(new Particle(m_X, m_Y, m_Layer));
+		m_Level.addParticle(new Particle(m_X, m_Y, m_Level));
+		m_Level.addParticle(new Particle(m_X, m_Y, m_Level));
 	}
-	if (glfwGetKey(m_Window.getWindow(), GLFW_KEY_S)) {
+	if (glfwGetKey(m_Level.getWindow(), GLFW_KEY_S)) {
 		dy -= m_PlayerSpeed;
-		//m_Level.addParticle(new Particle(m_X, m_Y, m_Layer));
 	}
-	if (glfwGetKey(m_Window.getWindow(), GLFW_KEY_A)) {
+	if (glfwGetKey(m_Level.getWindow(), GLFW_KEY_A)) {
 		dx -= m_PlayerSpeed;
-		//m_Level.addParticle(new Particle(m_X, m_Y, m_Layer));
 	}
-	if (glfwGetKey(m_Window.getWindow(), GLFW_KEY_D)) {
+	if (glfwGetKey(m_Level.getWindow(), GLFW_KEY_D)) {
 		dx += m_PlayerSpeed;
-		//m_Level.addParticle(new Particle(m_X, m_Y, m_Layer));
 	}
 
 	// gravity
@@ -83,17 +82,11 @@ void Player::move(const double& dx, const double& dy)
 {
 	if (dx == 0 && dy == 0) return;
 
-	m_Level.addParticle(new Particle(m_X, m_Y, m_Layer));
-	m_Level.addParticle(new Particle(m_X, m_Y, m_Layer));
 	for (Sprite* sprite : m_PlayerBody)
 	{
 		sprite->addDirection(dx, dy);
 	}
 
-	/*glGetUniformMat4()
-	glm::mat4 t = glm::translate(ortho, glm::vec3(1, 0, 0));
-	m_Layer->setProjectionMatrix(t);
-*/
 	m_Level.moveCamera(dx, dy);
 
 	m_X += dx;
@@ -103,24 +96,22 @@ void Player::move(const double& dx, const double& dy)
 bool Player::collision(int x, int y, bool spawn_particles, int dx, int dy)
 {
 	// look at all the platforms in the level and check for any collisions
-	std::vector<Platform*>& platforms = m_Level.getPlatforms();
-	for (Platform* platform : platforms)
+	std::vector<Entity*>& platforms = m_Level.getPlatforms();
+	for (Entity* platform : platforms)
 	{
 		const int& px = platform->getX();
 		const int& py = platform->getY();
 		const int& w = platform->getWidth();
 		const int& h = platform->getHeight();
 
-		//std::cout << "x : " << x << ", y : " << y << " | px : " << px << ", py : " << py
-		//	<< ", px2 : " << (px + w) << ", py2 : " << (py + h) << "\n";
-		
 		if (x < px + w && x > px && y > py && y < py + h)
 		{
-			// get the platforms colour and spawn particles according to the platfroms colour
+			// if player is on a platform and moving
+			// get the platforms colour and spawn particles the same colour as the platfroms
 			if (spawn_particles && (dx != 0 || dy != 0))
 			{
 				glm::vec4 colour = platform->getSprite()->getColour();
-				m_Level.addParticle(new Particle(m_X, m_Y, m_Layer, colour));
+				m_Level.addParticle(new Particle(m_X, m_Y, m_Level, colour));
 			}
 			return true;
 		}

@@ -3,6 +3,7 @@
 #include "../Graphics/renderable.h"
 #include "../Graphics/Layers/layer.h"
 #include "../Graphics/window.h"
+#include "entity.h"
 #include "sprite.h"
 #include "../Level/level.h"
 #include <vector>
@@ -10,16 +11,13 @@
 
 class Level;
 
-class Player
+class Player : public Entity
 {
 public:
-	Player(const int& x, const int& y, Layer& layer, Level& level, Window& window);
+	Player(const int& x, const int& y, Level& level);
 
-	void update();
-	void render();
-
-	int getX() const { return m_X; }
-	int getY() const { return m_Y; }
+	void update() override;
+	void render() override;
 
 private:
 	void init();
@@ -27,13 +25,7 @@ private:
 	bool collision(int x, int y, bool spawn_particle = false, int dx = 0, int dy = 0);
 
 private:
-	int m_X;
-	int m_Y;
 	double m_PlayerSpeed;
-	Layer& m_Layer;
-	Level& m_Level;
-	Window& m_Window;
 
-	Sprite* player_body;
 	std::vector<Sprite*> m_PlayerBody;
 };

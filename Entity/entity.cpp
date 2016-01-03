@@ -1,9 +1,8 @@
 #include "entity.h"
 
-Entity::Entity(int x, int y, Level& level, Layer& layer, Window& window)
-	: m_X(x), m_Y(y), m_Level(level), m_Layer(layer), m_Window(window)
+Entity::Entity(int x, int y, Level& level)
+	: m_X(x), m_Y(y), m_Destroy(false), m_Level(level)
 {
-
 }
 
 void Entity::update()
@@ -16,3 +15,7 @@ void Entity::render()
 
 }
 
+void Entity::addToLevel(Renderable* renderable)
+{
+	m_Level.getLayer().add(renderable);
+}

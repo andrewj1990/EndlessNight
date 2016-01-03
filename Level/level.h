@@ -6,9 +6,11 @@
 #include <glm/gtx/transform.hpp>
 #include "../Graphics/window.h"
 
+#include <vector>
 #include <algorithm>
 #include <iterator>
 
+#include "../Entity/entity.h"
 #include "../Entity/player.h"
 #include "../Entity/particle.h"
 #include "../Entity/platform.h"
@@ -24,12 +26,15 @@ public:
 	void update();
 	void render();
 
-	void addParticle(Particle* particle);
-	void addPlatform(Platform* platform);
+	void addParticle(Entity* particle);
+	void addPlatform(Entity* platform);
+
 
 	void moveCamera(const float& x, const float& y);
 	
-	std::vector<Platform*>& getPlatforms() { return m_Platforms; }
+	GLFWwindow* getWindow() { return m_Window.getWindow(); }
+	Layer& getLayer() { return *m_Layer; }
+	std::vector<Entity*>& getPlatforms() { return m_Platforms; }
 
 
 private:
@@ -42,7 +47,7 @@ private:
 	glm::mat4 m_Ortho;
 	glm::vec2 m_Offset;
 
-	std::vector<Particle*> m_Particles;
-	std::vector<Platform*> m_Platforms;
+	std::vector<Entity*> m_Particles;
+	std::vector<Entity*> m_Platforms;
 
 };

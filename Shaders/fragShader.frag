@@ -16,7 +16,7 @@ void main()
 {
 	// as the distance increases from light_pos, the length increases
 	// causing intensity to become smaller
-	float intensity = 1.0 / length(fs_in.position.xy - light_pos);
-//	color = fs_in.color * intensity;
-	color = fs_in.color;
+	float intensity = 100.0 / length(fs_in.position.xy - light_pos);
+	color = fs_in.color * intensity;
+	//color = fs_in.color;
 }
