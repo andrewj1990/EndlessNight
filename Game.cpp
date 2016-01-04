@@ -44,7 +44,7 @@ int main(int argc, char** argv)
 		++frames;
 		if (time.elapsed() - timer > 1.0f) {
 			timer += 1.0f;
-			printf("%d fps , ups : %d \n", frames, updates);
+			printf("%d fps , %d ups\n", frames, updates);
 			frames = 0;
 			updates = 0;
 		}

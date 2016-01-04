@@ -28,14 +28,15 @@ public:
 
 	void addParticle(Entity* particle);
 	void addPlatform(Entity* platform);
-
+	void addProjectile(Entity* projectile);
 
 	void moveCamera(const float& x, const float& y);
 	
 	GLFWwindow* getWindow() { return m_Window.getWindow(); }
+	Window& getWindowClass() { return m_Window; }
 	Layer& getLayer() { return *m_Layer; }
 	std::vector<Entity*>& getPlatforms() { return m_Platforms; }
-
+	glm::vec2& getOffset() { return m_Offset; }
 
 private:
 	Layer* m_Layer;
@@ -49,5 +50,6 @@ private:
 
 	std::vector<Entity*> m_Particles;
 	std::vector<Entity*> m_Platforms;
+	std::vector<Entity*> m_Projectiles;
 
 };

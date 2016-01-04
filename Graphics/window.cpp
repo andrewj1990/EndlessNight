@@ -63,10 +63,10 @@ bool Window::init()
 	return true;
 }
 
-void Window::getMousePos(double* x, double* y)
+void Window::getMousePos(double& x, double& y)
 {
-	glfwGetCursorPos(m_Window, x, y);
-	*y = m_Height - *y;
+	glfwGetCursorPos(m_Window, &x, &y);
+	y = m_Height - y;
 	//*x = *x * 16 / 1280;
 	//*y = 9 - (*y * 9 / 720);
 }

@@ -3,6 +3,8 @@
 Player::Player(const int& x, const int& y, Level& level)
 	: Entity(x, y, level)
 {
+	m_Width = 10;
+	m_Height = 10;
 	m_PlayerSpeed = 3.0;
 	init();
 }
@@ -18,12 +20,13 @@ void Player::init()
 	const float& arm_width = 1.0f * scale;
 	const float& head_size = 2.0f * scale;
 
-	m_PlayerBody.push_back(new Sprite(glm::vec3(m_X, m_Y, 0), glm::vec2(body_width, body_height), glm::vec4(1, 0, 1, 0.5)));
-	m_PlayerBody.push_back(new Sprite(glm::vec3(m_X - arm_width, m_Y + body_height - arm_height, 0), glm::vec2(arm_width, arm_height), glm::vec4(1, 0, 0, 1)));
-	m_PlayerBody.push_back(new Sprite(glm::vec3(m_X + body_width, m_Y + body_height - arm_height, 0), glm::vec2(arm_width, arm_height), glm::vec4(1, 0, 0, 1)));
-	m_PlayerBody.push_back(new Sprite(glm::vec3(m_X + body_width / 4.0f, m_Y + body_height, 0), glm::vec2(head_size, head_size), glm::vec4(1, 0, 0, 1)));
-	m_PlayerBody.push_back(new Sprite(glm::vec3(m_X + 0.5f, m_Y - leg_height, 0), glm::vec2(leg_width, leg_height), glm::vec4(1, 0, 0, 1)));
-	m_PlayerBody.push_back(new Sprite(glm::vec3(m_X + body_width - leg_width - 0.5f, m_Y - leg_height, 0), glm::vec2(leg_width, leg_height), glm::vec4(1, 1, 0, 1)));
+	m_PlayerBody.push_back(new Sprite(glm::vec3(m_X, m_Y, 0), glm::vec2(10, 10), glm::vec4(0.4f, 0.3f, 0.7f, 1)));
+	//m_PlayerBody.push_back(new Sprite(glm::vec3(m_X, m_Y, 0), glm::vec2(body_width, body_height), glm::vec4(1, 0, 1, 0.5)));
+	//m_PlayerBody.push_back(new Sprite(glm::vec3(m_X - arm_width, m_Y + body_height - arm_height, 0), glm::vec2(arm_width, arm_height), glm::vec4(1, 0, 0, 1)));
+	//m_PlayerBody.push_back(new Sprite(glm::vec3(m_X + body_width, m_Y + body_height - arm_height, 0), glm::vec2(arm_width, arm_height), glm::vec4(1, 0, 0, 1)));
+	//m_PlayerBody.push_back(new Sprite(glm::vec3(m_X + body_width / 4.0f, m_Y + body_height, 0), glm::vec2(head_size, head_size), glm::vec4(1, 0, 0, 1)));
+	//m_PlayerBody.push_back(new Sprite(glm::vec3(m_X + 0.5f, m_Y - leg_height, 0), glm::vec2(leg_width, leg_height), glm::vec4(1, 0, 0, 1)));
+	//m_PlayerBody.push_back(new Sprite(glm::vec3(m_X + body_width - leg_width - 0.5f, m_Y - leg_height, 0), glm::vec2(leg_width, leg_height), glm::vec4(1, 1, 0, 1)));
 
 	// add all the body pieces to the level
 	for (Sprite* sprite : m_PlayerBody)
@@ -35,12 +38,12 @@ void Player::init()
 void Player::update()
 {
 	double dx = 0;
-	double dy = 0;
+	double dy = -m_PlayerSpeed;
 
 	if (glfwGetKey(m_Level.getWindow(), GLFW_KEY_SPACE)) {
 		dy += m_PlayerSpeed + 10;
-		m_Level.addParticle(new Particle(m_X, m_Y, m_Level));
-		m_Level.addParticle(new Particle(m_X, m_Y, m_Level));
+		m_Level.addParticle(new Particle(getCenterX(), getCenterY(), m_Level));
+		m_Level.addParticle(new Particle(getCenterX(), getCenterY(), m_Level));
 	}
 	if (glfwGetKey(m_Level.getWindow(), GLFW_KEY_S)) {
 		dy -= m_PlayerSpeed;
@@ -52,10 +55,15 @@ void Player::update()
 		dx += m_PlayerSpeed;
 	}
 
-	// gravity
-	if (!collision(m_X, m_Y - m_PlayerSpeed, true, dx, dy))
+	if (glfwGetMouseButton(m_Level.getWindow(), GLFW_MOUSE_BUTTON_1))
 	{
-		move(0, -m_PlayerSpeed);
+		m_Level.addProjectile(new Projectile(getCenterX(), getCenterY(), m_Level));
+	}
+
+	// gravity
+	if (!collision(m_X, m_Y - 1, true, dx, 0))
+	{
+		move(0, -1);
 	}
 
 	// check if the next tile is not collidable and move
@@ -111,7 +119,7 @@ bool Player::collision(int x, int y, bool spawn_particles, int dx, int dy)
 			if (spawn_particles && (dx != 0 || dy != 0))
 			{
 				glm::vec4 colour = platform->getSprite()->getColour();
-				m_Level.addParticle(new Particle(m_X, m_Y, m_Level, colour));
+				m_Level.addParticle(new Particle(getCenterX(), m_Y, m_Level, colour));
 			}
 			return true;
 		}

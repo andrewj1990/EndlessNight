@@ -8,8 +8,7 @@
 #include "../Level/level.h"
 #include <vector>
 #include "platform.h"
-
-class Level;
+#include "Projectiles\projectile.h"
 
 class Player : public Entity
 {

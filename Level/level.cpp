@@ -21,6 +21,10 @@ Level::Level(Window& window)
 	m_Platforms.push_back(platform);
 	m_Player = new Player(m_Window.getWidth() / 2, m_Window.getHeight() / 2, *this);
 
+	int center = 0;
+	int center_width = 1280;
+	int center_height = 720;
+
 	Zone* zone1 = new Zone(1280, 720, m_Window, *m_Layer, *this);
 	Zone* zone2 = new Zone(1280, 0, m_Window, *m_Layer, *this);
 	Zone* zone3 = new Zone(1280, -720, m_Window, *m_Layer, *this);
@@ -39,7 +43,7 @@ void Level::update()
 	
 	double x;
 	double y;
-	m_Window.getMousePos(&x, &y);
+	m_Window.getMousePos(x, y);
 	x += m_Offset.x;
 	y += m_Offset.y;
 	//std::cout << "x : " << x << ", y : " << y << "\n";
@@ -69,11 +73,16 @@ void Level::update()
 		}
 	}
 
+	for (Entity* projectile : m_Projectiles)
+	{
+		projectile->update();
+	}
+
 }
 
 void Level::render()
 {
-	m_Shader->setUniform2f("light_pos", glm::vec2(m_Player->getX(), m_Player->getY()));
+	m_Shader->setUniform2f("light_pos", glm::vec2(m_Player->getCenterX(), m_Player->getCenterY()));
 	m_Layer->render();
 }
 
@@ -86,6 +95,11 @@ void Level::addParticle(Entity* particle)
 void Level::addPlatform(Entity* platform)
 {
 	m_Platforms.push_back(platform);
+}
+
+void Level::addProjectile(Entity* projectile)
+{
+	m_Projectiles.push_back(projectile);
 }
 
 void Level::moveCamera(const float& x, const float& y)
