@@ -16,6 +16,8 @@ public:
 	void remove(Renderable* ptr);
 
 	void render();
+	void render(std::vector<Renderable*> renderables);
+
 	void setProjectionMatrix(const glm::mat4 projectionMatrix);
 	glm::mat4 getProjectionMatrix() { return m_ProjectionMatrix; }
 

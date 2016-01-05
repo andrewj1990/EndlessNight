@@ -12,7 +12,7 @@ public:
 	void setPosition(double x, double y);
 	void addDirection(double dx, double dy);
 
-	void fade();
+	void fade(float fadeAmount = 0.01f);
 
 private:
 

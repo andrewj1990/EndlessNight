@@ -34,13 +34,10 @@ Level::Level(Window& window)
 	Zone* zone7 = new Zone(-1280, 720, m_Window, *m_Layer, *this);
 	Zone* zone8 = new Zone(-1280, 0, m_Window, *m_Layer, *this);
 	Zone* zone9 = new Zone(-1280, -720, m_Window, *m_Layer, *this);
-
 }
 
-float i = 0;
 void Level::update()
 {
-	
 	double x;
 	double y;
 	m_Window.getMousePos(x, y);
@@ -49,10 +46,10 @@ void Level::update()
 	//std::cout << "x : " << x << ", y : " << y << "\n";
 
 
-	if (glfwGetMouseButton(m_Window.getWindow(), GLFW_MOUSE_BUTTON_1))
-	{
-		m_Particles.push_back(new Particle(x, y, *this));
-	}
+	//if (glfwGetMouseButton(m_Window.getWindow(), GLFW_MOUSE_BUTTON_1))
+	//{
+	//	m_Particles.push_back(new Particle(x, y, *this));
+	//}
 
 	m_Player->update();
 //	std::cout << "particles : " << m_Particles.size() << "\n";
@@ -73,11 +70,24 @@ void Level::update()
 		}
 	}
 
-	for (Entity* projectile : m_Projectiles)
+	for (auto i = m_Projectiles.begin(); i != m_Projectiles.end(); )
 	{
-		projectile->update();
+		if ((*i)->shouldDestroy())
+		{
+			m_Layer->remove((*i)->getSprite());
+			delete *i;
+			i = m_Projectiles.erase(i);
+		}
+		else
+		{
+			(*i)->update();
+			++i;
+		}
 	}
 
+
+//	std::cout << "number of platforms : " << m_Platforms.size() << "\n";
+//	std::cout << "number of projectiles : " << m_Projectiles.size() << "\n";
 }
 
 void Level::render()

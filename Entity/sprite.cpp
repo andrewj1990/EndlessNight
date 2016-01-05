@@ -24,7 +24,7 @@ void Sprite::addDirection(double dx, double dy)
 	m_Position.y += dy;
 }
 
-void Sprite::fade()
+void Sprite::fade(float fadeAmount)
 {
-	m_Colour.w -= 0.01f;
+	m_Colour.w -= fadeAmount;
 }
