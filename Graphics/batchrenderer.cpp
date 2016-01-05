@@ -102,7 +102,7 @@ void BatchRenderer::end()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-// draw the elects in the buffer
+// draw the quads in the buffer
 void BatchRenderer::flush()
 {
 	glBindVertexArray(m_VAO);

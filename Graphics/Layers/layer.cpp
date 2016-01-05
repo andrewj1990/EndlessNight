@@ -25,16 +25,6 @@ void Layer::remove(Renderable* ptr)
 			return;
 		}
 	}
-
-//	for (int i = 0; i < m_Renderables.size(); ++i)
-//	{
-//		if (m_Renderables[i] == ptr)
-//		{
-////			delete *i;
-//			m_Renderables.erase(m_Renderables.begin() + i);
-//			return;
-//		}
-//	}
 }
 
 void Layer::render()
@@ -50,7 +40,21 @@ void Layer::render()
 	}
 	m_Renderer->end();
 	m_Renderer->flush();
+}
 
+void Layer::render(std::vector<Renderable*> renderables)
+{
+	m_Shader->bind();
+
+	//	std::cout << "renderables size : " << m_Renderables.size() << "\n";
+
+	m_Renderer->begin();
+	for (Renderable* renderable : renderables)
+	{
+		m_Renderer->submit(*renderable);
+	}
+	m_Renderer->end();
+	m_Renderer->flush();
 }
 
 void Layer::setProjectionMatrix(const glm::mat4 projectionMatrix)
@@ -59,3 +63,4 @@ void Layer::setProjectionMatrix(const glm::mat4 projectionMatrix)
 	m_Shader->setUniformMat4("pr_matrix", projectionMatrix);
 	m_Shader->unbind();
 }
+

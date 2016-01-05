@@ -9,6 +9,7 @@ public:
 
 	void update() override;
 	void render() override;
+	bool collision(std::vector<Entity*> objects) override;
 
 private:
 	void calcProjectileDir();
@@ -18,5 +19,7 @@ private:
 	float m_Dy;
 
 	float m_ProjectileSpeed;
+
+	int m_Life;
 
 };

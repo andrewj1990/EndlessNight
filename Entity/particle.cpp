@@ -10,12 +10,12 @@ Particle::Particle(int x, int y, Level& level)
 	addToLevel(m_Sprite);
 }
 
-Particle::Particle(int x, int y, Level& level, glm::vec4 colour)
+Particle::Particle(int x, int y, Level& level, glm::vec4 colour, float size)
 	: Entity(x, y, level)
 {
 	dx = 0.5f - (rand() % 1000 / 1000.0f);
 	dy = 0.5f - (rand() % 1000 / 1000.0f);
-	m_Sprite = new Sprite(glm::vec3(x, y, 0), glm::vec2(2.0f, 2.0f), colour);
+	m_Sprite = new Sprite(glm::vec3(x, y, 0), glm::vec2(size, size), colour);
 	addToLevel(m_Sprite);
 }
 

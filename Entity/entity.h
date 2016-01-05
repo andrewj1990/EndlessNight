@@ -1,6 +1,7 @@
 #pragma once
 
 #include "sprite.h"
+#include <vector>
 
 class Level;
 
@@ -13,9 +14,10 @@ public:
 	virtual void update();
 	virtual void render();
 
+	virtual bool collision(std::vector<Entity*> objects);
 
-	inline const int& getX() const { return m_X; }
-	inline const int& getY() const { return m_Y; }
+	inline const float& getX() const { return m_X; }
+	inline const float& getY() const { return m_Y; }
 	inline const int getCenterX() const { return (m_X + (m_Width / 2)); }
 	inline const int getCenterY() const { return (m_Y + (m_Height / 2)); }
 	inline const int& getWidth() const { return m_Width; }
@@ -28,8 +30,8 @@ protected:
 	void addToLevel(Renderable* renderable);
 
 protected:
-	int m_X;
-	int m_Y;
+	float m_X;
+	float m_Y;
 	int m_Width;
 	int m_Height;
 

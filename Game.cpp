@@ -18,10 +18,11 @@
 
 int main(int argc, char** argv)
 {
-	Window window(1280, 720, "Endless Night");
+	Window window(1280, 720, "Don't be square!");
 	Level level(window);
 
 	Timer time;
+	Timer time2;
 	float timer = 0;
 	int frames = 0;
 	int updates = 0;
@@ -37,6 +38,7 @@ int main(int argc, char** argv)
 			updateTimer += tick;
 		}
 
+		time2.reset();
 		level.render();
 
 		window.update();

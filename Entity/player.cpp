@@ -112,7 +112,10 @@ bool Player::collision(int x, int y, bool spawn_particles, int dx, int dy)
 		const int& w = platform->getWidth();
 		const int& h = platform->getHeight();
 
-		if (x < px + w && x > px && y > py && y < py + h)
+		if (x < px + w && x > px && y > py && y < py + h ||
+			x + m_Width < px + w && x + m_Width > px && y > py && y < py + h ||
+			x < px + w && x > px && y + m_Height > py && y + m_Height < py + h ||
+			x + m_Width < px + w && x + m_Width > px && y + m_Height > py && y + m_Height < py + h)
 		{
 			// if player is on a platform and moving
 			// get the platforms colour and spawn particles the same colour as the platfroms
