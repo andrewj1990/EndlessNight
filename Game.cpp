@@ -15,11 +15,17 @@
 #include "Graphics\Layers\layer.h"
 
 #include "Level\level.h"
+#include "Graphics\texture.h"
 
 int main(int argc, char** argv)
 {
+	FreeImage_Initialise();
 	Window window(1280, 720, "Don't be square!");
 	Level level(window);
+
+	glActiveTexture(GL_TEXTURE0);
+	Texture texture("test.png");
+	texture.bind();
 
 	Timer time;
 	Timer time2;
@@ -38,7 +44,6 @@ int main(int argc, char** argv)
 			updateTimer += tick;
 		}
 
-		time2.reset();
 		level.render();
 
 		window.update();

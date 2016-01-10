@@ -4,10 +4,12 @@
 #include <GL/glew.h>
 #include "buffers/indexbuffer.h"
 #include "renderable.h"
+#include <vector>
 
 struct VertexData
 {
 	glm::vec3 vertex;
+	glm::vec2 uv;
 	unsigned int colour;
 };
 
@@ -18,7 +20,8 @@ const int RENDERER_BUFFER_SIZE = RENDERER_SPRITE_SIZE * RENDERER_MAX_SPRITES;
 const int RENDERER_INDICES_SIZE = RENDERER_MAX_SPRITES * 6;
 
 constexpr int SHADER_VERTEX_INDEX = 0;
-constexpr int SHADER_COLOUR_INDEX = 1;
+constexpr int SHADER_UV_INDEX = 1;
+constexpr int SHADER_COLOUR_INDEX = 2;
 
 
 class BatchRenderer

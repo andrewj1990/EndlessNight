@@ -23,8 +23,11 @@ void BatchRenderer::init()
 	glBufferData(GL_ARRAY_BUFFER, RENDERER_BUFFER_SIZE, NULL, GL_DYNAMIC_DRAW);
 
 	glEnableVertexAttribArray(SHADER_VERTEX_INDEX);
+	glEnableVertexAttribArray(SHADER_UV_INDEX);
 	glEnableVertexAttribArray(SHADER_COLOUR_INDEX);
+
 	glVertexAttribPointer(SHADER_VERTEX_INDEX, 3, GL_FLOAT, GL_FALSE, RENDERER_VERTEX_SIZE, (const GLvoid*)0);
+	glVertexAttribPointer(SHADER_UV_INDEX, 2, GL_FLOAT, GL_FALSE, RENDERER_VERTEX_SIZE, (const GLvoid*)(offsetof(VertexData, VertexData::uv)));
 	glVertexAttribPointer(SHADER_COLOUR_INDEX, 4, GL_UNSIGNED_BYTE, GL_TRUE, RENDERER_VERTEX_SIZE, (const GLvoid*)(offsetof(VertexData, VertexData::colour)));
 
 	// unbind buffer object
@@ -68,6 +71,7 @@ void BatchRenderer::submit(const Renderable& renderable)
 	const glm::vec3& position = renderable.getPosition();
 	const glm::vec2& size = renderable.getSize();
 	const glm::vec4& colour = renderable.getColour();
+	const std::vector<glm::vec2>& uv = renderable.getUV();
 
 	int r = colour.x * 255;
 	int g = colour.y * 255;
@@ -77,18 +81,22 @@ void BatchRenderer::submit(const Renderable& renderable)
 	unsigned int color = a << 24 | b << 16 | g << 8 | r;
 
 	m_Buffer->vertex = position;
+	m_Buffer->uv = uv[0];
 	m_Buffer->colour = color;
 	++m_Buffer;
 
 	m_Buffer->vertex = glm::vec3(position.x, position.y + size.y, position.z);
+	m_Buffer->uv = uv[1];
 	m_Buffer->colour = color;
 	++m_Buffer;
 
 	m_Buffer->vertex = glm::vec3(position.x + size.x, position.y + size.y, position.z);
+	m_Buffer->uv = uv[2];
 	m_Buffer->colour = color;
 	++m_Buffer;
 
 	m_Buffer->vertex = glm::vec3(position.x + size.x, position.y, position.z);
+	m_Buffer->uv = uv[3];
 	m_Buffer->colour = color;
 	++m_Buffer;
 
