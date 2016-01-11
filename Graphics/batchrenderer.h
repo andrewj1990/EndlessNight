@@ -10,6 +10,7 @@ struct VertexData
 {
 	glm::vec3 vertex;
 	glm::vec2 uv;
+	float tid;
 	unsigned int colour;
 };
 
@@ -21,7 +22,8 @@ const int RENDERER_INDICES_SIZE = RENDERER_MAX_SPRITES * 6;
 
 constexpr int SHADER_VERTEX_INDEX = 0;
 constexpr int SHADER_UV_INDEX = 1;
-constexpr int SHADER_COLOUR_INDEX = 2;
+constexpr int SHADER_TID_INDEX = 2;
+constexpr int SHADER_COLOUR_INDEX = 3;
 
 
 class BatchRenderer
@@ -32,6 +34,8 @@ private:
 	VertexData* m_Buffer;
 	IndexBuffer* m_IBO;
 	GLsizei m_IndexCount;	
+
+	std::vector<GLuint> m_TextureSlots;
 
 public:
 	BatchRenderer();

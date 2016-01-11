@@ -20,6 +20,20 @@ void Shader::setUniform1f(GLuint location, float value)
 	glUniform1f(location, value);
 }
 
+void Shader::setUniform1fv(const char* name, int count, float* value)
+{
+	bind();
+	glUniform1fv(glGetUniformLocation(m_ProgramID, name), count, value);
+	unbind();
+}
+
+void Shader::setUniform1iv(const char* name, int count, int* value)
+{
+	bind();
+	glUniform1iv(glGetUniformLocation(m_ProgramID, name), count, value);
+	unbind();
+}
+
 void Shader::setUniform2f(const char* name, const glm::vec2& vector)
 {
 	bind();

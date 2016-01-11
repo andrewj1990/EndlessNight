@@ -20,6 +20,8 @@ void Player::init()
 	const float& arm_width = 1.0f * scale;
 	const float& head_size = 2.0f * scale;
 
+	//Texture* texture = new Texture("test.png");
+	//m_PlayerBody.push_back(new Sprite(glm::vec3(m_X, m_Y, 0), glm::vec2(10, 10), texture));
 	m_PlayerBody.push_back(new Sprite(glm::vec3(m_X, m_Y, 0), glm::vec2(10, 10), glm::vec4(0.4f, 0.3f, 0.7f, 1)));
 	//m_PlayerBody.push_back(new Sprite(glm::vec3(m_X, m_Y, 0), glm::vec2(body_width, body_height), glm::vec4(1, 0, 1, 0.5)));
 	//m_PlayerBody.push_back(new Sprite(glm::vec3(m_X - arm_width, m_Y + body_height - arm_height, 0), glm::vec2(arm_width, arm_height), glm::vec4(1, 0, 0, 1)));

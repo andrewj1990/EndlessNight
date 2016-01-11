@@ -18,6 +18,8 @@ public:
 	void unbind() const;
 
 	void setUniform1f(GLuint location, float value);
+	void setUniform1fv(const char* name, int count, float* value);
+	void setUniform1iv(const char* name, int count, int* value);
 	void setUniform2f(const char* name, const glm::vec2& vector);
 	void setUniformMat4(const char* name, const glm::mat4& matrix);
 

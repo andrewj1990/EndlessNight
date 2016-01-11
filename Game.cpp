@@ -1,4 +1,5 @@
 #include <iostream>
+#include "Utils\timer.h"
 #include "Utils\shader.h"
 #include "Graphics\batchrenderer.h"
 
@@ -10,7 +11,6 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
-#include "Utils\timer.h"
 #include "Graphics\window.h"
 #include "Graphics\Layers\layer.h"
 
@@ -22,9 +22,9 @@ int main(int argc, char** argv)
 	Window window(1280, 720, "Don't be square!");
 	Level level(window);
 
-	glActiveTexture(GL_TEXTURE0);
-	Texture texture("test.png");
-	texture.bind();
+	//glActiveTexture(GL_TEXTURE0);
+	//Texture texture("test.png");
+	//texture.bind();
 
 	Timer time;
 	Timer time2;

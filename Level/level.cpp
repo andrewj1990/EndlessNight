@@ -9,17 +9,34 @@ Level::Level(Window& window)
 	m_Ortho = glm::ortho(0.0f, 1280.0f, 0.0f, 720.0f, -1.0f, 1.0f);
 	m_Layer = new Layer(m_Shader, m_Ortho);
 
+	GLint texID[] = 
+	{
+		0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+	};
+
+	m_Shader->setUniform1iv("textures", 10, texID);
+
+	Texture* tex = new Texture("test.png");
+	Texture* tex2 = new Texture("test2.png");
+
+	//Sprite* sprite = new Sprite(glm::vec3(0, 0, 0), glm::vec2(100, 100), tex);
+	//m_Layer->add(sprite);
+	//Sprite* sprite2 = new Sprite(glm::vec3(100, 100, 0), glm::vec2(100, 100), tex2);
+	//m_Layer->add(sprite2);
+
 	//for (float i = 0; i < 3280; i += 60.0f)
 	//{
 	//	for (float j = 0; j < 720; j += 60.0f)
 	//	{
-	//		m_Layer->add(new Renderable(glm::vec3(i, j, 0), glm::vec2(50.0f, 50.0f), glm::vec4(0, 0, rand() % 1000 / 1000.0f, 1)));
+	//		m_Layer->add(new Sprite(glm::vec3(i, j, 0), glm::vec2(50.0f, 50.0f), rand() % 2 == 0 ? tex : tex2));
+	//		//m_Layer->add(new Renderable(glm::vec3(i, j, 0), glm::vec2(50.0f, 50.0f), glm::vec4(0, 0, rand() % 1000 / 1000.0f, 1)));
 	//	}
 	//}
 
 	Platform* platform = new Platform(m_Window.getWidth() / 3, 0, m_Window.getWidth() / 2, m_Window.getHeight() / 2, *this);
 	m_Platforms.push_back(platform);
 	m_Player = new Player(m_Window.getWidth() / 2, m_Window.getHeight() / 2, *this);
+
 
 	int center = 0;
 	int center_width = 1280;

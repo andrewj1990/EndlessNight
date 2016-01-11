@@ -2,6 +2,7 @@
 
 #include <glm/glm.hpp>
 #include <vector>
+#include "texture.h"
 
 //struct VertexData
 //{
@@ -17,6 +18,7 @@ protected:
 	glm::vec2 m_Size;
 	glm::vec4 m_Colour;
 	std::vector<glm::vec2> m_UV;
+	Texture* m_Texture;
 	
 protected:
 	Renderable()
@@ -35,6 +37,7 @@ public:
 	inline const glm::vec2& getSize() const { return m_Size; }
 	inline const glm::vec4& getColour() const { return m_Colour; }
 	inline const std::vector<glm::vec2>& getUV() const { return m_UV; }
+	inline const unsigned int getTID() const { return m_Texture == nullptr ? 0 : m_Texture->getTID(); }
 
 private:
 	void setUVDefaults()
