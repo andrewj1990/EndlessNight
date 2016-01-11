@@ -1,5 +1,4 @@
 #include <iostream>
-#include "Graphics\window.h"
 #include "Utils\shader.h"
 #include "Graphics\batchrenderer.h"
 
@@ -12,6 +11,7 @@
 #include <cstdlib>
 #include <ctime>
 #include "Utils\timer.h"
+#include "Graphics\window.h"
 #include "Graphics\Layers\layer.h"
 
 #include "Level\level.h"
@@ -19,7 +19,6 @@
 
 int main(int argc, char** argv)
 {
-	FreeImage_Initialise();
 	Window window(1280, 720, "Don't be square!");
 	Level level(window);
 

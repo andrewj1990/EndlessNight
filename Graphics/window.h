@@ -1,9 +1,9 @@
 #pragma once
 
+#include <FreeImage.h>
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 #include <iostream>
-
 
 class Window {
 public:

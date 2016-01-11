@@ -10,7 +10,8 @@ Window::Window(int width, int height, char* title)
 }
 
 Window::~Window()
-{
+{	FreeImage_Initialise();
+
 	glfwDestroyWindow(m_Window);
 	glfwTerminate();
 }
@@ -37,6 +38,8 @@ void Window::key_callback(GLFWwindow* window, int key, int scancode, int action,
 
 bool Window::init()
 {
+	FreeImage_Initialise();
+
 	if (!glfwInit()) {
 		return false;
 	}

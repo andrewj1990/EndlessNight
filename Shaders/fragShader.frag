@@ -22,5 +22,5 @@ void main()
 	//color = fs_in.color * intensity;		
 	//color = fs_in.color;
 	color = texture(tex, fs_in.uv);
-	//color = vec4(fs_in.uv.y,0,0,1);
+	//color = vec4(fs_in.uv.y,fs_in.uv.x,0,1);
 }

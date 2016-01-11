@@ -9,6 +9,7 @@
 #include <vector>
 #include <algorithm>
 #include <iterator>
+#include <iostream>
 
 #include "../Entity/entity.h"
 #include "../Entity/player.h"

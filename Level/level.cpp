@@ -116,7 +116,7 @@ void Level::moveCamera(const float& x, const float& y)
 {
 	m_Offset.x += x;
 	m_Offset.y += y;
-//	std::cout << "offsetX : " << m_Offset.x << ", offsetY : " << m_Offset.y << "\n";
+	std::cout << "offsetX : " << m_Offset.x << ", offsetY : " << m_Offset.y << "\n";
 
 	m_Ortho = glm::translate(m_Ortho, glm::vec3(-x, -y, 0));
 	m_Layer->setProjectionMatrix(m_Ortho);

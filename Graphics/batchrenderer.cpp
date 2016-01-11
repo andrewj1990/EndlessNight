@@ -117,12 +117,14 @@ void BatchRenderer::flush()
 	m_IBO->bind();
 
 	glEnable(GL_BLEND);
+	glEnable(GL_TEXTURE_2D);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
 	glDrawElements(GL_TRIANGLES, m_IndexCount, GL_UNSIGNED_INT, NULL);
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDisable(GL_BLEND);
+	glDisable(GL_TEXTURE_2D);
 
 	m_IBO->unbind();
 	glBindVertexArray(0);

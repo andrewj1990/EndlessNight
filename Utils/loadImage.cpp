@@ -29,6 +29,6 @@ BYTE* loadImage(const char* filename, unsigned int* width, unsigned int* height)
 	*width = FreeImage_GetWidth(dib);
 	*height = FreeImage_GetHeight(dib);
 
-	FreeImage_Unload(dib);
+	//FreeImage_Unload(dib);
 	return result;
 }
