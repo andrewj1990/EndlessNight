@@ -1,5 +1,7 @@
 #include "level.h"
+#include "../Graphics/label.h"
 
+Label* label = new Label("fps", 0, 0, glm::vec4(1,0,1,0.5));
 Level::Level(Window& window)
 	: m_Window(window)
 {
@@ -24,14 +26,16 @@ Level::Level(Window& window)
 	//Sprite* sprite2 = new Sprite(glm::vec3(100, 100, 0), glm::vec2(100, 100), tex2);
 	//m_Layer->add(sprite2);
 
-	//for (float i = 0; i < 3280; i += 60.0f)
-	//{
-	//	for (float j = 0; j < 720; j += 60.0f)
-	//	{
-	//		m_Layer->add(new Sprite(glm::vec3(i, j, 0), glm::vec2(50.0f, 50.0f), rand() % 2 == 0 ? tex : tex2));
-	//		//m_Layer->add(new Renderable(glm::vec3(i, j, 0), glm::vec2(50.0f, 50.0f), glm::vec4(0, 0, rand() % 1000 / 1000.0f, 1)));
-	//	}
-	//}
+	for (float i = 0; i < 3280; i += 60.0f)
+	{
+		for (float j = 0; j < 720; j += 60.0f)
+		{
+			m_Layer->add(new Sprite(glm::vec3(i, j, 0), glm::vec2(50.0f, 50.0f), rand() % 2 == 0 ? tex : tex2));
+			//m_Layer->add(new Renderable(glm::vec3(i, j, 0), glm::vec2(50.0f, 50.0f), glm::vec4(0, 0, rand() % 1000 / 1000.0f, 1)));
+		}
+	}
+
+	m_Layer->add(label);
 
 	Platform* platform = new Platform(m_Window.getWidth() / 3, 0, m_Window.getWidth() / 2, m_Window.getHeight() / 2, *this);
 	m_Platforms.push_back(platform);
@@ -101,6 +105,9 @@ void Level::update()
 			++i;
 		}
 	}
+
+
+	label->text = std::to_string(x) + ", " + std::to_string(y);
 
 
 //	std::cout << "number of platforms : " << m_Platforms.size() << "\n";

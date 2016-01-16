@@ -3,13 +3,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include "texture.h"
-
-//struct VertexData
-//{
-//	glm::vec3 vertex;
-//	//	vec4 colour;
-//	unsigned int colour;
-//};
+#include "batchrenderer.h"
 	
 class Renderable
 {
@@ -22,15 +16,21 @@ protected:
 	
 protected:
 	Renderable()
+		: m_Texture(nullptr)
 	{
 		setUVDefaults();
 	}
 
 public:
-	Renderable(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
-		: m_Position(position), m_Size(size), m_Colour(color)
+	Renderable(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color = glm::vec4(1,1,1,1))
+		: m_Position(position), m_Size(size), m_Colour(color), m_Texture(nullptr)
 	{	
 		setUVDefaults();
+	}
+
+	virtual void submit(BatchRenderer& renderer) const
+	{
+		renderer.submit(*this);
 	}
 
 	inline const glm::vec3& getPosition() const { return m_Position; }

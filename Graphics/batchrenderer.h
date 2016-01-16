@@ -3,8 +3,11 @@
 #include <cstddef>
 #include <GL/glew.h>
 #include "buffers/indexbuffer.h"
-#include "renderable.h"
 #include <vector>
+#include <glm\glm.hpp>
+#include <freetype-gl.h>
+
+class Renderable;
 
 struct VertexData
 {
@@ -37,11 +40,15 @@ private:
 
 	std::vector<GLuint> m_TextureSlots;
 
+	ftgl::texture_atlas_t* m_FTAtlas;
+	ftgl::texture_font_t* m_FTFont;
+
 public:
 	BatchRenderer();
 	~BatchRenderer();
 	void begin();
 	void submit(const Renderable& renderable);
+	void drawString(const std::string& text, const glm::vec3& position, const glm::vec4& colour);
 	void end();
 	void flush();
 
@@ -49,3 +56,5 @@ private:
 	void init();
 
 };
+
+#include "renderable.h"

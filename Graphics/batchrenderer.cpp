@@ -59,6 +59,12 @@ void BatchRenderer::init()
 	// unbind the vertex array object
 	glBindVertexArray(0);
 
+	m_FTAtlas = ftgl::texture_atlas_new(512, 512, 2);
+	m_FTFont = ftgl::texture_font_new_from_file(m_FTAtlas, 80, "LuckiestGuy.ttf");
+	//m_FTFont = ftgl::texture_font_new_from_file(m_FTAtlas, 20, "Arial.ttf");
+
+	ftgl::texture_glyph_t *glyph = texture_font_get_glyph(m_FTFont, 'A');
+
 }
 
 void BatchRenderer::begin()
@@ -105,15 +111,12 @@ void BatchRenderer::submit(const Renderable& renderable)
 		}
 
 	}
-	else
-	{
-		int r = colour.x * 255;
-		int g = colour.y * 255;
-		int b = colour.z * 255;
-		int a = colour.w * 255;
+	int r = colour.x * 255;
+	int g = colour.y * 255;
+	int b = colour.z * 255;
+	int a = colour.w * 255;
 
-		color = a << 24 | b << 16 | g << 8 | r;
-	}
+	color = a << 24 | b << 16 | g << 8 | r;
 
 	m_Buffer->vertex = position;
 	m_Buffer->uv = uv[0];
@@ -142,6 +145,99 @@ void BatchRenderer::submit(const Renderable& renderable)
 	m_IndexCount += 6;
 }
 
+void BatchRenderer::drawString(const std::string& text, const glm::vec3& position, const glm::vec4& colour)
+{
+	using namespace ftgl;
+
+	int r = colour.x * 255;
+	int g = colour.y * 255;
+	int b = colour.z * 255;
+	int a = colour.w * 255;
+
+	unsigned int color = a << 24 | b << 16 | g << 8 | r;
+
+	float ts = 0.0f;
+	bool found = false;
+
+	for (int i = 0; i < m_TextureSlots.size(); ++i)
+	{
+		if (m_TextureSlots[i] == m_FTAtlas->id)
+		{
+			ts = (float)(i + 1);
+			found = true;
+			break;
+		}
+	}
+
+	if (!found)
+	{
+		if (m_TextureSlots.size() >= 32)
+		{
+			end();
+			flush();
+			begin();
+		}
+		m_TextureSlots.push_back(m_FTAtlas->id);
+		ts = (float)(m_TextureSlots.size());
+	}
+
+	float x = position.x;
+
+	for (int i = 0; i < text.length(); i++)
+	{
+		char c = text.at(i);
+		texture_glyph_t* glyph = texture_font_get_glyph(m_FTFont, c);
+		
+		if (glyph != NULL)
+		{
+			if (i > 0)
+			{
+				float kerning = texture_glyph_get_kerning(glyph, text[i - 1]);
+				x += kerning;
+			}
+
+
+			float x0 = x + glyph->offset_x;
+			float y0 = position.y + glyph->offset_y;
+			float x1 = x0 + glyph->width;
+			float y1 = y0 - glyph->height;
+
+			float u0 = glyph->s0;
+			float v0 = glyph->t0;
+			float u1 = glyph->s1;
+			float v1 = glyph->t1;
+
+			m_Buffer->vertex = glm::vec3(x0, y0, 0);
+			m_Buffer->uv = glm::vec2(u0, v0);
+			m_Buffer->tid = ts;
+			m_Buffer->colour = color;
+			++m_Buffer;
+
+			m_Buffer->vertex = glm::vec3(x0, y1, 0);
+			m_Buffer->uv = glm::vec2(u0, v1);
+			m_Buffer->tid = ts;
+			m_Buffer->colour = color;
+			++m_Buffer;
+
+			m_Buffer->vertex = glm::vec3(x1, y1, 0);
+			m_Buffer->uv = glm::vec2(u1, v1);
+			m_Buffer->tid = ts;
+			m_Buffer->colour = color;
+			++m_Buffer;
+
+			m_Buffer->vertex = glm::vec3(x1, y0, 0);
+			m_Buffer->uv = glm::vec2(u1, v0);
+			m_Buffer->tid = ts;
+			m_Buffer->colour = color;
+			++m_Buffer;
+
+			m_IndexCount += 6;
+
+			x += glyph->advance_x;
+		}
+	}
+}
+
 void BatchRenderer::end()
 {
 	// unmap and unbind buffer
@@ -163,11 +259,11 @@ void BatchRenderer::flush()
 	m_IBO->bind();
 
 	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glDrawElements(GL_TRIANGLES, m_IndexCount, GL_UNSIGNED_INT, NULL);
 
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDisable(GL_BLEND);
 	glDisable(GL_TEXTURE_2D);
 

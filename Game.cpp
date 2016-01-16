@@ -19,6 +19,13 @@
 
 int main(int argc, char** argv)
 {
+	//FT_Library  library;
+	//if (FT_Init_FreeType(&library))
+	//{
+	//	std::cout << "failed to init";
+	//	return 0;
+	//}
+
 	Window window(1280, 720, "Don't be square!");
 	Level level(window);
 
@@ -59,3 +66,5 @@ int main(int argc, char** argv)
 
 	return 0;
 }
+
+
