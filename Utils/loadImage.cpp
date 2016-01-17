@@ -24,11 +24,15 @@ BYTE* loadImage(const char* filename, unsigned int* width, unsigned int* height)
 		return nullptr;
 	}
 
-	BYTE* result = FreeImage_GetBits(dib);
+	BYTE* pixels = FreeImage_GetBits(dib);
 
 	*width = FreeImage_GetWidth(dib);
 	*height = FreeImage_GetHeight(dib);
 
-	//FreeImage_Unload(dib);
+	int size = *width * *height * (FreeImage_GetBPP(dib) / 8);
+	BYTE* result = new BYTE[size];
+	memcpy(result, pixels, size);
+
+	FreeImage_Unload(dib);
 	return result;
 }

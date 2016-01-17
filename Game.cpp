@@ -50,6 +50,25 @@ int main(int argc, char** argv)
 			updateTimer += tick;
 		}
 
+		if (window.isMouseButtonPressed(GLFW_MOUSE_BUTTON_1))
+		{
+			std::cout << "mouse is pressed\n";
+		}
+
+		if (window.isMouseButtonClicked(GLFW_MOUSE_BUTTON_2))
+		{
+			std::cout << "mouse is clicked\n";
+		}
+
+		if (window.isKeyTyped(GLFW_KEY_V))
+		{
+			std::cout << "v is typed\n";
+		}
+		if (window.isKeyTyped(GLFW_KEY_V))
+		{
+			std::cout << "asd is typed\n";
+		}
+
 		level.render();
 
 		window.update();

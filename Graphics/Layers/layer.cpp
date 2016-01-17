@@ -7,6 +7,20 @@ Layer::Layer(Shader* shader, const glm::mat4 projectionMatrix)
 
 	m_Shader->bind();
 	m_Shader->setUniformMat4("pr_matrix", projectionMatrix);
+
+	/*GLint texID[] =
+	{
+		0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+	};
+*/
+	GLint texID[32];
+	for (int i = 0; i < 32; ++i)
+	{
+		texID[i] = i;
+	}
+
+
+	m_Shader->setUniform1iv("textures", 32, texID);
 	m_Shader->unbind();
 }
 
@@ -40,7 +54,7 @@ void Layer::render()
 		renderable->submit(*m_Renderer);
 	}
 
-	m_Renderer->drawString("hello", glm::vec3(100, 100, 0), glm::vec4(0, 1, 1, 1));
+//	m_Renderer->drawString("hello", glm::vec3(100, 100, 0), glm::vec4(0, 1, 1, 1));
 
 	m_Renderer->end();
 	m_Renderer->flush();

@@ -1,22 +1,19 @@
 #include "level.h"
 #include "../Graphics/label.h"
+#include "../Graphics/font.h"
+#include "../Graphics/font_manager.h"
 
-Label* label = new Label("fps", 0, 0, glm::vec4(1,0,1,0.5));
+Label* label;
 Level::Level(Window& window)
 	: m_Window(window)
 {
 	m_Shader = new Shader("Shaders/vertShader.vert", "Shaders/fragShader.frag");
+	FontManager::add(new Font("blah", "LuckiestGuy.ttf", 80));
+	label = new Label("fps", 0, 0, "blah", glm::vec4(1,0,1,0.5));
 
 	m_Offset = glm::vec2(0.0f, 0.0f);
 	m_Ortho = glm::ortho(0.0f, 1280.0f, 0.0f, 720.0f, -1.0f, 1.0f);
 	m_Layer = new Layer(m_Shader, m_Ortho);
-
-	GLint texID[] = 
-	{
-		0, 1, 2, 3, 4, 5, 6, 7, 8, 9
-	};
-
-	m_Shader->setUniform1iv("textures", 10, texID);
 
 	Texture* tex = new Texture("test.png");
 	Texture* tex2 = new Texture("test2.png");

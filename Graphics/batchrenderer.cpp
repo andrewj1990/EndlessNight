@@ -59,11 +59,11 @@ void BatchRenderer::init()
 	// unbind the vertex array object
 	glBindVertexArray(0);
 
-	m_FTAtlas = ftgl::texture_atlas_new(512, 512, 2);
-	m_FTFont = ftgl::texture_font_new_from_file(m_FTAtlas, 80, "LuckiestGuy.ttf");
-	//m_FTFont = ftgl::texture_font_new_from_file(m_FTAtlas, 20, "Arial.ttf");
+	//m_FTAtlas = ftgl::texture_atlas_new(512, 512, 2);
+	//m_FTFont = ftgl::texture_font_new_from_file(m_FTAtlas, 80, "LuckiestGuy.ttf");
+	////m_FTFont = ftgl::texture_font_new_from_file(m_FTAtlas, 20, "Arial.ttf");
 
-	ftgl::texture_glyph_t *glyph = texture_font_get_glyph(m_FTFont, 'A');
+	//ftgl::texture_glyph_t *glyph = texture_font_get_glyph(m_FTFont, 'A');
 
 }
 
@@ -145,7 +145,7 @@ void BatchRenderer::submit(const Renderable& renderable)
 	m_IndexCount += 6;
 }
 
-void BatchRenderer::drawString(const std::string& text, const glm::vec3& position, const glm::vec4& colour)
+void BatchRenderer::drawString(const Font& font, const std::string& text, const glm::vec3& position, const glm::vec4& colour)
 {
 	using namespace ftgl;
 
@@ -161,7 +161,7 @@ void BatchRenderer::drawString(const std::string& text, const glm::vec3& positio
 
 	for (int i = 0; i < m_TextureSlots.size(); ++i)
 	{
-		if (m_TextureSlots[i] == m_FTAtlas->id)
+		if (m_TextureSlots[i] == font.getID())
 		{
 			ts = (float)(i + 1);
 			found = true;
@@ -171,22 +171,24 @@ void BatchRenderer::drawString(const std::string& text, const glm::vec3& positio
 
 	if (!found)
 	{
-		if (m_TextureSlots.size() >= 32)
+		if (m_TextureSlots.size() >= RENDERER_MAX_TEXTURES)
 		{
 			end();
 			flush();
 			begin();
 		}
-		m_TextureSlots.push_back(m_FTAtlas->id);
+		m_TextureSlots.push_back(font.getID());
 		ts = (float)(m_TextureSlots.size());
 	}
 
 	float x = position.x;
 
+	texture_font_t* ftFont = font.getFTFont();
+
 	for (int i = 0; i < text.length(); i++)
 	{
 		char c = text.at(i);
-		texture_glyph_t* glyph = texture_font_get_glyph(m_FTFont, c);
+		texture_glyph_t* glyph = texture_font_get_glyph(ftFont, c);
 		
 		if (glyph != NULL)
 		{
@@ -271,4 +273,5 @@ void BatchRenderer::flush()
 	glBindVertexArray(0);
 
 	m_IndexCount = 0;
+	m_TextureSlots.clear();
 }

@@ -20,6 +20,7 @@ public:
 
 	void setProjectionMatrix(const glm::mat4 projectionMatrix);
 	glm::mat4 getProjectionMatrix() { return m_ProjectionMatrix; }
+	const std::vector<Renderable*>& getRenderables() const { return m_Renderables; }
 
 private:
 	BatchRenderer* m_Renderer;

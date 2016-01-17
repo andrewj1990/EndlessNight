@@ -5,7 +5,7 @@
 #include "buffers/indexbuffer.h"
 #include <vector>
 #include <glm\glm.hpp>
-#include <freetype-gl.h>
+#include "font.h"
 
 class Renderable;
 
@@ -22,6 +22,7 @@ const int RENDERER_VERTEX_SIZE = sizeof(VertexData);
 const int RENDERER_SPRITE_SIZE = RENDERER_VERTEX_SIZE * 4;
 const int RENDERER_BUFFER_SIZE = RENDERER_SPRITE_SIZE * RENDERER_MAX_SPRITES;
 const int RENDERER_INDICES_SIZE = RENDERER_MAX_SPRITES * 6;
+constexpr int RENDERER_MAX_TEXTURES = 32;
 
 constexpr int SHADER_VERTEX_INDEX = 0;
 constexpr int SHADER_UV_INDEX = 1;
@@ -40,15 +41,12 @@ private:
 
 	std::vector<GLuint> m_TextureSlots;
 
-	ftgl::texture_atlas_t* m_FTAtlas;
-	ftgl::texture_font_t* m_FTFont;
-
 public:
 	BatchRenderer();
 	~BatchRenderer();
 	void begin();
 	void submit(const Renderable& renderable);
-	void drawString(const std::string& text, const glm::vec3& position, const glm::vec4& colour);
+	void drawString(const Font& font, const std::string& text, const glm::vec3& position, const glm::vec4& colour);
 	void end();
 	void flush();
 
