@@ -3,13 +3,11 @@
 #include "../Graphics/font.h"
 #include "../Graphics/font_manager.h"
 
-Label* label;
 Level::Level(Window& window)
 	: m_Window(window)
 {
 	m_Shader = new Shader("Shaders/vertShader.vert", "Shaders/fragShader.frag");
 	FontManager::add(new Font("blah", "LuckiestGuy.ttf", 80));
-	label = new Label("fps", 0, 0, "blah", glm::vec4(1,0,1,0.5));
 
 	m_Offset = glm::vec2(0.0f, 0.0f);
 	m_Ortho = glm::ortho(0.0f, 1280.0f, 0.0f, 720.0f, -1.0f, 1.0f);
@@ -23,16 +21,14 @@ Level::Level(Window& window)
 	//Sprite* sprite2 = new Sprite(glm::vec3(100, 100, 0), glm::vec2(100, 100), tex2);
 	//m_Layer->add(sprite2);
 
-	for (float i = 0; i < 3280; i += 60.0f)
-	{
-		for (float j = 0; j < 720; j += 60.0f)
-		{
-			m_Layer->add(new Sprite(glm::vec3(i, j, 0), glm::vec2(50.0f, 50.0f), rand() % 2 == 0 ? tex : tex2));
-			//m_Layer->add(new Renderable(glm::vec3(i, j, 0), glm::vec2(50.0f, 50.0f), glm::vec4(0, 0, rand() % 1000 / 1000.0f, 1)));
-		}
-	}
-
-	m_Layer->add(label);
+	//for (float i = 0; i < 3280; i += 60.0f)
+	//{
+	//	for (float j = 0; j < 720; j += 60.0f)
+	//	{
+	//		m_Layer->add(new Sprite(glm::vec3(i, j, 0), glm::vec2(50.0f, 50.0f), rand() % 2 == 0 ? tex : tex2));
+	//		//m_Layer->add(new Renderable(glm::vec3(i, j, 0), glm::vec2(50.0f, 50.0f), glm::vec4(0, 0, rand() % 1000 / 1000.0f, 1)));
+	//	}
+	//}
 
 	Platform* platform = new Platform(m_Window.getWidth() / 3, 0, m_Window.getWidth() / 2, m_Window.getHeight() / 2, *this);
 	m_Platforms.push_back(platform);
@@ -43,15 +39,18 @@ Level::Level(Window& window)
 	int center_width = 1280;
 	int center_height = 720;
 
-	Zone* zone1 = new Zone(1280, 720, m_Window, *m_Layer, *this);
-	Zone* zone2 = new Zone(1280, 0, m_Window, *m_Layer, *this);
-	Zone* zone3 = new Zone(1280, -720, m_Window, *m_Layer, *this);
-	Zone* zone4 = new Zone(0, 720, m_Window, *m_Layer, *this);
-	Zone* zone5 = new Zone(0, 0, m_Window, *m_Layer, *this);
-	Zone* zone6 = new Zone(0, -720, m_Window, *m_Layer, *this);
-	Zone* zone7 = new Zone(-1280, 720, m_Window, *m_Layer, *this);
-	Zone* zone8 = new Zone(-1280, 0, m_Window, *m_Layer, *this);
-	Zone* zone9 = new Zone(-1280, -720, m_Window, *m_Layer, *this);
+	//Zone* zone1 = new Zone(1280, 720, m_Window, *m_Layer, *this);
+	//Zone* zone2 = new Zone(1280, 0, m_Window, *m_Layer, *this);
+	//Zone* zone3 = new Zone(1280, -720, m_Window, *m_Layer, *this);
+	//Zone* zone4 = new Zone(0, 720, m_Window, *m_Layer, *this);
+	//Zone* zone5 = new Zone(0, 0, m_Window, *m_Layer, *this);
+	//Zone* zone6 = new Zone(0, -720, m_Window, *m_Layer, *this);
+	//Zone* zone7 = new Zone(-1280, 720, m_Window, *m_Layer, *this);
+	//Zone* zone8 = new Zone(-1280, 0, m_Window, *m_Layer, *this);
+	//Zone* zone9 = new Zone(-1280, -720, m_Window, *m_Layer, *this);
+
+	Platform* test = new Platform(*this);
+	m_Platforms.push_back(test);
 }
 
 void Level::update()
@@ -102,13 +101,6 @@ void Level::update()
 			++i;
 		}
 	}
-
-
-	label->text = std::to_string(x) + ", " + std::to_string(y);
-
-
-//	std::cout << "number of platforms : " << m_Platforms.size() << "\n";
-//	std::cout << "number of projectiles : " << m_Projectiles.size() << "\n";
 }
 
 void Level::render()
@@ -137,7 +129,7 @@ void Level::moveCamera(const float& x, const float& y)
 {
 	m_Offset.x += x;
 	m_Offset.y += y;
-	std::cout << "offsetX : " << m_Offset.x << ", offsetY : " << m_Offset.y << "\n";
+	//std::cout << "offsetX : " << m_Offset.x << ", offsetY : " << m_Offset.y << "\n";
 
 	m_Ortho = glm::translate(m_Ortho, glm::vec3(-x, -y, 0));
 	m_Layer->setProjectionMatrix(m_Ortho);

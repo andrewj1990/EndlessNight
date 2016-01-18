@@ -33,6 +33,13 @@ public:
 		renderer.submit(*this);
 	}
 
+	void setColor(int r, int g, int b)
+	{
+		m_Colour.r = r;
+		m_Colour.g = g;
+		m_Colour.b = b;
+	}
+
 	inline const glm::vec3& getPosition() const { return m_Position; }
 	inline const glm::vec2& getSize() const { return m_Size; }
 	inline const glm::vec4& getColour() const { return m_Colour; }

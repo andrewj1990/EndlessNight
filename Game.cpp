@@ -19,19 +19,8 @@
 
 int main(int argc, char** argv)
 {
-	//FT_Library  library;
-	//if (FT_Init_FreeType(&library))
-	//{
-	//	std::cout << "failed to init";
-	//	return 0;
-	//}
-
 	Window window(1280, 720, "Don't be square!");
 	Level level(window);
-
-	//glActiveTexture(GL_TEXTURE0);
-	//Texture texture("test.png");
-	//texture.bind();
 
 	Timer time;
 	Timer time2;
@@ -48,25 +37,6 @@ int main(int argc, char** argv)
 			level.update();
 			++updates;
 			updateTimer += tick;
-		}
-
-		if (window.isMouseButtonPressed(GLFW_MOUSE_BUTTON_1))
-		{
-			std::cout << "mouse is pressed\n";
-		}
-
-		if (window.isMouseButtonClicked(GLFW_MOUSE_BUTTON_2))
-		{
-			std::cout << "mouse is clicked\n";
-		}
-
-		if (window.isKeyTyped(GLFW_KEY_V))
-		{
-			std::cout << "v is typed\n";
-		}
-		if (window.isKeyTyped(GLFW_KEY_V))
-		{
-			std::cout << "asd is typed\n";
 		}
 
 		level.render();

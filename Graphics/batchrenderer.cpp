@@ -100,7 +100,7 @@ void BatchRenderer::submit(const Renderable& renderable)
 
 		if (!found)
 		{
-			if (m_TextureSlots.size() >= 32)
+			if (m_TextureSlots.size() >= RENDERER_MAX_TEXTURES)
 			{
 				end();
 				flush();
