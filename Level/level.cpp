@@ -3,6 +3,7 @@
 #include "../Graphics/font.h"
 #include "../Graphics/font_manager.h"
 
+Sprite*sprite = new Sprite(glm::vec3(200, 200, 0), glm::vec2(10, 10), glm::vec4(1, 0, 1, 1));
 Level::Level(Window& window)
 	: m_Window(window)
 {
@@ -50,7 +51,10 @@ Level::Level(Window& window)
 	//Zone* zone9 = new Zone(-1280, -720, m_Window, *m_Layer, *this);
 
 	Platform* test = new Platform(*this);
-	m_Platforms.push_back(test);
+	//m_Platforms.push_back(test);
+
+	quad = new QuadTree(0, BoundingBox(0, 0, 1280, 720));
+	m_Layer->add(sprite);
 }
 
 void Level::update()
@@ -101,10 +105,50 @@ void Level::update()
 			++i;
 		}
 	}
+
+	//for (Renderable* renderble : renderables)
+	//{
+	//	quad->retrieve(rend, *renderble);
+
+	//	for (Renderable* rend : rend)
+	//	{
+	//		std::cout << "here\n";
+	//	}
+	//}
 }
 
 void Level::render()
 {
+	delete quad;
+	quad = new QuadTree(0, BoundingBox(0, 0, 1280, 720));
+
+	std::vector<Renderable*> renderables = m_Layer->getRenderables();
+	std::vector<Renderable*> rend;
+	for (Renderable* r : renderables)
+	{
+		quad->insert(r);
+	}
+
+	std::vector<BoundingBox> bounds;
+	std::vector<Renderable*> boxes;
+	quad->getBounds(bounds);
+
+	int size = 1;
+	for (BoundingBox b : bounds)
+	{
+		boxes.push_back(new Sprite(glm::vec3(b.x, b.y, 0), glm::vec2(b.width, size), glm::vec4(1, 1, 0, 1)));
+		boxes.push_back(new Sprite(glm::vec3(b.x, b.y, 0), glm::vec2(size, b.height), glm::vec4(1, 1, 0, 1)));
+		boxes.push_back(new Sprite(glm::vec3(b.x + b.width, b.y, 0), glm::vec2(size, b.height), glm::vec4(1, 1, 0, 1)));
+		boxes.push_back(new Sprite(glm::vec3(b.x, b.y + b.height, 0), glm::vec2(b.width, size), glm::vec4(1, 1, 0, 1)));
+
+	}
+
+	quad->retrieve(rend, *sprite);
+
+	m_Layer->render(boxes);
+
+	std::cout << "rend size : " << rend.size() << " | boundingboxsize : " << bounds.size() << "\n";
+
 	m_Shader->setUniform2f("light_pos", glm::vec2(m_Player->getCenterX(), m_Player->getCenterY()));
 	m_Layer->render();
 }
@@ -113,6 +157,11 @@ void Level::addParticle(Entity* particle)
 {
 	m_Particles.push_back(particle);
 //	m_Layer->add(particle->getSprite());
+}
+
+void Level::addPlatform(Renderable* platform)
+{
+	m_Platform.push_back(platform);
 }
 
 void Level::addPlatform(Entity* platform)

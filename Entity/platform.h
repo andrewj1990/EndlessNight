@@ -30,6 +30,7 @@ private:
 	Texture* tex;
 	std::vector<Sprite*> m_Sprites;
 	std::queue<Node> m_Queue;
+	int m_Size;
 
 	std::unordered_map<int, bool> visited;
 

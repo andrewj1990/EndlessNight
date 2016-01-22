@@ -19,6 +19,7 @@
 
 int main(int argc, char** argv)
 {
+
 	Window window(1280, 720, "Don't be square!");
 	Level level(window);
 

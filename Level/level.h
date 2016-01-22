@@ -17,6 +17,8 @@
 #include "../Entity/platform.h"
 #include "zone.h"
 
+#include "../Utils/quadTree.h"
+
 class Player;
 
 class Level
@@ -30,6 +32,7 @@ public:
 	void addParticle(Entity* particle);
 	void addPlatform(Entity* platform);
 	void addProjectile(Entity* projectile);
+	void addPlatform(Renderable* platform);
 
 	void moveCamera(const float& x, const float& y);
 	
@@ -37,6 +40,7 @@ public:
 	Window& getWindowClass() { return m_Window; }
 	Layer& getLayer() { return *m_Layer; }
 	std::vector<Entity*>& getPlatforms() { return m_Platforms; }
+	std::vector<Renderable*> getPlatform() { return m_Platform; }
 	glm::vec2& getOffset() { return m_Offset; }
 
 private:
@@ -51,6 +55,9 @@ private:
 
 	std::vector<Entity*> m_Particles;
 	std::vector<Entity*> m_Platforms;
+	std::vector<Renderable*> m_Platform;
 	std::vector<Entity*> m_Projectiles;
+
+	QuadTree* quad;
 
 };

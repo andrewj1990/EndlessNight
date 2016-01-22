@@ -3,6 +3,7 @@
 Projectile::Projectile(int x, int y, Level& level)
 	: Entity(x, y, level), m_ProjectileSpeed(15.0f), m_Life(10000)
 {
+	m_ProjectileSpeed = 1;
 	calcProjectileDir();
 	m_Sprite = new Sprite(glm::vec3(m_X, m_Y, 0), glm::vec2(2.5f, 2.5f), glm::vec4(1, 1, 0, 1));
 	addToLevel(m_Sprite);
@@ -47,7 +48,7 @@ void Projectile::update()
 		m_Destroy = true;
 	}
 
-	m_Sprite->fade();
+	//m_Sprite->fade();
 
 	float alpha = m_Sprite->getColour().w;
 	// set to destroy particle if life runs out
@@ -65,25 +66,25 @@ void Projectile::update()
 bool Projectile::collision(std::vector<Entity*> objects)
 {
 	// look at all the platforms in the level and check for any collisions
-	std::vector<Entity*>& platforms = m_Level.getPlatforms();
-	for (Entity* platform : platforms)
-	{
-		const int& px = platform->getX();
-		const int& py = platform->getY();
-		const int& w = platform->getWidth();
-		const int& h = platform->getHeight();
+	//std::vector<Renderable*>& platforms = m_Level.getPlatform();
+	//for (Renderable* platform : platforms)
+	//{
+	//	const int& px = platform->getPosition().x;
+	//	const int& py = platform->getPosition().y;
+	//	const int& w = platform->getSize().x;
+	//	const int& h = platform->getSize().y;
 
-		if (m_X < px + w && m_X > px && m_Y > py && m_Y < py + h)
-		{
-	//		std::cout << "x : " << x << ", y : " << y << "\n";
-			// if player is on a platform and moving
-			// get the platforms colour and spawn particles the same colour as the platfroms
-			glm::vec4 platformColour = platform->getSprite()->getColour();
-			for (int i = 0; i < 5; ++i)
-				m_Level.addParticle(new Particle(m_X, m_Y, m_Level, platformColour, 3.0f));
-			return true;
-		}
-	}
+	//	if (m_X < px + w && m_X > px && m_Y > py && m_Y < py + h)
+	//	{
+	////		std::cout << "x : " << x << ", y : " << y << "\n";
+	//		// if player is on a platform and moving
+	//		// get the platforms colour and spawn particles the same colour as the platfroms
+	//		glm::vec4 platformColour = platform->getColour();
+	//		for (int i = 0; i < 5; ++i)
+	//			m_Level.addParticle(new Particle(m_X, m_Y, m_Level, platformColour, 3.0f));
+	//		return true;
+	//	}
+	//}
 
 	return false;
 }

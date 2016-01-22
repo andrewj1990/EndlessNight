@@ -40,6 +40,8 @@ public:
 		m_Colour.b = b;
 	}
 
+	void setTexture(Texture* texture) { m_Texture = texture;}
+
 	inline const glm::vec3& getPosition() const { return m_Position; }
 	inline const glm::vec2& getSize() const { return m_Size; }
 	inline const glm::vec4& getColour() const { return m_Colour; }
