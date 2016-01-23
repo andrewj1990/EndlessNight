@@ -17,7 +17,6 @@
 #include "../Entity/platform.h"
 #include "zone.h"
 
-#include "../Utils/quadTree.h"
 
 class Player;
 
@@ -45,7 +44,7 @@ public:
 
 private:
 	Layer* m_Layer;
-	Shader* m_Shader;
+	Shader m_Shader;
 	Window& m_Window;
 
 	Player* m_Player;
@@ -58,6 +57,6 @@ private:
 	std::vector<Renderable*> m_Platform;
 	std::vector<Entity*> m_Projectiles;
 
-	QuadTree* quad;
+	//QuadTree* quad;
 
 };

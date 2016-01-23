@@ -8,7 +8,6 @@ BatchRenderer::BatchRenderer()
 
 BatchRenderer::~BatchRenderer()
 {
-	delete m_IBO;
 }
 
 void BatchRenderer::init()
@@ -54,7 +53,7 @@ void BatchRenderer::init()
 	}
 
 	// create a index buffer object with all the indices
-	m_IBO = new IndexBuffer(indices, RENDERER_INDICES_SIZE);
+	m_IBO = std::unique_ptr<IndexBuffer>(new IndexBuffer(indices, RENDERER_INDICES_SIZE));
 
 	// unbind the vertex array object
 	glBindVertexArray(0);

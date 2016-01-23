@@ -6,6 +6,7 @@
 #include <vector>
 #include <glm\glm.hpp>
 #include "font.h"
+#include <memory>
 
 class Renderable;
 
@@ -36,7 +37,7 @@ private:
 	GLuint m_VAO;
 	GLuint m_BO;
 	VertexData* m_Buffer;
-	IndexBuffer* m_IBO;
+	std::unique_ptr<IndexBuffer> m_IBO;
 	GLsizei m_IndexCount;	
 
 	std::vector<GLuint> m_TextureSlots;

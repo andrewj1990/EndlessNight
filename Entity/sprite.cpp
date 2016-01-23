@@ -1,16 +1,16 @@
 #include "sprite.h"
 
 
-Sprite::Sprite(const glm::vec3 & position, const glm::vec2 size, const glm::vec4 & colour)
+Sprite::Sprite(const glm::vec3& position, const glm::vec2 size, const glm::vec4& colour)
 	: Renderable(position, size, colour)
 {
 
 }
 
-Sprite::Sprite(const glm::vec3 & position, const glm::vec2 size, Texture* texture)
+Sprite::Sprite(const glm::vec3 & position, const glm::vec2 size, Texture texture)
 	: Renderable(position, size)
 {
-	m_Texture = texture;
+	m_Texture = std::make_unique<Texture>(texture);
 }
 
 Sprite::~Sprite()

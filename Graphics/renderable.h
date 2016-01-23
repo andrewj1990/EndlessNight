@@ -12,18 +12,17 @@ protected:
 	glm::vec2 m_Size;
 	glm::vec4 m_Colour;
 	std::vector<glm::vec2> m_UV;
-	Texture* m_Texture;
+	std::unique_ptr<Texture> m_Texture;
 	
 protected:
 	Renderable()
-		: m_Texture(nullptr)
 	{
 		setUVDefaults();
 	}
 
 public:
 	Renderable(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color = glm::vec4(1,1,1,1))
-		: m_Position(position), m_Size(size), m_Colour(color), m_Texture(nullptr)
+		: m_Position(position), m_Size(size), m_Colour(color)
 	{	
 		setUVDefaults();
 	}
@@ -40,7 +39,7 @@ public:
 		m_Colour.b = b;
 	}
 
-	void setTexture(Texture* texture) { m_Texture = texture;}
+	void setTexture(Texture texture) { m_Texture = std::make_unique<Texture>(texture);}
 
 	inline const glm::vec3& getPosition() const { return m_Position; }
 	inline const glm::vec2& getSize() const { return m_Size; }

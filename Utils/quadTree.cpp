@@ -3,16 +3,16 @@
 QuadTree::QuadTree(int level, BoundingBox bounds)
 	: m_Level(level), m_Bounds(bounds), ne(nullptr), se(nullptr), sw(nullptr), nw(nullptr)
 {
-	max_objects = 2;
+	max_objects = 10;
 	//max_levels = 10;
 }
 
 QuadTree::~QuadTree()
 {
-	delete se;
-	delete ne;
-	delete sw;
-	delete nw;
+	if (se != nullptr) delete se;
+	if (ne != nullptr) delete ne;
+	if (sw != nullptr) delete sw;
+	if (nw != nullptr) delete nw;
 }
 
 void QuadTree::split()
