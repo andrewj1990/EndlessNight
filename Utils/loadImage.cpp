@@ -1,6 +1,6 @@
 #include "loadImage.h"
 
-BYTE* loadImage(const char* filename, unsigned int* width, unsigned int* height)
+BYTE* loadImage(const char* filename, unsigned int& width, unsigned int& height)
 {
 	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
 	FIBITMAP *dib = nullptr;
@@ -26,10 +26,10 @@ BYTE* loadImage(const char* filename, unsigned int* width, unsigned int* height)
 
 	BYTE* pixels = FreeImage_GetBits(dib);
 
-	*width = FreeImage_GetWidth(dib);
-	*height = FreeImage_GetHeight(dib);
+	width = FreeImage_GetWidth(dib);
+	height = FreeImage_GetHeight(dib);
 
-	int size = *width * *height * (FreeImage_GetBPP(dib) / 8);
+	int size = width * height * (FreeImage_GetBPP(dib) / 8);
 	BYTE* result = new BYTE[size];
 	memcpy(result, pixels, size);
 

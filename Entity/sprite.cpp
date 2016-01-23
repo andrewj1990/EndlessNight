@@ -1,7 +1,7 @@
 #include "sprite.h"
 
 
-Sprite::Sprite(const glm::vec3 & position, const glm::vec2 size, const glm::vec4 & colour)
+Sprite::Sprite(const glm::vec3& position, const glm::vec2 size, const glm::vec4& colour)
 	: Renderable(position, size, colour)
 {
 

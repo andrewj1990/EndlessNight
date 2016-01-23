@@ -3,11 +3,9 @@
 #include "../Graphics/font.h"
 #include "../Graphics/font_manager.h"
 
-Sprite*sprite = new Sprite(glm::vec3(200, 200, 0), glm::vec2(10, 10), glm::vec4(1, 0, 1, 1));
 Level::Level(Window& window)
-	: m_Window(window)
+	: m_Window(window), m_Shader("Shaders/vertShader.vert", "Shaders/fragShader.frag")
 {
-	m_Shader = new Shader("Shaders/vertShader.vert", "Shaders/fragShader.frag");
 	FontManager::add(new Font("blah", "LuckiestGuy.ttf", 80));
 
 	m_Offset = glm::vec2(0.0f, 0.0f);
@@ -54,7 +52,6 @@ Level::Level(Window& window)
 	//m_Platforms.push_back(test);
 
 	quad = new QuadTree(0, BoundingBox(0, 0, 1280, 720));
-	m_Layer->add(sprite);
 }
 
 void Level::update()
@@ -119,37 +116,35 @@ void Level::update()
 
 void Level::render()
 {
-	delete quad;
-	quad = new QuadTree(0, BoundingBox(0, 0, 1280, 720));
+	//delete quad;
+	//quad = new QuadTree(0, BoundingBox(0, 0, 1280, 720));
 
-	std::vector<Renderable*> renderables = m_Layer->getRenderables();
-	std::vector<Renderable*> rend;
-	for (Renderable* r : renderables)
-	{
-		quad->insert(r);
-	}
+	//std::vector<Renderable*> renderables = m_Layer->getRenderables();
+	//std::vector<Renderable*> rend;
+	//for (Renderable* r : renderables)
+	//{
+	//	quad->insert(r);
+	//}
 
-	std::vector<BoundingBox> bounds;
-	std::vector<Renderable*> boxes;
-	quad->getBounds(bounds);
+	//std::vector<BoundingBox> bounds;
+	//std::vector<Renderable*> boxes;
+	//quad->getBounds(bounds);
 
-	int size = 1;
-	for (BoundingBox b : bounds)
-	{
-		boxes.push_back(new Sprite(glm::vec3(b.x, b.y, 0), glm::vec2(b.width, size), glm::vec4(1, 1, 0, 1)));
-		boxes.push_back(new Sprite(glm::vec3(b.x, b.y, 0), glm::vec2(size, b.height), glm::vec4(1, 1, 0, 1)));
-		boxes.push_back(new Sprite(glm::vec3(b.x + b.width, b.y, 0), glm::vec2(size, b.height), glm::vec4(1, 1, 0, 1)));
-		boxes.push_back(new Sprite(glm::vec3(b.x, b.y + b.height, 0), glm::vec2(b.width, size), glm::vec4(1, 1, 0, 1)));
+	//int size = 1;
+	//for (BoundingBox b : bounds)
+	//{
+	//	boxes.push_back(new Sprite(glm::vec3(b.x, b.y, 0), glm::vec2(b.width, size), glm::vec4(1, 1, 0, 1)));
+	//	boxes.push_back(new Sprite(glm::vec3(b.x, b.y, 0), glm::vec2(size, b.height), glm::vec4(1, 1, 0, 1)));
+	//	boxes.push_back(new Sprite(glm::vec3(b.x + b.width, b.y, 0), glm::vec2(size, b.height), glm::vec4(1, 1, 0, 1)));
+	//	boxes.push_back(new Sprite(glm::vec3(b.x, b.y + b.height, 0), glm::vec2(b.width, size), glm::vec4(1, 1, 0, 1)));
 
-	}
+	//}
 
-	quad->retrieve(rend, *sprite);
+	//quad->retrieve(rend, *sprite);
 
-	m_Layer->render(boxes);
+	//m_Layer->render(boxes);
 
-	std::cout << "rend size : " << rend.size() << " | boundingboxsize : " << bounds.size() << "\n";
-
-	m_Shader->setUniform2f("light_pos", glm::vec2(m_Player->getCenterX(), m_Player->getCenterY()));
+	m_Shader.setUniform2f("light_pos", glm::vec2(m_Player->getCenterX(), m_Player->getCenterY()));
 	m_Layer->render();
 }
 

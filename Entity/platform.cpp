@@ -21,7 +21,7 @@ Platform::Platform(Level& level)
 	setTextures();
 	for (Sprite* sprite : m_Sprites)
 	{
-		//addToLevel(sprite);
+		addToLevel(sprite);
 		//m_Level.addPlatform(sprite);
 	}
 
@@ -36,7 +36,7 @@ Platform::Platform(int x, int y, int width, int height, Level& level)
 	//tex = new Texture("test.png");
 	//m_Sprite = new Sprite(glm::vec3(m_X, m_Y, 0), glm::vec2(m_Width, m_Height), tex);
 
-	//addToLevel(m_Sprite);
+	addToLevel(m_Sprite);
 	//m_Level.addPlatform(m_Sprite);
 }
 

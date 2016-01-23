@@ -45,7 +45,7 @@ public:
 
 private:
 	Layer* m_Layer;
-	Shader* m_Shader;
+	Shader m_Shader;
 	Window& m_Window;
 
 	Player* m_Player;

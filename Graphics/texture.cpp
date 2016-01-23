@@ -13,7 +13,7 @@ Texture::~Texture()
 
 GLuint Texture::load()
 {
-	BYTE* pixels = loadImage(m_FileName.c_str(), &m_Width, &m_Height);
+	BYTE* pixels = loadImage(m_FileName.c_str(), m_Width, m_Height);
 
 	GLuint result;
 	glGenTextures(1, &result);
