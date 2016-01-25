@@ -19,7 +19,6 @@ public:
 	void render() override;
 
 private:
-	void init();
 	void move(const double& dx, const double& dy);
 	bool collision(int x, int y, bool spawn_particle = false, int dx = 0, int dy = 0);
 

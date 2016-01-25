@@ -1,6 +1,8 @@
 #pragma once
 
 #include <vector>
+#include <iterator>
+#include <iostream>
 #include "../Graphics/renderable.h"
 
 struct BoundingBox
@@ -14,7 +16,7 @@ struct BoundingBox
 		: x(x), y(y), width(width), height(height)
 	{ }
 
-	bool contains(Renderable data)
+	bool contains(const Renderable& data)
 	{
 		bool containsX = (x <= data.getPosition().x && data.getPosition().x <= x + width);
 		bool containsY = (y <= data.getPosition().y && data.getPosition().y <= y + height);
@@ -22,7 +24,7 @@ struct BoundingBox
 		return (containsX && containsY);
 	}
 
-	bool intersects(Renderable box)
+	bool intersects(const Renderable& box)
 	{
 		return (x <= box.getPosition().x + box.getSize().x && x + width >= box.getPosition().x && y <= box.getPosition().y + box.getSize().y && y + height >= box.getPosition().y);
 	}
@@ -34,15 +36,13 @@ public:
 	QuadTree(int level, BoundingBox bounds);
 	~QuadTree();
 
-	void clear();
 	void split();
 
-	void retrieve(std::vector<Renderable*>& list, Renderable range);
-	bool insert(Renderable* data);
+	void retrieve(std::vector<Renderable*>& list, Renderable* range);
+	void insert(Renderable* data);
+	int getIndex(Renderable* data);
 
 	void getBounds(std::vector<BoundingBox>& bounds);
-
-	int getIndex(BoundingBox rect);
 
 private:
 	int max_objects;
@@ -50,10 +50,11 @@ private:
 
 	int m_Level;
 	std::vector<Renderable*> m_Objects;
+	
 	BoundingBox m_Bounds;
-	QuadTree* ne;
-	QuadTree* se;
-	QuadTree* sw;
-	QuadTree* nw;
+	std::unique_ptr<QuadTree> ne;
+	std::unique_ptr<QuadTree> se;
+	std::unique_ptr<QuadTree> sw;
+	std::unique_ptr<QuadTree> nw;
 
 };

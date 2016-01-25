@@ -17,6 +17,8 @@
 #include "../Entity/platform.h"
 #include "zone.h"
 
+#include "../Utils/quadTree.h"
+#include "../Graphics/texture_manager.h"
 
 class Player;
 
@@ -41,13 +43,14 @@ public:
 	std::vector<Entity*>& getPlatforms() { return m_Platforms; }
 	std::vector<Renderable*> getPlatform() { return m_Platform; }
 	glm::vec2& getOffset() { return m_Offset; }
+	const std::unique_ptr<QuadTree>& getQuadTree() { return quad; }
 
 private:
 	Layer* m_Layer;
 	Shader m_Shader;
 	Window& m_Window;
 
-	Player* m_Player;
+	std::unique_ptr<Player> m_Player;
 
 	glm::mat4 m_Ortho;
 	glm::vec2 m_Offset;
@@ -57,6 +60,8 @@ private:
 	std::vector<Renderable*> m_Platform;
 	std::vector<Entity*> m_Projectiles;
 
-	//QuadTree* quad;
+	std::unique_ptr<QuadTree> quad;
+
+	Sprite* Background;
 
 };

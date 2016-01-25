@@ -6,30 +6,37 @@
 Level::Level(Window& window)
 	: m_Window(window), m_Shader("Shaders/vertShader.vert", "Shaders/fragShader.frag")
 {
+	// TEXTURES //
+	TextureManager::add(new Texture("Textures/Top.png"));
+	TextureManager::add(new Texture("Textures/Right.png"));
+	TextureManager::add(new Texture("Textures/Bottom.png"));
+	TextureManager::add(new Texture("Textures/Left.png"));
+	TextureManager::add(new Texture("Textures/TopRight.png"));
+	TextureManager::add(new Texture("Textures/TopBottom.png"));
+	TextureManager::add(new Texture("Textures/TopLeft.png"));
+	TextureManager::add(new Texture("Textures/RightLeft.png"));
+	TextureManager::add(new Texture("Textures/BottomRight.png"));
+	TextureManager::add(new Texture("Textures/BottomLeft.png"));
+	TextureManager::add(new Texture("Textures/All.png"));
+	TextureManager::add(new Texture("Textures/TopRightLeft.png"));
+	TextureManager::add(new Texture("Textures/TopBottomRight.png"));
+	TextureManager::add(new Texture("Textures/BottomRightLeft.png"));
+	TextureManager::add(new Texture("Textures/TopBottomLeft.png"));
+	TextureManager::add(new Texture("Textures/None.png"));
+
+	// FONTS //
 	FontManager::add(new Font("blah", "LuckiestGuy.ttf", 80));
 
 	m_Offset = glm::vec2(0.0f, 0.0f);
 	m_Ortho = glm::ortho(0.0f, 1280.0f, 0.0f, 720.0f, -1.0f, 1.0f);
 	m_Layer = new Layer(m_Shader, m_Ortho);
 
-	//Sprite* sprite = new Sprite(glm::vec3(0, 0, 0), glm::vec2(100, 100), tex);
-	//m_Layer->add(sprite);
-	//Sprite* sprite2 = new Sprite(glm::vec3(100, 100, 0), glm::vec2(100, 100), tex2);
-	//m_Layer->add(sprite2);
+	Background = new Sprite(glm::vec3(0, 0, 0), glm::vec2(1280, 1000), new Texture("Textures/Background.png"));
+	//m_Layer->add(Background);
 
-	//for (float i = 0; i < 3280; i += 60.0f)
-	//{
-	//	for (float j = 0; j < 720; j += 60.0f)
-	//	{
-	//		m_Layer->add(new Sprite(glm::vec3(i, j, 0), glm::vec2(50.0f, 50.0f), rand() % 2 == 0 ? tex : tex2));
-	//		//m_Layer->add(new Renderable(glm::vec3(i, j, 0), glm::vec2(50.0f, 50.0f), glm::vec4(0, 0, rand() % 1000 / 1000.0f, 1)));
-	//	}
-	//}
-
-	Platform* platform = new Platform(m_Window.getWidth() / 3, 0, m_Window.getWidth() / 2, m_Window.getHeight() / 2, *this);
-	m_Platforms.push_back(platform);
-	m_Player = new Player(m_Window.getWidth() / 2, m_Window.getHeight() / 2, *this);
-
+	//Platform* platform = new Platform(m_Window.getWidth() / 3, 0, m_Window.getWidth() / 2, m_Window.getHeight() / 2, *this);
+	//m_Platforms.push_back(platform);
+	m_Player = std::unique_ptr<Player>(new Player(m_Window.getWidth() / 2, m_Window.getHeight() / 2, *this));
 
 	int center = 0;
 	int center_width = 1280;
@@ -46,11 +53,11 @@ Level::Level(Window& window)
 	//Zone* zone9 = new Zone(-1280, -720, m_Window, *m_Layer, *this);
 
 	Platform* test = new Platform(*this);
-	//m_Platforms.push_back(test);
 
-	//quad = new QuadTree(0, BoundingBox(0, 0, 1280, 720));
 }
 
+std::vector<Renderable*> boxes;
+std::vector<BoundingBox> bounds;
 void Level::update()
 {
 	double x;
@@ -58,16 +65,15 @@ void Level::update()
 	m_Window.getMousePos(x, y);
 	x += m_Offset.x;
 	y += m_Offset.y;
-	//std::cout << "x : " << x << ", y : " << y << "\n";
 
+	quad = std::unique_ptr<QuadTree>(new QuadTree(0, BoundingBox(m_Offset.x, m_Offset.y, 1280, 720)));
+	for (Renderable* r : m_Platform)
+	{
+		quad->insert(r);
+	}
 
-	//if (glfwGetMouseButton(m_Window.getWindow(), GLFW_MOUSE_BUTTON_1))
-	//{
-	//	m_Particles.push_back(new Particle(x, y, *this));
-	//}
 
 	m_Player->update();
-//	std::cout << "particles : " << m_Particles.size() << "\n";
 
 	// check if any particles need to be deleted
 	for (auto i = m_Particles.begin(); i != m_Particles.end(); )
@@ -100,47 +106,25 @@ void Level::update()
 		}
 	}
 
-	//for (Renderable* renderble : renderables)
-	//{
-	//	quad->retrieve(rend, *renderble);
-
-	//	for (Renderable* rend : rend)
-	//	{
-	//		std::cout << "here\n";
-	//	}
-	//}
+	//std::vector<Renderable*> list;
+	//quad->retrieve(list, *m_Player->getSprite());
+	//std::cout << " list size : " << list.size() << "\n";
+	//boxes.clear();
+	//bounds.clear();
+	//quad->getBounds(bounds);
 }
 
 void Level::render()
 {
-	//delete quad;
-	//quad = new QuadTree(0, BoundingBox(0, 0, 1280, 720));
-
-	//std::vector<Renderable*> renderables = m_Layer->getRenderables();
-	//std::vector<Renderable*> rend;
-	//for (Renderable* r : renderables)
-	//{
-	//	quad->insert(r);
-	//}
-
-	//std::vector<BoundingBox> bounds;
-	//std::vector<Renderable*> boxes;
-	//quad->getBounds(bounds);
-
 	//int size = 1;
-	//for (BoundingBox b : bounds)
+	//for (const BoundingBox& b : bounds)
 	//{
 	//	boxes.push_back(new Sprite(glm::vec3(b.x, b.y, 0), glm::vec2(b.width, size), glm::vec4(1, 1, 0, 1)));
 	//	boxes.push_back(new Sprite(glm::vec3(b.x, b.y, 0), glm::vec2(size, b.height), glm::vec4(1, 1, 0, 1)));
 	//	boxes.push_back(new Sprite(glm::vec3(b.x + b.width, b.y, 0), glm::vec2(size, b.height), glm::vec4(1, 1, 0, 1)));
 	//	boxes.push_back(new Sprite(glm::vec3(b.x, b.y + b.height, 0), glm::vec2(b.width, size), glm::vec4(1, 1, 0, 1)));
-
 	//}
-
-	//quad->retrieve(rend, *sprite);
-
 	//m_Layer->render(boxes);
-
 	m_Shader.setUniform2f("light_pos", glm::vec2(m_Player->getCenterX(), m_Player->getCenterY()));
 	m_Layer->render();
 }

@@ -10,6 +10,7 @@ public:
 	Texture(const std::string& filename);
 	~Texture();
 
+	const std::string& getName() const { return m_FileName; }
 	GLuint getTID() const { return m_TID; }
 	void bind() const;
 	void unbind() const;

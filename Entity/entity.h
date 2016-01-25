@@ -14,7 +14,7 @@ public:
 	virtual void update();
 	virtual void render();
 
-	virtual bool collision(std::vector<Entity*> objects);
+	virtual bool collision();
 
 	inline const float& getX() const { return m_X; }
 	inline const float& getY() const { return m_Y; }

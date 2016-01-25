@@ -3,16 +3,13 @@
 QuadTree::QuadTree(int level, BoundingBox bounds)
 	: m_Level(level), m_Bounds(bounds), ne(nullptr), se(nullptr), sw(nullptr), nw(nullptr)
 {
-	max_objects = 10;
-	//max_levels = 10;
+	max_objects = 20;
+	max_levels = 10;
+
 }
 
 QuadTree::~QuadTree()
 {
-	if (se != nullptr) delete se;
-	if (ne != nullptr) delete ne;
-	if (sw != nullptr) delete sw;
-	if (nw != nullptr) delete nw;
 }
 
 void QuadTree::split()
@@ -22,22 +19,22 @@ void QuadTree::split()
 	int x = m_Bounds.x;
 	int y = m_Bounds.y;
 
-	se = new QuadTree(m_Level + 1, BoundingBox(x, y, subWidth, subHeight));
-	ne = new QuadTree(m_Level + 1, BoundingBox(x + subWidth, y, subWidth, subHeight));
-	sw = new QuadTree(m_Level + 1, BoundingBox(x, y + subHeight, subWidth, subHeight));
-	nw = new QuadTree(m_Level + 1, BoundingBox(x + subWidth, y + subHeight, subWidth, subHeight));
+	nw = std::unique_ptr<QuadTree>(new QuadTree(m_Level + 1, BoundingBox(x, y, subWidth, subHeight)));
+	ne = std::unique_ptr<QuadTree>(new QuadTree(m_Level + 1, BoundingBox(x + subWidth, y, subWidth, subHeight)));
+	sw = std::unique_ptr<QuadTree>(new QuadTree(m_Level + 1, BoundingBox(x, y + subHeight, subWidth, subHeight)));
+	se = std::unique_ptr<QuadTree>(new QuadTree(m_Level + 1, BoundingBox(x + subWidth, y + subHeight, subWidth, subHeight)));
 }
 
-int QuadTree::getIndex(BoundingBox rect)
+int QuadTree::getIndex(Renderable* data)
 {
 	int index = -1;
-	float vertMidpoint = m_Bounds.x + (m_Bounds.width / 2.0f);
-	float horiMidpoint = m_Bounds.y + (m_Bounds.height / 2.0f);
+	double vmid = m_Bounds.x + (m_Bounds.width / 2.0);
+	double hmid = m_Bounds.y + (m_Bounds.height / 2.0);
 
-	bool topQuad = (rect.y < horiMidpoint && rect.y + rect.height < horiMidpoint);
-	bool botQuad = (rect.y > horiMidpoint);
+	bool topQuad = data->getPosition().y < hmid && data->getPosition().y + data->getSize().y < hmid;
+	bool botQuad = data->getPosition().y > hmid;
 
-	if (rect.x < vertMidpoint && rect.x + rect.width < vertMidpoint)
+	if (data->getPosition().x < vmid && data->getPosition().x + data->getSize().x < vmid)
 	{
 		if (topQuad)
 		{
@@ -48,68 +45,78 @@ int QuadTree::getIndex(BoundingBox rect)
 			index = 2;
 		}
 	}
-	else if (rect.x > vertMidpoint)
+	else if (data->getPosition().x >= vmid)
 	{
-		if (topQuad) {
+		if (topQuad)
+		{
 			index = 0;
 		}
 		else if (botQuad)
 		{
 			index = 3;
 		}
+
 	}
 
 	return index;
 }
 
-bool QuadTree::insert(Renderable* data)
+void QuadTree::insert(Renderable* data)
 {
-	if (!m_Bounds.contains(*data))
+	// if there are child nodes then find the child node that we insert into
+	if (nw != nullptr)
 	{
-		return false;
-	}
-
-	if (m_Objects.size() < max_objects)
-	{
-		m_Objects.push_back(data);
-		return true;
-	}
-
-	if (nw == nullptr)
-	{
-		split();
-	}
-
-	if (nw->insert(data)) return true;
-	if (ne->insert(data)) return true;
-	if (sw->insert(data)) return true;
-	if (se->insert(data)) return true;
-
-	return false;
-}
-
-void QuadTree::retrieve(std::vector<Renderable*>& data, Renderable range)
-{
-	if (!m_Bounds.intersects(range))
-	{
-		return;
-	}
-
-	for (Renderable* object : m_Objects)
-	{
-		if (m_Bounds.contains(*object))
+		int index = getIndex(data);
+		
+		if (index != -1)
 		{
-			data.push_back(object);
+			if (index == 0)	ne->insert(data);
+			else if (index == 1) nw->insert(data);
+			else if (index == 2) sw->insert(data);
+			else if (index == 3) se->insert(data);
+			return;
 		}
 	}
 
-	if (nw == nullptr) return;
+	if (m_Bounds.contains(*data)) m_Objects.push_back(data);
 
-	nw->retrieve(data, range);
-	ne->retrieve(data, range);
-	sw->retrieve(data, range);
-	se->retrieve(data, range);
+	if (m_Objects.size() > max_objects && m_Level < max_levels)
+	{
+		if (nw == nullptr) split();
 
+		for (auto i = m_Objects.cbegin(); i != m_Objects.cend(); )
+		{
+			int index = getIndex(*i);
+			if (index != -1)
+			{
+				if (index == 0)	ne->insert(*i);
+				else if (index == 1) nw->insert(*i);
+				else if (index == 2) sw->insert(*i);
+				else if (index == 3) se->insert(*i);
+				i = m_Objects.erase(i);
+			}
+			else
+			{
+				++i;
+			}
+		}
+	}
+
+}
+
+void QuadTree::retrieve(std::vector<Renderable*>& data, Renderable* range)
+{
+	auto index = getIndex(range);
+
+	if (index != -1 && nw != nullptr)
+	{
+		if (index == 0)	ne->retrieve(data, range);
+		else if (index == 1) nw->retrieve(data, range);
+		else if (index == 2) sw->retrieve(data, range);
+		else if (index == 3) se->retrieve(data, range);
+	}
+
+	std::copy(m_Objects.begin(), m_Objects.end(), std::back_inserter(data));
 }
 
 void QuadTree::getBounds(std::vector<BoundingBox>& bounds)

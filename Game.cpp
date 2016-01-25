@@ -33,7 +33,7 @@ int main(int argc, char** argv)
 	while (!window.shouldClose()) {
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		while (time.elapsed() - updateTimer > tick)
+		while (time.elapsed() - updateTimer > tick && updates < 60)
 		{
 			level.update();
 			++updates;

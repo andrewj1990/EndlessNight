@@ -40,7 +40,7 @@ void Projectile::update()
 	m_X += m_Dx;
 	m_Y += m_Dy;
 
-	if (!collision(m_Level.getPlatforms()))
+	if (!collision())
 	{
 		m_Sprite->addDirection(m_Dx, m_Dy);
 	}
@@ -63,33 +63,35 @@ void Projectile::update()
 	}
 }
 
-bool Projectile::collision(std::vector<Entity*> objects)
+std::vector<Renderable*> list;
+bool Projectile::collision()
 {
-	// look at all the platforms in the level and check for any collisions
-	//std::vector<Renderable*>& platforms = m_Level.getPlatform();
-	//for (Renderable* platform : platforms)
-	//{
-	//	const int& px = platform->getPosition().x;
-	//	const int& py = platform->getPosition().y;
-	//	const int& w = platform->getSize().x;
-	//	const int& h = platform->getSize().y;
+	//look at all the platforms in the level and check for any collisions
+	const std::unique_ptr<QuadTree>& q = m_Level.getQuadTree();
+	list.clear();
+	q->retrieve(list, m_Sprite);
+	const std::vector<Renderable*>& plat = m_Level.getPlatform();
+	for (Renderable* platform : list)
+	{
+		const int& px = platform->getPosition().x;
+		const int& py = platform->getPosition().y;
+		const int& w = platform->getSize().x;
+		const int& h = platform->getSize().y;
 
-	//	if (m_X < px + w && m_X > px && m_Y > py && m_Y < py + h)
-	//	{
-	////		std::cout << "x : " << x << ", y : " << y << "\n";
-	//		// if player is on a platform and moving
-	//		// get the platforms colour and spawn particles the same colour as the platfroms
-	//		glm::vec4 platformColour = platform->getColour();
-	//		for (int i = 0; i < 5; ++i)
-	//			m_Level.addParticle(new Particle(m_X, m_Y, m_Level, platformColour, 3.0f));
-	//		return true;
-	//	}
-	//}
+		if (m_X <= px + w && m_X >= px && m_Y >= py && m_Y <= py + h)
+		{
+			// if player is on a platform and moving
+			// get the platforms colour and spawn particles the same colour as the platfroms
+			glm::vec4 platformColour = platform->getColour();
+			for (int i = 0; i < 5; ++i)
+				m_Level.addParticle(new Particle(m_X, m_Y, m_Level, platformColour, 3.0f));
+			return true;
+		}
+	}
 
 	return false;
 }
 
 void Projectile::render()
 {
-
 }

@@ -1,7 +1,7 @@
 #include "platform.h"
 
 Platform::Platform(Level& level)
-	: Entity(0, 0, level), m_Size(15)
+	: Entity(0, 0, level), m_Size(30)
 {
 	//m_X = rand() % 1280;
 	//m_Y = rand() % 720;
@@ -18,11 +18,18 @@ Platform::Platform(Level& level)
 	generatePlatforms(100, 100);
 	generatePlatforms(900, 500);
 
+
+	//m_Sprites.push_back(new Sprite(glm::vec3(100, 500, 0), glm::vec2(30, 30), glm::vec4(1, 1, 0, 1)));
+	//m_Sprites.push_back(new Sprite(glm::vec3(200, 500, 0), glm::vec2(30, 30), glm::vec4(1, 1, 0, 1)));
+	//m_Sprites.push_back(new Sprite(glm::vec3(300, 500, 0), glm::vec2(30, 30), glm::vec4(1, 1, 0, 1)));
+	//m_Sprites.push_back(new Sprite(glm::vec3(400, 500, 0), glm::vec2(30, 30), glm::vec4(1, 1, 0, 1)));
+	//m_Sprites.push_back(new Sprite(glm::vec3(500, 500, 0), glm::vec2(30, 30), glm::vec4(1, 1, 0, 1)));
+
 	setTextures();
 	for (Sprite* sprite : m_Sprites)
 	{
 		addToLevel(sprite);
-		//m_Level.addPlatform(sprite);
+		m_Level.addPlatform(sprite);
 	}
 
 }
@@ -122,22 +129,22 @@ void Platform::setTextures()
 			state += 11;
 		}
 
-		if (state == 1) sprite->setTexture(Texture("Textures/Top.png"));
-		else if (state == 3)  sprite->setTexture(Texture("Textures/Right.png"));
-		else if (state == 5)  sprite->setTexture(Texture("Textures/Bottom.png"));
-		else if (state == 11) sprite->setTexture(Texture("Textures/Left.png"));
-		else if (state == 4)  sprite->setTexture(Texture("Textures/TopRight.png"));
-		else if (state == 6)  sprite->setTexture(Texture("Textures/TopBottom.png"));
-		else if (state == 12) sprite->setTexture(Texture("Textures/TopLeft.png"));
-		else if (state == 14) sprite->setTexture(Texture("Textures/RightLeft.png"));
-		else if (state == 8)  sprite->setTexture(Texture("Textures/BottomRight.png"));
-		else if (state == 16) sprite->setTexture(Texture("Textures/BottomLeft.png"));
-		else if (state == 20) sprite->setTexture(Texture("Textures/All.png"));
-		else if (state == 15) sprite->setTexture(Texture("Textures/TopRightLeft.png"));
-		else if (state == 9)  sprite->setTexture(Texture("Textures/TopBottomRight.png"));
-		else if (state == 19) sprite->setTexture(Texture("Textures/BottomRightLeft.png"));
-		else if (state == 17) sprite->setTexture(Texture("Textures/TopBottomLeft.png"));
-		else sprite->setTexture(Texture("Textures/None.png"));
+		if (state == 1)		  sprite->setTexture(TextureManager::get("Textures/Top.png"));
+		else if (state == 3)  sprite->setTexture(TextureManager::get("Textures/Right.png"));
+		else if (state == 5)  sprite->setTexture(TextureManager::get("Textures/Bottom.png"));
+		else if (state == 11) sprite->setTexture(TextureManager::get("Textures/Left.png"));
+		else if (state == 4)  sprite->setTexture(TextureManager::get("Textures/TopRight.png"));
+		else if (state == 6)  sprite->setTexture(TextureManager::get("Textures/TopBottom.png"));
+		else if (state == 12) sprite->setTexture(TextureManager::get("Textures/TopLeft.png"));
+		else if (state == 14) sprite->setTexture(TextureManager::get("Textures/RightLeft.png"));
+		else if (state == 8)  sprite->setTexture(TextureManager::get("Textures/BottomRight.png"));
+		else if (state == 16) sprite->setTexture(TextureManager::get("Textures/BottomLeft.png"));
+		else if (state == 20) sprite->setTexture(TextureManager::get("Textures/All.png"));
+		else if (state == 15) sprite->setTexture(TextureManager::get("Textures/TopRightLeft.png"));
+		else if (state == 9)  sprite->setTexture(TextureManager::get("Textures/TopBottomRight.png"));
+		else if (state == 19) sprite->setTexture(TextureManager::get("Textures/BottomRightLeft.png"));
+		else if (state == 17) sprite->setTexture(TextureManager::get("Textures/TopBottomLeft.png"));
+		else sprite->setTexture(TextureManager::get("Textures/None.png"));
 
 	}
 

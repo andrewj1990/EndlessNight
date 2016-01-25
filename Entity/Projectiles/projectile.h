@@ -9,7 +9,7 @@ public:
 
 	void update() override;
 	void render() override;
-	bool collision(std::vector<Entity*> objects) override;
+	bool collision() override;
 
 private:
 	void calcProjectileDir();

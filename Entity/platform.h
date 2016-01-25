@@ -4,6 +4,7 @@
 #include "entity.h"
 #include <queue>
 #include <unordered_map>
+#include "../Graphics/texture_manager.h"
 
 struct Node
 {

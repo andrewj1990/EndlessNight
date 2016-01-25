@@ -7,10 +7,10 @@ Sprite::Sprite(const glm::vec3& position, const glm::vec2 size, const glm::vec4&
 
 }
 
-Sprite::Sprite(const glm::vec3 & position, const glm::vec2 size, Texture texture)
+Sprite::Sprite(const glm::vec3 & position, const glm::vec2 size, Texture* texture)
 	: Renderable(position, size)
 {
-	m_Texture = std::make_unique<Texture>(texture);
+	m_Texture = texture;
 }
 
 Sprite::~Sprite()
