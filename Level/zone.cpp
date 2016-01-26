@@ -16,6 +16,6 @@ void Zone::init()
 		int ry = m_Y + (rand() % m_Window.getHeight());
 		int rw = rand() % m_Window.getWidth() / 5;
 		int rh = rand() % m_Window.getHeight() / 5;
-		m_Level.addPlatform(new Platform(rx, ry, rw, rh, m_Level));
+		//m_Level.addPlatform(new Platform(rx, ry, rw, rh, m_Level));
 	}
 }

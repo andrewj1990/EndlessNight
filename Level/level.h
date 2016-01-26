@@ -20,6 +20,9 @@
 #include "../Utils/quadTree.h"
 #include "../Graphics/texture_manager.h"
 
+#include "../Graphics/label.h"
+#include "../Graphics/font_manager.h"
+
 class Player;
 
 class Level
@@ -40,7 +43,6 @@ public:
 	GLFWwindow* getWindow() { return m_Window.getWindow(); }
 	Window& getWindowClass() { return m_Window; }
 	Layer& getLayer() { return *m_Layer; }
-	std::vector<Entity*>& getPlatforms() { return m_Platforms; }
 	std::vector<Renderable*> getPlatform() { return m_Platform; }
 	glm::vec2& getOffset() { return m_Offset; }
 	const std::unique_ptr<QuadTree>& getQuadTree() { return quad; }
@@ -56,12 +58,12 @@ private:
 	glm::vec2 m_Offset;
 
 	std::vector<Entity*> m_Particles;
-	std::vector<Entity*> m_Platforms;
 	std::vector<Renderable*> m_Platform;
 	std::vector<Entity*> m_Projectiles;
 
 	std::unique_ptr<QuadTree> quad;
 
 	Sprite* Background;
+	std::unique_ptr<Label> m_Label;
 
 };

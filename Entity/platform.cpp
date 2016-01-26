@@ -16,7 +16,7 @@ Platform::Platform(Level& level)
 
 	//generatePlatforms(500, 500);
 	generatePlatforms(100, 100);
-	generatePlatforms(900, 500);
+	generatePlatforms(900, 1000);
 
 
 	//m_Sprites.push_back(new Sprite(glm::vec3(100, 500, 0), glm::vec2(30, 30), glm::vec4(1, 1, 0, 1)));

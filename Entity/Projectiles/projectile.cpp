@@ -3,7 +3,7 @@
 Projectile::Projectile(int x, int y, Level& level)
 	: Entity(x, y, level), m_ProjectileSpeed(15.0f), m_Life(10000)
 {
-	m_ProjectileSpeed = 1;
+	//m_ProjectileSpeed = 1;
 	calcProjectileDir();
 	m_Sprite = new Sprite(glm::vec3(m_X, m_Y, 0), glm::vec2(2.5f, 2.5f), glm::vec4(1, 1, 0, 1));
 	addToLevel(m_Sprite);
@@ -18,21 +18,9 @@ void Projectile::calcProjectileDir()
 	mouseY += m_Level.getOffset().y;
 
 	// get projectile direction
-	//m_Dx = mouseX - m_X;
-	//m_Dy = mouseY - m_Y;
-
 	float angle = std::atan2f(mouseX - m_X, mouseY - m_Y);
 	m_Dx = std::sinf(angle) * m_ProjectileSpeed;
 	m_Dy = std::cosf(angle) * m_ProjectileSpeed;
-
-//	float length;
-//	length = std::sqrtf(m_Dx*m_Dx + m_Dy*m_Dy);
-//
-////	 normalize
-//	m_Dx /= length;
-//	m_Dy /= length;
-//	m_Dx *= m_ProjectileSpeed;
-//	m_Dy *= m_ProjectileSpeed;
 }
 
 void Projectile::update()
@@ -48,7 +36,7 @@ void Projectile::update()
 		m_Destroy = true;
 	}
 
-	//m_Sprite->fade();
+	m_Sprite->fade();
 
 	float alpha = m_Sprite->getColour().w;
 	// set to destroy particle if life runs out
@@ -63,15 +51,13 @@ void Projectile::update()
 	}
 }
 
-std::vector<Renderable*> list;
 bool Projectile::collision()
 {
 	//look at all the platforms in the level and check for any collisions
 	const std::unique_ptr<QuadTree>& q = m_Level.getQuadTree();
-	list.clear();
-	q->retrieve(list, m_Sprite);
-	const std::vector<Renderable*>& plat = m_Level.getPlatform();
-	for (Renderable* platform : list)
+	std::vector<Renderable*> platforms;
+	q->retrieve(platforms, m_Sprite);
+	for (Renderable* platform : platforms)
 	{
 		const int& px = platform->getPosition().x;
 		const int& py = platform->getPosition().y;

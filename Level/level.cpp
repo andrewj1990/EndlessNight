@@ -25,14 +25,14 @@ Level::Level(Window& window)
 	TextureManager::add(new Texture("Textures/None.png"));
 
 	// FONTS //
-	FontManager::add(new Font("blah", "LuckiestGuy.ttf", 80));
+	FontManager::add(new Font("Arial", "arial.ttf", 30));
 
 	m_Offset = glm::vec2(0.0f, 0.0f);
 	m_Ortho = glm::ortho(0.0f, 1280.0f, 0.0f, 720.0f, -1.0f, 1.0f);
 	m_Layer = new Layer(m_Shader, m_Ortho);
 
-	Background = new Sprite(glm::vec3(0, 0, 0), glm::vec2(1280, 1000), new Texture("Textures/Background.png"));
-	//m_Layer->add(Background);
+	Background = new Sprite(glm::vec3(0, 0, 0), glm::vec2(1200, 1000), new Texture("Textures/Background.png"));
+	m_Layer->add(Background);
 
 	//Platform* platform = new Platform(m_Window.getWidth() / 3, 0, m_Window.getWidth() / 2, m_Window.getHeight() / 2, *this);
 	//m_Platforms.push_back(platform);
@@ -54,10 +54,10 @@ Level::Level(Window& window)
 
 	Platform* test = new Platform(*this);
 
+	m_Label = std::unique_ptr<Label>(new Label("Altitude : ", 0, 0, FontManager::get("Arial"), glm::vec4(1, 1, 1, 1)));
+	m_Layer->add(m_Label.get());
 }
 
-std::vector<Renderable*> boxes;
-std::vector<BoundingBox> bounds;
 void Level::update()
 {
 	double x;
@@ -106,25 +106,13 @@ void Level::update()
 		}
 	}
 
-	//std::vector<Renderable*> list;
-	//quad->retrieve(list, *m_Player->getSprite());
-	//std::cout << " list size : " << list.size() << "\n";
-	//boxes.clear();
-	//bounds.clear();
-	//quad->getBounds(bounds);
+	m_Label->text = "Altitude : " + std::to_string(m_Offset.y);
 }
 
 void Level::render()
 {
-	//int size = 1;
-	//for (const BoundingBox& b : bounds)
-	//{
-	//	boxes.push_back(new Sprite(glm::vec3(b.x, b.y, 0), glm::vec2(b.width, size), glm::vec4(1, 1, 0, 1)));
-	//	boxes.push_back(new Sprite(glm::vec3(b.x, b.y, 0), glm::vec2(size, b.height), glm::vec4(1, 1, 0, 1)));
-	//	boxes.push_back(new Sprite(glm::vec3(b.x + b.width, b.y, 0), glm::vec2(size, b.height), glm::vec4(1, 1, 0, 1)));
-	//	boxes.push_back(new Sprite(glm::vec3(b.x, b.y + b.height, 0), glm::vec2(b.width, size), glm::vec4(1, 1, 0, 1)));
-	//}
-	//m_Layer->render(boxes);
+	m_Label->position.x = m_Offset.x + 15;
+	m_Label->position.y = m_Offset.y + m_Window.getHeight() - 45;
 	m_Shader.setUniform2f("light_pos", glm::vec2(m_Player->getCenterX(), m_Player->getCenterY()));
 	m_Layer->render();
 }
@@ -138,11 +126,6 @@ void Level::addParticle(Entity* particle)
 void Level::addPlatform(Renderable* platform)
 {
 	m_Platform.push_back(platform);
-}
-
-void Level::addPlatform(Entity* platform)
-{
-	m_Platforms.push_back(platform);
 }
 
 void Level::addProjectile(Entity* projectile)
