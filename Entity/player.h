@@ -26,4 +26,6 @@ private:
 	double m_PlayerSpeed;
 
 	std::vector<Sprite*> m_PlayerBody;
+
+	bool first;
 };

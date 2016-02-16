@@ -36,7 +36,7 @@ Level::Level(Window& window)
 
 	//Platform* platform = new Platform(m_Window.getWidth() / 3, 0, m_Window.getWidth() / 2, m_Window.getHeight() / 2, *this);
 	//m_Platforms.push_back(platform);
-	m_Player = std::unique_ptr<Player>(new Player(m_Window.getWidth() / 2, m_Window.getHeight() / 2, *this));
+	m_Player = std::unique_ptr<Player>(new Player(m_Window.getWidth() / 2 - 5, m_Window.getHeight() / 2 - 5, *this));
 
 	int center = 0;
 	int center_width = 1280;
@@ -69,6 +69,7 @@ void Level::update()
 	quad = std::unique_ptr<QuadTree>(new QuadTree(0, BoundingBox(m_Offset.x, m_Offset.y, 1280, 720)));
 	for (Renderable* r : m_Platform)
 	{
+		r->setColor(1, 1, 1);
 		quad->insert(r);
 	}
 

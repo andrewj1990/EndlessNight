@@ -21,22 +21,42 @@ void Projectile::calcProjectileDir()
 	float angle = std::atan2f(mouseX - m_X, mouseY - m_Y);
 	m_Dx = std::sinf(angle) * m_ProjectileSpeed;
 	m_Dy = std::cosf(angle) * m_ProjectileSpeed;
+
+	std::unordered_map<int, Node> mp;
+	//std::cout << "m_X : " << m_X << " , m_Y : " << m_Y << " | mouseX : " << mouseX << " , mouseY : " << mouseY << "\n";
+
+	int size = 16;
+	const std::unique_ptr<QuadTree>& qt = m_Level.getQuadTree();
+	mp = aStarSearch((int)(m_X / size) * size, (int)(m_Y / size) * size, glm::vec2((int)(mouseX / size) * size, (int)(mouseY / size) * size), qt);
+
+	Node current((int)(mouseX / size) * size, (int)(mouseY / size) * size);
+	Node start((int)(m_X / size) * size, (int)(m_Y / size) * size);
+	path.push_back(current);
+	while (current.getInt() != start.getInt())
+	{
+		current = mp[current.getInt()];
+		path.push_back(current);
+	}
 }
 
 void Projectile::update()
 {
-	m_X += m_Dx;
-	m_Y += m_Dy;
+	if (path.size() <= 0) return;
+	Node current = path.back();
+	path.pop_back();
+	m_X = current.x;
+	m_Y = current.y;
 
 	if (!collision())
 	{
-		m_Sprite->addDirection(m_Dx, m_Dy);
+		//m_Sprite->addDirection(m_Dx, m_Dy);
+		m_Sprite->setPosition(m_X, m_Y);
 	}
 	else {
 		m_Destroy = true;
 	}
 
-	m_Sprite->fade();
+	//m_Sprite->fade();
 
 	float alpha = m_Sprite->getColour().w;
 	// set to destroy particle if life runs out
@@ -59,6 +79,7 @@ bool Projectile::collision()
 	q->retrieve(platforms, m_Sprite);
 	for (Renderable* platform : platforms)
 	{
+		platform->setColor(0, 1, 0);
 		const int& px = platform->getPosition().x;
 		const int& py = platform->getPosition().y;
 		const int& w = platform->getSize().x;

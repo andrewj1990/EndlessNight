@@ -3,6 +3,7 @@
 Player::Player(const int& x, const int& y, Level& level)
 	: Entity(x, y, level)
 {
+	first = true;
 	m_Width = 10;
 	m_Height = 10;
 	m_PlayerSpeed = 3.0;
@@ -14,8 +15,8 @@ Player::Player(const int& x, const int& y, Level& level)
 void Player::update()
 {
 	double dx = 0;
-	double dy = -m_PlayerSpeed;
-	//double dy = 0;
+	//double dy = -m_PlayerSpeed;
+	double dy = 0;
 
 	//if (glfwGetKey(m_Level.getWindow(), GLFW_KEY_W)) {
 	if (glfwGetKey(m_Level.getWindow(), GLFW_KEY_SPACE)) {
@@ -33,17 +34,18 @@ void Player::update()
 		dx += m_PlayerSpeed;
 	}
 
-	//if (glfwGetMouseButton(m_Level.getWindow(), GLFW_MOUSE_BUTTON_1))
-	if (m_Level.getWindowClass().isMouseButtonPressed(GLFW_MOUSE_BUTTON_1))
+	if (glfwGetMouseButton(m_Level.getWindow(), GLFW_MOUSE_BUTTON_1))
+	//if (m_Level.getWindowClass().isMouseButtonPressed(GLFW_MOUSE_BUTTON_1) && first)
 	{
+		first = false;
 		m_Level.addProjectile(new Projectile(getCenterX(), getCenterY(), m_Level));
 	}
 
 	// gravity
-	if (!collision(m_X, m_Y - 1, true, dx, 0))
-	{
-		move(0, -1);
-	}
+	//if (!collision(m_X, m_Y - 1, true, dx, 0))
+	//{
+	//	move(0, -1);
+	//}
 
 	// check if the next tile is not collidable and move
 	if (!collision(m_X, m_Y + dy))
@@ -80,15 +82,18 @@ void Player::move(const double& dx, const double& dy)
 bool Player::collision(int x, int y, bool spawn_particles, int dx, int dy)
 {
 	// look at all the platforms in the level and check for any collisions
-	//std::vector<Entity*>& platforms = m_Level.getPlatforms();
-	//std::vector<Entity*>& platforms = m_Level.getSprites();
-	//const std::vector<Renderable*>& platforms = m_Level.getPlatform();
-
 	const std::unique_ptr<QuadTree>& q = m_Level.getQuadTree();
 	std::vector<Renderable*> platforms;
-	q->retrieve(platforms, m_Sprite);
+	//q->retrieve(platforms, x, y, m_Width, m_Height);
+	q->retrieve(platforms, x, y, 0, 0);
+	q->retrieve(platforms, x + m_Width, y, 0, 0);
+	q->retrieve(platforms, x, y + m_Height, 0, 0);
+	q->retrieve(platforms, x + m_Width, y + m_Height, 0, 0);
+
+	const std::vector<Renderable*> platforms2 = m_Level.getPlatform();
 	for (Renderable* platform : platforms)
 	{
+		platform->setColor(1, 0, 0);
 		//const int& px = platform->getX();
 		//const int& py = platform->getY();
 		//const int& w = platform->getWidth();

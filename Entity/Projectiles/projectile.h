@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../entity.h"
+#include "../../Utils/astar.h"
+#include <unordered_map>
 
 class Projectile : public Entity
 {
@@ -21,5 +23,7 @@ private:
 	float m_ProjectileSpeed;
 
 	int m_Life;
+
+	std::vector<Node> path;
 
 };

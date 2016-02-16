@@ -25,7 +25,7 @@ Platform::Platform(Level& level)
 	//m_Sprites.push_back(new Sprite(glm::vec3(400, 500, 0), glm::vec2(30, 30), glm::vec4(1, 1, 0, 1)));
 	//m_Sprites.push_back(new Sprite(glm::vec3(500, 500, 0), glm::vec2(30, 30), glm::vec4(1, 1, 0, 1)));
 
-	setTextures();
+	//setTextures();
 	for (Sprite* sprite : m_Sprites)
 	{
 		addToLevel(sprite);

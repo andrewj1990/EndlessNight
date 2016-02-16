@@ -5,14 +5,7 @@
 #include <queue>
 #include <unordered_map>
 #include "../Graphics/texture_manager.h"
-
-struct Node
-{
-	int x;
-	int y;
-
-	Node(int x, int y) : x(x), y(y) { }
-};
+#include "../Utils/Node.h"
 
 class Platform : public Entity
 {

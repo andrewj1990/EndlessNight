@@ -39,8 +39,10 @@ public:
 	void split();
 
 	void retrieve(std::vector<Renderable*>& list, Renderable* range);
+	void retrieve(std::vector<Renderable*>& data, const float& x, const float& y, const float& w, const float& h);
 	void insert(Renderable* data);
 	int getIndex(Renderable* data);
+	int getIndex(const float& x, const float& y, const float& w, const float& h);
 
 	void getBounds(std::vector<BoundingBox>& bounds);
 
