@@ -93,7 +93,6 @@ bool Player::collision(int x, int y, bool spawn_particles, int dx, int dy)
 	const std::vector<Renderable*> platforms2 = m_Level.getPlatform();
 	for (Renderable* platform : platforms)
 	{
-		platform->setColor(1, 0, 0);
 		//const int& px = platform->getX();
 		//const int& py = platform->getY();
 		//const int& w = platform->getWidth();

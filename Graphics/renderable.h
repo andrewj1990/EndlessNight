@@ -24,7 +24,7 @@ public:
 	Renderable(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color = glm::vec4(1,1,1,1))
 		: m_Position(position), m_Size(size), m_Colour(color)
 	{	
-		setUVDefaults();
+		setUV();
 	}
 
 	virtual void submit(BatchRenderer& renderer) const
@@ -39,7 +39,7 @@ public:
 		m_Colour.b = b;
 	}
 
-	void setTexture(Texture* texture) { m_Texture = texture; }
+	void setTexture(Texture* texture) { m_Texture = texture; m_UV = m_Texture->getUVs(); }
 
 	inline const glm::vec3& getPosition() const { return m_Position; }
 	inline const glm::vec2& getSize() const { return m_Size; }
@@ -50,9 +50,33 @@ public:
 private:
 	void setUVDefaults()
 	{
-		m_UV.push_back(glm::vec2(0, 0));
-		m_UV.push_back(glm::vec2(0, 1));
-		m_UV.push_back(glm::vec2(1, 1));
-		m_UV.push_back(glm::vec2(1, 0));
+		//float r = rand() % 10;
+		//if (r == 0) r = 1;
+		//else r = 1 / r;
+		float s = 0.0f;
+		float r = 1.0f;
+		m_UV.push_back(glm::vec2(s, s));
+		m_UV.push_back(glm::vec2(s, r));
+		m_UV.push_back(glm::vec2(r, r));
+		m_UV.push_back(glm::vec2(r, s));
+	}
+
+	void setUV()
+	{
+		float totalSize = 64;
+		float size = 22;
+
+		float ix = 1;
+		float iy = 1;
+
+		float tx = (ix * size) / totalSize;
+		float ty = (iy * size) / totalSize;
+		float tw = (size / totalSize);
+		float th = (size / totalSize);
+
+		m_UV.push_back(glm::vec2(tx, ty));
+		m_UV.push_back(glm::vec2(tx, ty + th));
+		m_UV.push_back(glm::vec2(tx + tw, ty + th));
+		m_UV.push_back(glm::vec2(tx + tw, ty));
 	}
 };

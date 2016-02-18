@@ -3,15 +3,29 @@
 #include "../Utils/loadImage.h"
 #include <GL\glew.h>
 #include <string>
+#include <vector>
+#include <glm\glm.hpp>
+#include "spritesheet.h"
+
+class SpriteSheet;
 
 class Texture
 {
 public:
+	
 	Texture(const std::string& filename);
+	Texture(SpriteSheet& spritesheet, const std::string& filename, const int& xIndex, const int& yIndex, const int& width, const int& height);
 	~Texture();
 
+	void setDefaultUV();
+
 	const std::string& getName() const { return m_FileName; }
-	GLuint getTID() const { return m_TID; }
+	inline const GLuint& getTID() const { return m_TID; }
+	
+	void setUV(const float& ix, const float& iy, const float& w, const float& h, const float& sw, const float& sh);
+	inline const std::vector<glm::vec2> getUVs() { return m_UV; }
+	const int& getWidth() { return m_Width; }
+	const int& getHeight() { return m_Height; }
 	void bind() const;
 	void unbind() const;
 
@@ -23,5 +37,6 @@ private:
 	GLuint m_TID;
 	unsigned int m_Width;
 	unsigned int m_Height;
+	std::vector<glm::vec2> m_UV;
 
 };

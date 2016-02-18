@@ -79,7 +79,6 @@ bool Projectile::collision()
 	q->retrieve(platforms, m_Sprite);
 	for (Renderable* platform : platforms)
 	{
-		platform->setColor(0, 1, 0);
 		const int& px = platform->getPosition().x;
 		const int& py = platform->getPosition().y;
 		const int& w = platform->getSize().x;

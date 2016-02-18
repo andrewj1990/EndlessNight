@@ -6,23 +6,43 @@
 Level::Level(Window& window)
 	: m_Window(window), m_Shader("Shaders/vertShader.vert", "Shaders/fragShader.frag")
 {
+	SpriteSheet* spritesheet = new SpriteSheet("Textures/spritesheetTest.png");
+	SpriteSheet* platforms_spritesheet = new SpriteSheet("Textures/Platforms.png");
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/Top.png"				, 0, 0, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/Right.png"			, 0, 0, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/Bottom.png"			, 0, 0, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/Left.png"				, 0, 0, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/TopRight.png"			, 0, 0, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/TopBottom.png"		, 0, 0, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/TopLeft.png"			, 0, 0, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/RightLeft.png"		, 0, 0, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/BottomRight.png"		, 0, 0, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/BottomLeft.png"		, 0, 0, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/All.png"				, 0, 0, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/TopRightLeft.png"		, 0, 0, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/TopBottomRight.png"	, 0, 0, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/BottomRightLeft.png"	, 0, 0, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/TopBottomLeft.png"	, 0, 0, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/None.png"				, 0, 0, 32, 32));
+
+
 	// TEXTURES //
-	TextureManager::add(new Texture("Textures/Top.png"));
-	TextureManager::add(new Texture("Textures/Right.png"));
-	TextureManager::add(new Texture("Textures/Bottom.png"));
-	TextureManager::add(new Texture("Textures/Left.png"));
-	TextureManager::add(new Texture("Textures/TopRight.png"));
-	TextureManager::add(new Texture("Textures/TopBottom.png"));
-	TextureManager::add(new Texture("Textures/TopLeft.png"));
-	TextureManager::add(new Texture("Textures/RightLeft.png"));
-	TextureManager::add(new Texture("Textures/BottomRight.png"));
-	TextureManager::add(new Texture("Textures/BottomLeft.png"));
-	TextureManager::add(new Texture("Textures/All.png"));
-	TextureManager::add(new Texture("Textures/TopRightLeft.png"));
-	TextureManager::add(new Texture("Textures/TopBottomRight.png"));
-	TextureManager::add(new Texture("Textures/BottomRightLeft.png"));
-	TextureManager::add(new Texture("Textures/TopBottomLeft.png"));
-	TextureManager::add(new Texture("Textures/None.png"));
+	//TextureManager::add(new Texture("Textures/Top.png"));
+	//TextureManager::add(new Texture("Textures/Right.png"));
+	//TextureManager::add(new Texture("Textures/Bottom.png"));
+	//TextureManager::add(new Texture("Textures/Left.png"));
+	//TextureManager::add(new Texture("Textures/TopRight.png"));
+	//TextureManager::add(new Texture("Textures/TopBottom.png"));
+	//TextureManager::add(new Texture("Textures/TopLeft.png"));
+	//TextureManager::add(new Texture("Textures/RightLeft.png"));
+	//TextureManager::add(new Texture("Textures/BottomRight.png"));
+	//TextureManager::add(new Texture("Textures/BottomLeft.png"));
+	//TextureManager::add(new Texture("Textures/All.png"));
+	//TextureManager::add(new Texture("Textures/TopRightLeft.png"));
+	//TextureManager::add(new Texture("Textures/TopBottomRight.png"));
+	//TextureManager::add(new Texture("Textures/BottomRightLeft.png"));
+	//TextureManager::add(new Texture("Textures/TopBottomLeft.png"));
+	//TextureManager::add(new Texture("Textures/None.png"));
 
 	// FONTS //
 	FontManager::add(new Font("Arial", "arial.ttf", 30));
@@ -56,6 +76,12 @@ Level::Level(Window& window)
 
 	m_Label = std::unique_ptr<Label>(new Label("Altitude : ", 0, 0, FontManager::get("Arial"), glm::vec4(1, 1, 1, 1)));
 	m_Layer->add(m_Label.get());
+
+	//Sprite* sprite = new Sprite(glm::vec3(300, 300, 0), glm::vec2(100, 100), new Texture("Textures/spritesheetTest.png"));
+	Sprite* sprite = new Sprite(glm::vec3(300, 300, 0), glm::vec2(100, 100), glm::vec4(1, 1, 1, 1));
+	//sprite->setTexture(new Texture(*spritesheet, "test",0, 2, 21, 21));
+	sprite->setTexture(TextureManager::get("Textures/Top.png"));
+	m_Layer->add(sprite);
 }
 
 void Level::update()
@@ -69,10 +95,8 @@ void Level::update()
 	quad = std::unique_ptr<QuadTree>(new QuadTree(0, BoundingBox(m_Offset.x, m_Offset.y, 1280, 720)));
 	for (Renderable* r : m_Platform)
 	{
-		r->setColor(1, 1, 1);
 		quad->insert(r);
 	}
-
 
 	m_Player->update();
 
