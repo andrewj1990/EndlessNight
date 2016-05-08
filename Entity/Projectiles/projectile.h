@@ -26,4 +26,12 @@ private:
 
 	std::vector<Node> path;
 
+	typedef std::pair<int, Node> Element;
+	std::priority_queue<Element, std::vector<Element>, std::greater<Element>> frontier;
+	Node* goal;
+	Node* start;
+
+	std::unordered_map<int, Node> came_from;
+	std::unordered_map<int, int> cost_so_far;
+
 };

@@ -22,41 +22,34 @@ void Projectile::calcProjectileDir()
 	m_Dx = std::sinf(angle) * m_ProjectileSpeed;
 	m_Dy = std::cosf(angle) * m_ProjectileSpeed;
 
-	std::unordered_map<int, Node> mp;
-	//std::cout << "m_X : " << m_X << " , m_Y : " << m_Y << " | mouseX : " << mouseX << " , mouseY : " << mouseY << "\n";
+	// pathfinding test
+	//int size = 16;
 
-	int size = 16;
-	const std::unique_ptr<QuadTree>& qt = m_Level.getQuadTree();
-	mp = aStarSearch((int)(m_X / size) * size, (int)(m_Y / size) * size, glm::vec2((int)(mouseX / size) * size, (int)(mouseY / size) * size), qt);
+	//start = new Node((int)(m_X / size) * size, (int)(m_Y / size) * size);
+	//goal = new Node((int)(mouseX / size) * size, (int)(mouseY / size) * size);
+	//frontier.emplace(0, *start);
 
-	Node current((int)(mouseX / size) * size, (int)(mouseY / size) * size);
-	Node start((int)(m_X / size) * size, (int)(m_Y / size) * size);
-	path.push_back(current);
-	while (current.getInt() != start.getInt())
-	{
-		current = mp[current.getInt()];
-		path.push_back(current);
-	}
+	//came_from[start->getInt()] = *start;
+	//cost_so_far[start->getInt()] = 0;
+
+	//Sprite* sprite = new Sprite(glm::vec3(goal->x, goal->y, 0), glm::vec2(2, 2), glm::vec4(0, 1, 1, 1));
+	//m_Level.getLayer().add(sprite);
+
 }
 
 void Projectile::update()
 {
-	if (path.size() <= 0) return;
-	Node current = path.back();
-	path.pop_back();
-	m_X = current.x;
-	m_Y = current.y;
 
 	if (!collision())
 	{
-		//m_Sprite->addDirection(m_Dx, m_Dy);
-		m_Sprite->setPosition(m_X, m_Y);
+		m_Sprite->addDirection(m_Dx, m_Dy);
+		m_X += m_Dx;
+		m_Y += m_Dy;
+		//m_Sprite->setPosition(m_X, m_Y);
 	}
 	else {
 		m_Destroy = true;
 	}
-
-	//m_Sprite->fade();
 
 	float alpha = m_Sprite->getColour().w;
 	// set to destroy particle if life runs out
@@ -69,28 +62,85 @@ void Projectile::update()
 	{
 		m_Destroy = true;
 	}
+
+	if (frontier.empty()) return;
+
+	const std::unique_ptr<QuadTree>& qt = m_Level.getQuadTree();
+	Node current = frontier.top().second;
+	frontier.pop();
+
+	Sprite* sprite = new Sprite(glm::vec3(current.x, current.y, 0), glm::vec2(1, 1), glm::vec4(1, 1, 1, 1));
+	m_Level.getLayer().add(sprite);
+	if (current.getInt() == goal->getInt())
+	{
+		frontier = std::priority_queue<Element, std::vector<Element>, std::greater<Element>>();
+		return;
+	}
+	// if already visited then continue
+	for (Node next : current.neighbors())
+	{
+		int new_cost = cost_so_far[current.getInt()] + AStar::cost(next, qt);
+		// if already visited then continue
+		if (!came_from.count(next.getInt()) || new_cost < cost_so_far[next.getInt()])
+		{
+			cost_so_far[next.getInt()] = new_cost;
+			int priority = new_cost + AStar::heuristic(next, *goal);
+			frontier.emplace(priority, next);
+			came_from[next.getInt()] = current;
+		}
+
+	}
+
+
 }
 
 bool Projectile::collision()
 {
 	//look at all the platforms in the level and check for any collisions
-	const std::unique_ptr<QuadTree>& q = m_Level.getQuadTree();
-	std::vector<Renderable*> platforms;
-	q->retrieve(platforms, m_Sprite);
-	for (Renderable* platform : platforms)
+	//const std::unique_ptr<QuadTree>& q = m_Level.getQuadTree();
+	//std::vector<Renderable*> platforms;
+	//q->retrieve(platforms, m_Sprite);
+	//for (Renderable* platform : platforms)
+	//{
+	//	const int& px = platform->getPosition().x;
+	//	const int& py = platform->getPosition().y;
+	//	const int& w = platform->getSize().x;
+	//	const int& h = platform->getSize().y;
+
+	//	if (m_X <= px + w && m_X >= px && m_Y >= py && m_Y <= py + h)
+	//	{
+	//		// if player is on a platform and moving
+	//		// get the platforms colour and spawn particles the same colour as the platfroms
+	//		glm::vec4 platformColour = platform->getColour();
+	//		for (int i = 0; i < 5; ++i)
+	//			m_Level.addParticle(new Particle(m_X, m_Y, m_Level, platformColour, 3.0f));
+
+	//		m_Level.addEnemy(px, py, w / 2);
+	//		return true;
+	//	}
+	//}
+
+	const auto& enemies = m_Level.getEnemies();
+	for (const auto& enemy : enemies)
 	{
-		const int& px = platform->getPosition().x;
-		const int& py = platform->getPosition().y;
-		const int& w = platform->getSize().x;
-		const int& h = platform->getSize().y;
+		const int& px = enemy->getSprite()->getPosition().x;
+		const int& py = enemy->getSprite()->getPosition().y;
+		const int& w = enemy->getSprite()->getSize().x;
+		const int& h = enemy->getSprite()->getSize().y;
 
 		if (m_X <= px + w && m_X >= px && m_Y >= py && m_Y <= py + h)
 		{
-			// if player is on a platform and moving
-			// get the platforms colour and spawn particles the same colour as the platfroms
-			glm::vec4 platformColour = platform->getColour();
+			glm::vec4 platformColour(0, 1, 1, 1);
 			for (int i = 0; i < 5; ++i)
 				m_Level.addParticle(new Particle(m_X, m_Y, m_Level, platformColour, 3.0f));
+
+			enemy->damage(10);
+			if (enemy->shouldDestroy())
+			{
+				m_Level.addEnemy(m_X, m_Y, w * 0.85f);
+				m_Level.addEnemy(m_X, m_Y, w * 0.85f);
+			}
+			m_Level.addDamageText("100", m_X, m_Y);
 			return true;
 		}
 	}

@@ -19,7 +19,7 @@ void main()
 {
 	// as the distance increases from light_pos, the length increases
 	// causing intensity to become smaller
-	float intensity = 200.0 / length(fs_in.position.xy - light_pos);
+	float intensity = 1000.0 / length(fs_in.position.xy - light_pos);
 	
 	vec4 texColor = fs_in.color;
 	if (fs_in.tid > 0.0)
@@ -27,6 +27,12 @@ void main()
 		int tid = int(fs_in.tid - 0.5);
 		texColor = fs_in.color * texture(textures[tid], fs_in.uv);
 	}
-	color = texColor;
+
+	if (texColor.rgb == vec3(1,0,1))
+	{
+		discard;
+	}
+
+	color = texColor * intensity;
 	//color = vec4(1,0,1,1);
 }

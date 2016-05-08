@@ -15,6 +15,7 @@ public:
 
 	void add(Renderable* renderable);
 	void remove(Renderable* ptr);
+	void clear();
 
 	void render();
 	void render(std::vector<Renderable*> renderables);

@@ -1,10 +1,14 @@
 #include "texture_manager.h"
 
 std::vector<Texture*> TextureManager::m_Textures;
+std::unordered_map<std::string, Texture*> TextureManager::m_TextureMap;
 
 void TextureManager::add(Texture* texture)
 {
 	m_Textures.push_back(texture);
+
+	std::string textureKey = texture->getName() + "_" + std::to_string(texture->getIndexY()) + "_" + std::to_string(texture->getIndexX());
+	m_TextureMap.emplace(textureKey, texture);
 }
 
 Texture* TextureManager::get(const std::string& name)
@@ -18,6 +22,13 @@ Texture* TextureManager::get(const std::string& name)
 	}
 
 	return nullptr;
+}
+
+Texture* TextureManager::get(const std::string& name, const int& row, const int& col)
+{
+	std::string textureKey = name + "_" + std::to_string(col) + "_" + std::to_string(row);
+
+	return m_TextureMap[textureKey];
 }
 
 void TextureManager::clean()

@@ -34,6 +34,11 @@ void Layer::remove(Renderable* ptr)
 	}
 }
 
+void Layer::clear()
+{
+	m_Renderables.clear();
+}
+
 void Layer::render()
 {
 	m_Shader.bind();

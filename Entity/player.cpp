@@ -1,14 +1,33 @@
 #include "player.h"
 
 Player::Player(const int& x, const int& y, Level& level)
-	: Entity(x, y, level)
+	: Entity(x, y, level), m_PlayerSpriteSheet("Textures/PlayerSpritesheet9.png"), m_Anim(0)
 {
 	first = true;
+	m_ProjectileDelay = 0;
 	m_Width = 10;
 	m_Height = 10;
 	m_PlayerSpeed = 3.0;
 
-	m_Sprite = new Sprite(glm::vec3(m_X, m_Y, 0), glm::vec2(10, 10), glm::vec4(0.4f, 0.3f, 0.7f, 1));
+	//m_PlayerSpriteSheet = std::unique_ptr<SpriteSheet>(new SpriteSheet("Textures/PlayerSpritesheet4.png"));
+	TextureManager::add(new Texture(m_PlayerSpriteSheet, "PlayerSpriteSheet", 0, 0, 32, 32));
+	TextureManager::add(new Texture(m_PlayerSpriteSheet, "PlayerSpriteSheet", 0, 1, 32, 32));
+	TextureManager::add(new Texture(m_PlayerSpriteSheet, "PlayerSpriteSheet", 1, 1, 32, 32));
+	TextureManager::add(new Texture(m_PlayerSpriteSheet, "PlayerSpriteSheet", 2, 1, 32, 32));
+	TextureManager::add(new Texture(m_PlayerSpriteSheet, "PlayerSpriteSheet", 3, 1, 32, 32));
+	TextureManager::add(new Texture(m_PlayerSpriteSheet, "PlayerSpriteSheet", 4, 1, 32, 32));
+	TextureManager::add(new Texture(m_PlayerSpriteSheet, "PlayerSpriteSheet", 5, 1, 32, 32));
+	TextureManager::add(new Texture(m_PlayerSpriteSheet, "PlayerSpriteSheet", 6, 1, 32, 32));
+	TextureManager::add(new Texture(m_PlayerSpriteSheet, "PlayerSpriteSheet", 7, 1, 32, 32));
+	//TextureManager::add(new Texture(m_PlayerSpriteSheet, "PlayerSpriteSheet", 0, 1, 64, 64));
+	//TextureManager::add(new Texture(m_PlayerSpriteSheet, "PlayerSpriteSheet", 1, 1, 64, 64));
+	//TextureManager::add(new Texture(m_PlayerSpriteSheet, "PlayerSpriteSheet", 2, 1, 64, 64));
+
+		
+	//m_Sprite = new Sprite(glm::vec3(m_X, m_Y, 0), glm::vec2(10, 10), glm::vec4(0.4f, 0.3f, 0.7f, 1));
+	m_Sprite = new Sprite(glm::vec3(m_X, m_Y, 0), glm::vec2(32, 32), glm::vec4(1, 1, 1, 1));
+	//m_Sprite->setTexture(TextureManager::get("PlayerSpriteIdle"));
+	m_Sprite->setTexture(TextureManager::get("PlayerSpriteSheet", 0, 0));
 	m_Level.getLayer().add(m_Sprite);
 }
 
@@ -29,14 +48,20 @@ void Player::update()
 	}
 	if (glfwGetKey(m_Level.getWindow(), GLFW_KEY_A)) {
 		dx -= m_PlayerSpeed;
+		m_Sprite->setTexture(TextureManager::get("PlayerSpriteSheet", 0, 0));
 	}
 	if (glfwGetKey(m_Level.getWindow(), GLFW_KEY_D)) {
+		m_Sprite->setTexture(TextureManager::get("PlayerSpriteSheet", m_Anim % 8, 1));
 		dx += m_PlayerSpeed;
 	}
 
-	if (glfwGetMouseButton(m_Level.getWindow(), GLFW_MOUSE_BUTTON_1))
+	m_Anim++;
+
+	m_ProjectileDelay++;
+	if (m_ProjectileDelay > 10 && glfwGetMouseButton(m_Level.getWindow(), GLFW_MOUSE_BUTTON_1))
 	//if (m_Level.getWindowClass().isMouseButtonPressed(GLFW_MOUSE_BUTTON_1) && first)
 	{
+		m_ProjectileDelay = 0;
 		first = false;
 		m_Level.addProjectile(new Projectile(getCenterX(), getCenterY(), m_Level));
 	}
@@ -44,7 +69,7 @@ void Player::update()
 	// gravity
 	//if (!collision(m_X, m_Y - 1, true, dx, 0))
 	//{
-	//	move(0, -1);
+	//	fall(-1);
 	//}
 
 	// check if the next tile is not collidable and move
@@ -77,6 +102,12 @@ void Player::move(const double& dx, const double& dy)
 
 	m_X += dx;
 	m_Y += dy;
+}
+
+void Player::fall(const double& dy)
+{
+	move(0, dy);
+	//m_Level.addBlock(m_X, m_Y - 100);
 }
 
 bool Player::collision(int x, int y, bool spawn_particles, int dx, int dy)
@@ -117,6 +148,31 @@ bool Player::collision(int x, int y, bool spawn_particles, int dx, int dy)
 			return true;
 		}
 	}
+
+	const auto& enemies = m_Level.getEnemies();
+	for (const auto& enemy : enemies)
+	{
+		const int& px = enemy->getX();
+		const int& py = enemy->getY();
+		const int& w = enemy->getSize();
+		const int& h = enemy->getSize();
+
+		if (x < px + w && x > px && y > py && y < py + h ||
+			x + m_Width < px + w && x + m_Width > px && y > py && y < py + h ||
+			x < px + w && x > px && y + m_Height > py && y + m_Height < py + h ||
+			x + m_Width < px + w && x + m_Width > px && y + m_Height > py && y + m_Height < py + h)
+		{
+			// if player is on a platform and moving
+			// get the platforms colour and spawn particles the same colour as the platfroms
+			if (spawn_particles && (dx != 0 || dy != 0))
+			{
+				glm::vec4 colour(1, 1, 0, 1);
+				m_Level.addParticle(new Particle(getCenterX(), m_Y, m_Level, colour));
+			}
+			return true;
+		}
+	}
+
 
 	return false;
 }

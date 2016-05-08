@@ -10,13 +10,21 @@
 #include <functional>
 #include <cstdlib>
 
+class AStar
+{
+public:
+	static int heuristic(const Node& a, const Node& b);
+	static int cost(Node& node, const std::unique_ptr<QuadTree>& qt);
 
-int heuristic(const Node& a, const Node& b);
-int cost(const Node& node, const std::unique_ptr<QuadTree>& qt);
+	static std::unordered_map<int, Node> bfsSearch(int x, int y, glm::vec2 end);
 
-std::unordered_map<int, Node> bfsSearch(int x, int y, glm::vec2 end);
+	static std::unordered_map<int, Node> aStarSearch(int x, int y, glm::vec2 end, const std::unique_ptr<QuadTree>& qt);
 
-std::unordered_map<int, Node> aStarSearch(int x, int y, glm::vec2 end, const std::unique_ptr<QuadTree>& qt);
+private:
+	AStar() {}
+
+};
+
 
 ////class Astar
 ////{

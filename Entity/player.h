@@ -9,6 +9,7 @@
 #include <vector>
 #include "platform.h"
 #include "Projectiles\projectile.h"
+#include "block.h"
 
 class Player : public Entity
 {
@@ -20,12 +21,17 @@ public:
 
 private:
 	void move(const double& dx, const double& dy);
+	void fall(const double& dy);
 	bool collision(int x, int y, bool spawn_particle = false, int dx = 0, int dy = 0);
 
 private:
 	double m_PlayerSpeed;
 
-	std::vector<Sprite*> m_PlayerBody;
+	int m_Anim;
+	int m_ProjectileDelay;
 
+	std::vector<Sprite*> m_PlayerBody;
+	//std::unique_ptr<SpriteSheet> m_PlayerSpriteSheet;
+	SpriteSheet m_PlayerSpriteSheet;
 	bool first;
 };

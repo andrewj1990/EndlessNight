@@ -76,6 +76,7 @@ void BatchRenderer::begin()
 void BatchRenderer::submit(const Renderable& renderable)
 {
 	const glm::vec3& position = renderable.getPosition();
+	const std::vector<glm::vec3>& positions = renderable.getPositions();
 	const glm::vec2& size = renderable.getSize();
 	const glm::vec4& colour = renderable.getColour();
 	const std::vector<glm::vec2>& uv = renderable.getUV();
@@ -117,25 +118,33 @@ void BatchRenderer::submit(const Renderable& renderable)
 
 	color = a << 24 | b << 16 | g << 8 | r;
 
-	m_Buffer->vertex = position;
+	//m_Buffer->vertex = positions[0];
+	m_Buffer->vertex = positions.size() > 0 ? positions[0] : position;
+	//m_Buffer->vertex = position;
 	m_Buffer->uv = uv[0];
 	m_Buffer->tid = ts;
 	m_Buffer->colour = color;
 	++m_Buffer;
 
-	m_Buffer->vertex = glm::vec3(position.x, position.y + size.y, position.z);
+	//m_Buffer->vertex = positions[1];
+	m_Buffer->vertex = positions.size() > 0 ? positions[1] : glm::vec3(position.x, position.y + size.y, position.z);
+	//m_Buffer->vertex = glm::vec3(position.x, position.y + size.y, position.z);
 	m_Buffer->uv = uv[1];
 	m_Buffer->tid = ts;
 	m_Buffer->colour = color;
 	++m_Buffer;
 
-	m_Buffer->vertex = glm::vec3(position.x + size.x, position.y + size.y, position.z);
+	//m_Buffer->vertex = positions[2];
+	m_Buffer->vertex = positions.size() > 0 ? positions[2] : glm::vec3(position.x + size.x, position.y + size.y, position.z);
+	//m_Buffer->vertex = glm::vec3(position.x + size.x, position.y + size.y, position.z);
 	m_Buffer->uv = uv[2];
 	m_Buffer->tid = ts;
 	m_Buffer->colour = color;
 	++m_Buffer;
 
-	m_Buffer->vertex = glm::vec3(position.x + size.x, position.y, position.z);
+	//m_Buffer->vertex = positions[3];
+	m_Buffer->vertex = positions.size() > 0 ? positions[3] : glm::vec3(position.x + size.x, position.y, position.z);
+	//m_Buffer->vertex = glm::vec3(position.x + size.x, position.y, position.z);
 	m_Buffer->uv = uv[3];
 	m_Buffer->tid = ts;
 	m_Buffer->colour = color;
@@ -261,6 +270,7 @@ void BatchRenderer::flush()
 
 	glEnable(GL_BLEND);
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	//glBlendFunc(GL_ONE, GL_ONE);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glDrawElements(GL_TRIANGLES, m_IndexCount, GL_UNSIGNED_INT, NULL);

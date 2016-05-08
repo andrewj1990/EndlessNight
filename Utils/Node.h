@@ -10,20 +10,25 @@ public:
 	std::vector<Node> edges;
 
 	Node() : x(0), y(0) {}
-	Node(int x, int y) : x(x), y(y) { }
+	Node(int x, int y) : x(x), y(y) 
+	{
+	}
 
-	std::vector<Node> neighbors()
+	const std::vector<Node>& neighbors()
 	{
 		int size = 16;
-		edges.push_back(Node(x + size, y));
-		edges.push_back(Node(x, y + size));
-		edges.push_back(Node(x - size, y));
-		edges.push_back(Node(x, y - size));
+		if (edges.empty())
+		{
+			edges.push_back(Node(x + size, y));
+			edges.push_back(Node(x, y + size));
+			edges.push_back(Node(x - size, y));
+			edges.push_back(Node(x, y - size));
 
-		edges.push_back(Node(x - size, y - size));
-		edges.push_back(Node(x + size, y - size));
-		edges.push_back(Node(x + size, y + size));
-		edges.push_back(Node(x - size, y + size));
+			edges.push_back(Node(x - size, y - size));
+			edges.push_back(Node(x + size, y - size));
+			edges.push_back(Node(x + size, y + size));
+			edges.push_back(Node(x - size, y + size));
+		}
 		return edges;
 	}
 

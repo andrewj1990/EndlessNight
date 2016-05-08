@@ -25,7 +25,7 @@ Platform::Platform(Level& level)
 	//m_Sprites.push_back(new Sprite(glm::vec3(400, 500, 0), glm::vec2(30, 30), glm::vec4(1, 1, 0, 1)));
 	//m_Sprites.push_back(new Sprite(glm::vec3(500, 500, 0), glm::vec2(30, 30), glm::vec4(1, 1, 0, 1)));
 
-	setTextures();
+	//setTextures();
 	for (Sprite* sprite : m_Sprites)
 	{
 		addToLevel(sprite);
@@ -53,7 +53,9 @@ void Platform::generatePlatforms(int x, int y)
 	const int& height = m_Level.getWindowClass().getHeight();
 	
 	m_Queue.push(Node(x, y));
-
+	
+	float greyColor = 8.0f / 255.0f;
+	//float greyColor = 1;
 	int counter = 0;
 	while (m_Queue.size() > 0)
 	{
@@ -66,7 +68,7 @@ void Platform::generatePlatforms(int x, int y)
 
 		auto isVisited = visited.find(index);
 
-		// key was not found which means node has not been visited yet
+		// key was not found which means node has not been visited yet		
 		if (isVisited == visited.end())
 		{
 			visited.insert({ index, false });
@@ -74,7 +76,7 @@ void Platform::generatePlatforms(int x, int y)
 			{
 				visited[index] = true;
 				//m_Sprites.push_back(new Sprite(glm::vec3(xx, yy, 0), glm::vec2(size, size), glm::vec4(rand() % 1000 / 1000.0f, rand() % 1000 / 1000.0f, 0, 1)));
-				m_Sprites.push_back(new Sprite(glm::vec3(xx, yy, 0), glm::vec2(m_Size, m_Size), glm::vec4(1, 1, 1, 1)));
+				m_Sprites.push_back(new Sprite(glm::vec3(xx, yy, 0), glm::vec2(m_Size, m_Size), glm::vec4(greyColor, greyColor, greyColor, 1)));
 				//m_Sprites.push_back(new Sprite(glm::vec3(xx, yy, 0), glm::vec2(size, size), new Texture("test2.png")));
 				m_Queue.push(Node(xx + m_Size, yy));
 				m_Queue.push(Node(xx, yy + m_Size));
@@ -89,6 +91,12 @@ void Platform::generatePlatforms(int x, int y)
 		}
 
 		counter++;
+	}
+
+	// generate random background elements
+	for (int i = 0; i < 100; ++i)
+	{
+		m_Sprites.push_back(new Sprite(glm::vec3(x + rand() % 1280, y + rand() % 720, 0), glm::vec2(m_Size, m_Size), glm::vec4(greyColor, greyColor, greyColor, 0.4f)));
 	}
 
 	m_Queue = std::queue<Node>();

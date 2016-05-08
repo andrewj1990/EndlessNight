@@ -26,6 +26,9 @@ public:
 	inline const std::vector<glm::vec2> getUVs() { return m_UV; }
 	const int& getWidth() { return m_Width; }
 	const int& getHeight() { return m_Height; }
+	const int& getIndexX() { return m_xIndex; }
+	const int& getIndexY() { return m_yIndex; }
+
 	void bind() const;
 	void unbind() const;
 
@@ -38,5 +41,8 @@ private:
 	unsigned int m_Width;
 	unsigned int m_Height;
 	std::vector<glm::vec2> m_UV;
+
+	int m_xIndex;
+	int m_yIndex;
 
 };

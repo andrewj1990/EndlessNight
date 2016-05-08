@@ -8,22 +8,22 @@ Level::Level(Window& window)
 {
 	SpriteSheet* spritesheet = new SpriteSheet("Textures/spritesheetTest.png");
 	SpriteSheet* platforms_spritesheet = new SpriteSheet("Textures/Platforms.png");
-	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/Top.png"				, 0, 0, 32, 32));
-	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/Right.png"			, 0, 0, 32, 32));
-	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/Bottom.png"			, 0, 0, 32, 32));
-	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/Left.png"				, 0, 0, 32, 32));
-	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/TopRight.png"			, 0, 0, 32, 32));
-	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/TopBottom.png"		, 0, 0, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/Top.png"				, 1, 0, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/Right.png"			, 2, 1, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/Bottom.png"			, 1, 2, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/Left.png"				, 0, 1, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/TopRight.png"			, 2, 0, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/TopBottom.png"		, 4, 0, 32, 32));
 	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/TopLeft.png"			, 0, 0, 32, 32));
-	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/RightLeft.png"		, 0, 0, 32, 32));
-	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/BottomRight.png"		, 0, 0, 32, 32));
-	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/BottomLeft.png"		, 0, 0, 32, 32));
-	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/All.png"				, 0, 0, 32, 32));
-	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/TopRightLeft.png"		, 0, 0, 32, 32));
-	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/TopBottomRight.png"	, 0, 0, 32, 32));
-	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/BottomRightLeft.png"	, 0, 0, 32, 32));
-	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/TopBottomLeft.png"	, 0, 0, 32, 32));
-	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/None.png"				, 0, 0, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/RightLeft.png"		, 3, 2, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/BottomRight.png"		, 2, 2, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/BottomLeft.png"		, 0, 2, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/All.png"				, 4, 2, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/TopRightLeft.png"		, 3, 1, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/TopBottomRight.png"	, 5, 0, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/BottomRightLeft.png"	, 4, 1, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/TopBottomLeft.png"	, 3, 0, 32, 32));
+	TextureManager::add(new Texture(*platforms_spritesheet, "Textures/None.png"				, 1, 1, 32, 32));
 
 
 	// TEXTURES //
@@ -51,8 +51,8 @@ Level::Level(Window& window)
 	m_Ortho = glm::ortho(0.0f, 1280.0f, 0.0f, 720.0f, -1.0f, 1.0f);
 	m_Layer = new Layer(m_Shader, m_Ortho);
 
-	Background = new Sprite(glm::vec3(0, 0, 0), glm::vec2(1200, 1000), new Texture("Textures/Background.png"));
-	m_Layer->add(Background);
+	//Background = new Sprite(glm::vec3(0, 0, 0), glm::vec2(1200, 1000), new Texture("Textures/Background.png"));
+	//m_Layer->add(Background);
 
 	//Platform* platform = new Platform(m_Window.getWidth() / 3, 0, m_Window.getWidth() / 2, m_Window.getHeight() / 2, *this);
 	//m_Platforms.push_back(platform);
@@ -72,16 +72,15 @@ Level::Level(Window& window)
 	//Zone* zone8 = new Zone(-1280, 0, m_Window, *m_Layer, *this);
 	//Zone* zone9 = new Zone(-1280, -720, m_Window, *m_Layer, *this);
 
-	Platform* test = new Platform(*this);
+	//Platform* test = new Platform(*this);
 
 	m_Label = std::unique_ptr<Label>(new Label("Altitude : ", 0, 0, FontManager::get("Arial"), glm::vec4(1, 1, 1, 1)));
 	m_Layer->add(m_Label.get());
 
-	//Sprite* sprite = new Sprite(glm::vec3(300, 300, 0), glm::vec2(100, 100), new Texture("Textures/spritesheetTest.png"));
-	Sprite* sprite = new Sprite(glm::vec3(300, 300, 0), glm::vec2(100, 100), glm::vec4(1, 1, 1, 1));
-	//sprite->setTexture(new Texture(*spritesheet, "test",0, 2, 21, 21));
-	sprite->setTexture(TextureManager::get("Textures/Top.png"));
-	m_Layer->add(sprite);
+	//addPlatform(new Renderable(glm::vec3(0, 0, 1), glm::vec2(window.getWidth()), glm::vec4(0,0,0,1)));
+
+	//m_Enemies.push_back(std::unique_ptr<Enemy>(new Enemy(50, 50, *this)));
+	addEnemy(50, 50, 50);
 }
 
 void Level::update()
@@ -96,6 +95,11 @@ void Level::update()
 	for (Renderable* r : m_Platform)
 	{
 		quad->insert(r);
+	}
+
+	for (const auto& enemy : m_Enemies)
+	{
+		quad->insert(enemy->getSprite());
 	}
 
 	m_Player->update();
@@ -131,6 +135,38 @@ void Level::update()
 		}
 	}
 
+	for (auto i = m_Enemies.begin(); i != m_Enemies.end(); )
+	{
+		if ((*i)->shouldDestroy())
+		{
+			m_Layer->remove((*i)->getSprite());
+			i = m_Enemies.erase(i);
+		}
+		else
+		{
+			(*i)->update();
+			++i;
+		}
+	}
+
+	for (auto i = m_DamageTexts.begin(); i != m_DamageTexts.end(); )
+	{
+		m_Layer->remove((*i)->getLabel().get());
+		m_Layer->add((*i)->getLabel().get());
+
+		if ((*i)->shouldDestroy())
+		{
+			m_Layer->remove((*i)->getLabel().get());
+			i = m_DamageTexts.erase(i);
+		}
+		else
+		{
+			(*i)->update();
+			++i;
+		}
+
+	}
+
 	m_Label->text = "Altitude : " + std::to_string(m_Offset.y);
 }
 
@@ -148,6 +184,15 @@ void Level::addParticle(Entity* particle)
 //	m_Layer->add(particle->getSprite());
 }
 
+void Level::addBlock(float x, float y)
+{
+	Renderable* renderable = new Renderable(glm::vec3(x, y, 0), glm::vec2(50, 50), glm::vec4(0, 1, 1, 1));
+	//m_Layer->add(new Renderable(glm::vec3(x, y, 0), glm::vec2(50, 50), glm::vec4(0, 1, 1, 1)));
+	m_Layer->add(renderable);
+	m_Platform.push_back(renderable);
+	//m_Layer->add(new Block(x, y));
+}
+
 void Level::addPlatform(Renderable* platform)
 {
 	m_Platform.push_back(platform);
@@ -156,6 +201,19 @@ void Level::addPlatform(Renderable* platform)
 void Level::addProjectile(Entity* projectile)
 {
 	m_Projectiles.push_back(projectile);
+}
+
+void Level::addEnemy(const int& x, const int& y, const int& size)
+{
+	m_Enemies.push_back(std::unique_ptr<Enemy>(new Enemy(x, y, size,*this)));
+}
+
+void Level::addDamageText(const std::string& text, const int& x, const int& y)
+{
+	//std::unique_ptr<DamageCounter> damageText = std::unique_ptr<DamageCounter>(new DamageCounter(text, x, y));
+	//m_DamageTexts.push_back(damageText);
+	//m_Layer->add(damageText->getLabel().get());
+	m_DamageTexts.push_back(std::unique_ptr<DamageCounter>(new DamageCounter(text, x, y)));
 }
 
 void Level::moveCamera(const float& x, const float& y)

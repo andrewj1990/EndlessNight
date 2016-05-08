@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include "../Graphics/texture_manager.h"
 #include "../Utils/Node.h"
+#include "../Level/level.h"
 
 class Platform : public Entity
 {

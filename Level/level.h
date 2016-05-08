@@ -13,6 +13,7 @@
 
 #include "../Entity/entity.h"
 #include "../Entity/player.h"
+#include "../Entity/Mobs/enemy.h"
 #include "../Entity/particle.h"
 #include "../Entity/platform.h"
 #include "zone.h"
@@ -22,8 +23,10 @@
 
 #include "../Graphics/label.h"
 #include "../Graphics/font_manager.h"
+#include "../Entity/damage_counter.h"
 
 class Player;
+class Enemy;
 
 class Level
 {
@@ -37,6 +40,9 @@ public:
 	void addPlatform(Entity* platform);
 	void addProjectile(Entity* projectile);
 	void addPlatform(Renderable* platform);
+	void addBlock(float x, float y);
+	void addEnemy(const int& x, const int& y, const int& size);
+	void addDamageText(const std::string& text, const int& x, const int& y);
 
 	void moveCamera(const float& x, const float& y);
 	
@@ -44,8 +50,12 @@ public:
 	Window& getWindowClass() { return m_Window; }
 	Layer& getLayer() { return *m_Layer; }
 	std::vector<Renderable*> getPlatform() { return m_Platform; }
+	const std::vector<std::unique_ptr<Enemy>>& getEnemies() { return m_Enemies; }
 	glm::vec2& getOffset() { return m_Offset; }
 	const std::unique_ptr<QuadTree>& getQuadTree() { return quad; }
+
+	//const float playerX() { return m_Player->getCenterX(); }
+	//const float playerY() { return m_Player->getCenterY(); }
 
 private:
 	Layer* m_Layer;
@@ -65,5 +75,8 @@ private:
 
 	Sprite* Background;
 	std::unique_ptr<Label> m_Label;
+
+	std::vector<std::unique_ptr<Enemy>> m_Enemies;
+	std::vector<std::unique_ptr<DamageCounter>> m_DamageTexts;
 
 };

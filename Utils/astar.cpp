@@ -1,16 +1,19 @@
 #include "astar.h"
+#include <algorithm>
 
-int heuristic(const Node& a, const Node& b)
+int AStar::heuristic(const Node& a, const Node& b)
 {
-	const int& x1 = a.x;
-	const int& y1 = a.y;
-	const int& x2 = b.x;
-	const int& y2 = b.y;
+	const float& dx = abs((float)a.x - (float)b.x);
+	const float& dy = abs((float)a.y - (float)b.y);
 
-	return abs(x1 - x2) + abs(y1 - y2);
+	const float& D = 1.0f;
+	const float& D2 = 1.0f;
+
+	//return abs(x1 - x2) + abs(y1 - y2);
+	return D * (dx + dy) + (D2 - 2 * D) * std::min(dx, dy);
 }
 
-int cost(const Node& node, const std::unique_ptr<QuadTree>& qt)
+int AStar::cost(Node& node, const std::unique_ptr<QuadTree>& qt)
 {
 	std::vector<Renderable*> platforms;
 	qt->retrieve(platforms, node.x, node.y, 0, 0);
@@ -23,15 +26,36 @@ int cost(const Node& node, const std::unique_ptr<QuadTree>& qt)
 
 		if (node.x <= px + w && node.x >= px && node.y >= py && node.y<= py + h)
 		{
-			return 200;
+			return 400;
 		}
 	}
 
-	return 1;
+	// if the current node is next to a platform then return a reduced cost
+	for (const Node& neighbors : node.neighbors())
+	{
+		platforms.clear();
+		qt->retrieve(platforms, neighbors.x, neighbors.y, 0, 0);
+		for (Renderable* platform : platforms)
+		{
+			const int& px = platform->getPosition().x;
+			const int& py = platform->getPosition().y;
+			const int& w = platform->getSize().x;
+			const int& h = platform->getSize().y;
+
+			if (neighbors.x <= px + w && neighbors.x >= px && neighbors.y >= py && neighbors.y <= py + h)
+			{
+				return 1;
+			}
+		}
+
+
+	}
+
+	return 5;
 	//return (rand() % 10);
 }
 
-std::unordered_map<int, Node> bfsSearch(int x, int y, glm::vec2 end)
+std::unordered_map<int, Node> AStar::bfsSearch(int x, int y, glm::vec2 end)
 {
 	Node node(x, y);
 	std::queue<Node> frontier;
@@ -66,7 +90,7 @@ std::unordered_map<int, Node> bfsSearch(int x, int y, glm::vec2 end)
 
 }
 
-std::unordered_map<int, Node> aStarSearch(int x, int y, glm::vec2 end, const std::unique_ptr<QuadTree>& qt)
+std::unordered_map<int, Node> AStar::aStarSearch(int x, int y, glm::vec2 end, const std::unique_ptr<QuadTree>& qt)
 {
 	Node node(x, y);
 	typedef std::pair<int, Node> PQElement;

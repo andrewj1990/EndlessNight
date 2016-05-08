@@ -1,14 +1,14 @@
 #include "texture.h"
 
 Texture::Texture(const std::string& filename)
-	: m_FileName(filename)
+	: m_FileName(filename), m_xIndex(0), m_yIndex(0)
 {
 	m_TID = load();
 	setDefaultUV();
 }
 
 Texture::Texture(SpriteSheet& spritesheet, const std::string& filename, const int& xIndex, const int& yIndex, const int& width, const int& height)
-	: m_FileName(filename), m_TID(spritesheet.getTID())
+	: m_FileName(filename), m_TID(spritesheet.getTID()), m_xIndex(xIndex), m_yIndex(yIndex)
 {
 	float inverseIndex = ((float)spritesheet.getHeight() / (float)height) - (float)yIndex - 1;
 	setUV((float)xIndex, inverseIndex, (float)width, (float)height, (float)spritesheet.getWidth(), (float)spritesheet.getHeight());
