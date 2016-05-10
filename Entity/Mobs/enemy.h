@@ -1,11 +1,14 @@
 #pragma once
 
 #include "../entity.h"
+#include "../player.h"
+
+class Player;
 
 class Enemy : public Entity
 {
 public:
-	Enemy(const int& x, const int& y, const int& size, Level& level);
+	Enemy(const int& x, const int& y, const int& size, const Player& player, Level& level);
 
 	void update() override;
 	void render() override;
@@ -22,9 +25,18 @@ private:
 	bool collision(int x, int y);
 
 private:
-	float m_Size;
+	const Player& m_Player;
+
 	float m_Dx;
 	float m_Dy;
+
+	float m_Pdx;
+	float m_Pdy;
+	float prevX;
+	float prevY;
+	int count;
+
+	float m_Size;
 	float m_Health;
 
 };

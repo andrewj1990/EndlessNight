@@ -1,7 +1,8 @@
 #include "player.h"
 
 Player::Player(const int& x, const int& y, Level& level)
-	: Entity(x, y, level), m_PlayerSpriteSheet("Textures/PlayerSpritesheet9.png"), m_Anim(0)
+	: Entity(x, y, level), m_PlayerSpriteSheet("Textures/PlayerSpritesheet9.png"), m_Anim(0),
+	m_PlayerDamage(10)
 {
 	first = true;
 	m_ProjectileDelay = 0;
@@ -63,7 +64,7 @@ void Player::update()
 	{
 		m_ProjectileDelay = 0;
 		first = false;
-		m_Level.addProjectile(new Projectile(getCenterX(), getCenterY(), m_Level));
+		m_Level.addProjectile(new Projectile(getCenterX(), getCenterY(), m_PlayerDamage, m_Level, std::bind(&Player::increaseDamage, this, std::placeholders::_1)));
 	}
 
 	// gravity
@@ -108,6 +109,11 @@ void Player::fall(const double& dy)
 {
 	move(0, dy);
 	//m_Level.addBlock(m_X, m_Y - 100);
+}
+
+void Player::increaseDamage(float multiplier)
+{
+	m_PlayerDamage *= multiplier;
 }
 
 bool Player::collision(int x, int y, bool spawn_particles, int dx, int dy)

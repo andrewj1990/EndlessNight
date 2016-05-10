@@ -7,7 +7,9 @@
 class Projectile : public Entity
 {
 public:
-	Projectile(int x, int y, Level& level);
+	typedef std::function<void (float)>  IncreaseDamageFunc;
+
+	Projectile(int x, int y, const int& damage, Level& level, IncreaseDamageFunc idf = nullptr);
 
 	void update() override;
 	void render() override;
@@ -21,6 +23,7 @@ private:
 	float m_Dy;
 
 	float m_ProjectileSpeed;
+	float m_ProjectileDamage;
 
 	int m_Life;
 
@@ -33,5 +36,7 @@ private:
 
 	std::unordered_map<int, Node> came_from;
 	std::unordered_map<int, int> cost_so_far;
+
+	IncreaseDamageFunc damageFunc;
 
 };

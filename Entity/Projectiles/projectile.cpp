@@ -1,7 +1,7 @@
 #include "projectile.h"
 
-Projectile::Projectile(int x, int y, Level& level)
-	: Entity(x, y, level), m_ProjectileSpeed(15.0f), m_Life(10000)
+Projectile::Projectile(int x, int y, const int& damage, Level& level, IncreaseDamageFunc idf)
+	: Entity(x, y, level), m_ProjectileSpeed(15.0f), m_Life(10000), m_ProjectileDamage(damage), damageFunc(idf)
 {
 	//m_ProjectileSpeed = 1;
 	calcProjectileDir();
@@ -134,13 +134,14 @@ bool Projectile::collision()
 			for (int i = 0; i < 5; ++i)
 				m_Level.addParticle(new Particle(m_X, m_Y, m_Level, platformColour, 3.0f));
 
-			enemy->damage(10);
+			enemy->damage(m_ProjectileDamage);
 			if (enemy->shouldDestroy())
 			{
-				m_Level.addEnemy(m_X, m_Y, w * 0.85f);
-				m_Level.addEnemy(m_X, m_Y, w * 0.85f);
+				m_Level.addEnemy(px, py, w * 0.85f);
+				m_Level.addEnemy(px, py, w * 0.85f);
+				if (damageFunc != nullptr) damageFunc(1.1f);
 			}
-			m_Level.addDamageText("100", m_X, m_Y);
+			m_Level.addDamageText(std::to_string(m_ProjectileDamage), m_X, m_Y);
 			return true;
 		}
 	}

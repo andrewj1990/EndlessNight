@@ -33,7 +33,7 @@ class Level
 public:
 	Level(Window& window);
 
-	void update();
+	void update(float elapsedTime);
 	void render();
 
 	void addParticle(Entity* particle);

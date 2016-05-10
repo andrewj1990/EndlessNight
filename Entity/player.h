@@ -23,9 +23,11 @@ private:
 	void move(const double& dx, const double& dy);
 	void fall(const double& dy);
 	bool collision(int x, int y, bool spawn_particle = false, int dx = 0, int dy = 0);
+	void increaseDamage(float multiplier);
 
 private:
 	double m_PlayerSpeed;
+	int m_PlayerDamage;
 
 	int m_Anim;
 	int m_ProjectileDelay;

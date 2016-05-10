@@ -55,6 +55,11 @@ int main(int argc, char** argv)
 	glClearColor(0.1f, 0.2f, 0.3f, 1);
 	double mouseX = 0;
 	double mouseY = 0;
+
+	double t = 0.0;
+	double dt = 0.01;
+
+	double accumulator = 0.0;
 	while (!window.shouldClose()) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
@@ -72,11 +77,24 @@ int main(int argc, char** argv)
 			Light light(shadowLayer, level.getLayer().getRenderables());
 		}
 
-		while (time.elapsed() - updateTimer > tick && updates < 60)
+		double frameTime = time.elapsed();
+		time.reset();
+		if (frameTime > 0.25)
 		{
-			level.update();
+			frameTime = 0.25;
+		}
+
+		accumulator += frameTime;
+
+		//while (time.elapsed() - updateTimer > tick)
+		while (accumulator >= dt)
+		{
+			level.update(t);
 			++updates;
 			updateTimer += tick;
+
+			t += dt;
+			accumulator -= dt;
 		}
 
 		glEnable(GL_STENCIL_TEST);
@@ -101,7 +119,7 @@ int main(int argc, char** argv)
 		window.update();
 
 		++frames;
-		if (time.elapsed() - timer > 1.0f) {
+		if (time2.elapsed() - timer > 1.0f) {
 			timer += 1.0f;
 			printf("%d fps , %d ups\n", frames, updates);
 			frames = 0;

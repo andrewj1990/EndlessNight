@@ -83,7 +83,7 @@ Level::Level(Window& window)
 	addEnemy(50, 50, 50);
 }
 
-void Level::update()
+void Level::update(float elapsedTime)
 {
 	double x;
 	double y;
@@ -205,7 +205,7 @@ void Level::addProjectile(Entity* projectile)
 
 void Level::addEnemy(const int& x, const int& y, const int& size)
 {
-	m_Enemies.push_back(std::unique_ptr<Enemy>(new Enemy(x, y, size,*this)));
+	m_Enemies.push_back(std::unique_ptr<Enemy>(new Enemy(x, y, size, *m_Player, *this)));
 }
 
 void Level::addDamageText(const std::string& text, const int& x, const int& y)
