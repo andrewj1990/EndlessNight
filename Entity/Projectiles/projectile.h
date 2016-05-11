@@ -11,7 +11,7 @@ public:
 
 	Projectile(int x, int y, const int& damage, Level& level, IncreaseDamageFunc idf = nullptr);
 
-	void update() override;
+	void update(float timeElapsed) override;
 	void render() override;
 	bool collision() override;
 

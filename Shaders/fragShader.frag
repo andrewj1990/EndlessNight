@@ -28,11 +28,11 @@ void main()
 		texColor = fs_in.color * texture(textures[tid], fs_in.uv);
 	}
 
-	if (texColor.rgb == vec3(1,0,1))
-	{
-		discard;
-	}
+	//if (texColor.rgb == vec3(1,0,1))
+	//{
+	//	discard;
+	//}
 
-	color = texColor * intensity;
+	color = texColor;// * intensity;
 	//color = vec4(1,0,1,1);
 }

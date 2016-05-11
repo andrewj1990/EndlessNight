@@ -1,11 +1,15 @@
 #include "projectile.h"
 
 Projectile::Projectile(int x, int y, const int& damage, Level& level, IncreaseDamageFunc idf)
-	: Entity(x, y, level), m_ProjectileSpeed(15.0f), m_Life(10000), m_ProjectileDamage(damage), damageFunc(idf)
+	: Entity(x, y, level), m_ProjectileSpeed(1000.0f), m_Life(10000), m_ProjectileDamage(damage), damageFunc(idf)
 {
 	//m_ProjectileSpeed = 1;
 	calcProjectileDir();
-	m_Sprite = new Sprite(glm::vec3(m_X, m_Y, 0), glm::vec2(2.5f, 2.5f), glm::vec4(1, 1, 0, 1));
+	//m_Sprite = new Sprite(glm::vec3(m_X, m_Y, 0), glm::vec2(2.5f, 2.5f), glm::vec4(1, 1, 0, 1));
+	//m_Sprite = new Sprite(glm::vec3(m_X, m_Y, 0), glm::vec2(32.0f, 32.0f), TextureManager::get("PlayerSpriteSheet", 0, 0));
+	m_Sprite = new Sprite(glm::vec3(m_X, m_Y, 0), glm::vec2(32, 32), glm::vec4(1, 1, 1, 1));
+	//m_Sprite->setTexture(TextureManager::get("PlayerSpriteIdle"));
+	m_Sprite->setTexture(TextureManager::get("Textures/Bullet.png", 0, 0));
 	addToLevel(m_Sprite);
 }
 
@@ -37,14 +41,14 @@ void Projectile::calcProjectileDir()
 
 }
 
-void Projectile::update()
+void Projectile::update(float timeElapsed)
 {
 
 	if (!collision())
 	{
-		m_Sprite->addDirection(m_Dx, m_Dy);
-		m_X += m_Dx;
-		m_Y += m_Dy;
+		m_Sprite->addDirection(m_Dx * timeElapsed, m_Dy * timeElapsed);
+		m_X += m_Dx * timeElapsed;
+		m_Y += m_Dy * timeElapsed;
 		//m_Sprite->setPosition(m_X, m_Y);
 	}
 	else {

@@ -158,7 +158,7 @@ void Platform::setTextures()
 
 }
 
-void Platform::update()
+void Platform::update(float timeElapsed)
 {
 
 }

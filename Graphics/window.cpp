@@ -20,7 +20,8 @@ Window::Window(int width, int height, char* title)
 }
 
 Window::~Window()
-{	FreeImage_Initialise();
+{	
+	FreeImage_Initialise();
 
 	glfwDestroyWindow(m_Window);
 	glfwTerminate();

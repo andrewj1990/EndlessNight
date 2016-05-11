@@ -14,7 +14,7 @@ public:
 	Platform(Level& level);
 	Platform(int x, int y, int width, int height, Level& level);
 	
-	void update() override;
+	void update(float timeElapsed) override;
 	void render() override;
 
 private:

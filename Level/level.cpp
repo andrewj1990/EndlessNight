@@ -27,7 +27,9 @@ Level::Level(Window& window)
 
 
 	// TEXTURES //
-	//TextureManager::add(new Texture("Textures/Top.png"));
+	TextureManager::add(new Texture("Textures/Bullet.png"));
+	TextureManager::add(new Texture("Textures/Top.png"));
+	TextureManager::add(new Texture("Textures/PlayerSpritesheet10.png"));
 	//TextureManager::add(new Texture("Textures/Right.png"));
 	//TextureManager::add(new Texture("Textures/Bottom.png"));
 	//TextureManager::add(new Texture("Textures/Left.png"));
@@ -83,7 +85,7 @@ Level::Level(Window& window)
 	addEnemy(50, 50, 50);
 }
 
-void Level::update(float elapsedTime)
+void Level::update(float timeElapsed)
 {
 	double x;
 	double y;
@@ -102,7 +104,7 @@ void Level::update(float elapsedTime)
 		quad->insert(enemy->getSprite());
 	}
 
-	m_Player->update();
+	m_Player->update(timeElapsed);
 
 	// check if any particles need to be deleted
 	for (auto i = m_Particles.begin(); i != m_Particles.end(); )
@@ -115,7 +117,7 @@ void Level::update(float elapsedTime)
 		}
 		else
 		{
-			(*i)->update();
+			(*i)->update(timeElapsed);
 			++i;
 		}
 	}
@@ -130,7 +132,7 @@ void Level::update(float elapsedTime)
 		}
 		else
 		{
-			(*i)->update();
+			(*i)->update(timeElapsed);
 			++i;
 		}
 	}
@@ -144,7 +146,7 @@ void Level::update(float elapsedTime)
 		}
 		else
 		{
-			(*i)->update();
+			(*i)->update(timeElapsed);
 			++i;
 		}
 	}

@@ -11,7 +11,7 @@ public:
 	Entity(int x, int y, Level& level);
 	virtual ~Entity() { delete m_Sprite; }
 
-	virtual void update();
+	virtual void update(float timeElapsed);
 	virtual void render();
 
 	virtual bool collision();

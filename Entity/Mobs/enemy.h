@@ -10,7 +10,7 @@ class Enemy : public Entity
 public:
 	Enemy(const int& x, const int& y, const int& size, const Player& player, Level& level);
 
-	void update() override;
+	void update(float timeElapsed) override;
 	void render() override;
 
 	const int& getX() { return m_X; }
@@ -35,6 +35,9 @@ private:
 	float prevX;
 	float prevY;
 	int count;
+
+	float m_Angle;
+	float m_PlayerAngle;
 
 	float m_Size;
 	float m_Health;

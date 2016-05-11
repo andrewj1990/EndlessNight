@@ -18,28 +18,42 @@ Enemy::Enemy(const int& x, const int& y, const int& size, const Player& player, 
 	float mag = std::sqrtf(m_Pdx * m_Pdx + m_Pdy * m_Pdy);
 	m_Pdx /= mag;
 	m_Pdy /= mag;
+
+	m_Angle = 180 - (std::rand() % 360);
 }
 
-void Enemy::update()
+void Enemy::update(float timeElapsed)
 {
+	float playerX = m_Player.getCenterX();
+	float playerY = m_Player.getCenterY();
+	m_PlayerAngle = std::atan2f(m_Player.getCenterY() - m_Y, m_Player.getCenterX() - m_X) * 180 / 3.14;
+	int angleDiff = m_PlayerAngle - m_Angle;
+
+	m_Angle += angleDiff * timeElapsed;
+
+	std::cout << "player angle : " << m_PlayerAngle << ", current angle : " << m_Angle << "\n";
+
+	m_Dx = std::cosf(m_Angle * 3.14 / 180);
+	m_Dy = std::sinf(m_Angle * 3.14 / 180);
+
 	m_Sprite->addDirection(m_Dx, m_Dy);
 
 
-	m_Pdx = m_Player.getCenterX() - m_X;
-	m_Pdy = m_Player.getCenterY() - m_Y;
+	//m_Pdx = m_Player.getCenterX() - m_X;
+	//m_Pdy = m_Player.getCenterY() - m_Y;
 
-	prevX = m_Pdx;
-	prevY = m_Pdy;
+	//prevX = m_Pdx;
+	//prevY = m_Pdy;
 	
-	float mag = std::sqrtf(m_Pdx * m_Pdx + m_Pdy * m_Pdy);
-	m_Pdx /= mag;
-	m_Pdy /= mag;
-	if (count < 10)
-	{
-		m_Dx += m_Pdx;
-		m_Dy += m_Pdy;
-		count++;
-	}
+	//float mag = std::sqrtf(m_Pdx * m_Pdx + m_Pdy * m_Pdy);
+	//m_Pdx /= mag;
+	//m_Pdy /= mag;
+	//if (count < 10)
+	//{
+	//	m_Dx += m_Pdx;
+	//	m_Dy += m_Pdy;
+	//	count++;
+	//}
 
 	m_X += m_Dx;
 	m_Y += m_Dy;

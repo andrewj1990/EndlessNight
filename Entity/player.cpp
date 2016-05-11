@@ -28,11 +28,11 @@ Player::Player(const int& x, const int& y, Level& level)
 	//m_Sprite = new Sprite(glm::vec3(m_X, m_Y, 0), glm::vec2(10, 10), glm::vec4(0.4f, 0.3f, 0.7f, 1));
 	m_Sprite = new Sprite(glm::vec3(m_X, m_Y, 0), glm::vec2(32, 32), glm::vec4(1, 1, 1, 1));
 	//m_Sprite->setTexture(TextureManager::get("PlayerSpriteIdle"));
-	m_Sprite->setTexture(TextureManager::get("PlayerSpriteSheet", 0, 0));
+	m_Sprite->setTexture(TextureManager::get("Textures/PlayerSpritesheet10.png", 0, 0));
 	m_Level.getLayer().add(m_Sprite);
 }
 
-void Player::update()
+void Player::update(float timeElapsed)
 {
 	double dx = 0;
 	//double dy = -m_PlayerSpeed;
@@ -49,10 +49,10 @@ void Player::update()
 	}
 	if (glfwGetKey(m_Level.getWindow(), GLFW_KEY_A)) {
 		dx -= m_PlayerSpeed;
-		m_Sprite->setTexture(TextureManager::get("PlayerSpriteSheet", 0, 0));
+		//m_Sprite->setTexture(TextureManager::get("PlayerSpriteSheet", 0, 0));
 	}
 	if (glfwGetKey(m_Level.getWindow(), GLFW_KEY_D)) {
-		m_Sprite->setTexture(TextureManager::get("PlayerSpriteSheet", m_Anim % 8, 1));
+		//m_Sprite->setTexture(TextureManager::get("PlayerSpriteSheet", m_Anim % 8, 1));
 		dx += m_PlayerSpeed;
 	}
 

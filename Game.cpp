@@ -89,7 +89,7 @@ int main(int argc, char** argv)
 		//while (time.elapsed() - updateTimer > tick)
 		while (accumulator >= dt)
 		{
-			level.update(t);
+			level.update(dt);
 			++updates;
 			updateTimer += tick;
 

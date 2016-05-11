@@ -16,7 +16,7 @@ class Player : public Entity
 public:
 	Player(const int& x, const int& y, Level& level);
 
-	void update() override;
+	void update(float timeElapsed) override;
 	void render() override;
 
 private:

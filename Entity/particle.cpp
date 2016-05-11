@@ -19,7 +19,7 @@ Particle::Particle(int x, int y, Level& level, glm::vec4 colour, float size)
 	addToLevel(m_Sprite);
 }
 
-void Particle::update()
+void Particle::update(float timeElapsed)
 {
 	m_Sprite->fade();
 

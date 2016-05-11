@@ -5,7 +5,7 @@ Entity::Entity(int x, int y, Level& level)
 {
 }
 
-void Entity::update()
+void Entity::update(float timeElapsed)
 {
 
 }
