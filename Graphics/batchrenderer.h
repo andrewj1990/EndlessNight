@@ -42,6 +42,9 @@ private:
 
 	std::vector<GLuint> m_TextureSlots;
 
+	std::vector<glm::mat4> m_TransformationStack;
+	//std::unique_ptr<glm::mat4> m_TransformationBack;
+
 public:
 	BatchRenderer();
 	~BatchRenderer();
@@ -51,8 +54,34 @@ public:
 	void end();
 	void flush();
 
+	void push(const glm::mat4& matrix, bool override = false)
+	{
+		if (override)
+		{
+			m_TransformationStack.push_back(matrix);
+		}
+		else
+		{
+			m_TransformationStack.push_back(m_TransformationStack.back() * matrix);
+		}
+
+		//m_TransformationBack = std::make_unique<glm::mat4>(&m_TransformationStack.back());
+	}
+
+	void pop()
+	{
+		if (m_TransformationStack.size() > 1)
+		{
+			m_TransformationStack.pop_back();
+		}
+
+		//m_TransformationBack = std::make_unique<glm::mat4>(&m_TransformationStack.back());
+	}
+
 private:
 	void init();
+
+	glm::vec3 multiply(const glm::mat4& matrix, const glm::vec3 vector);
 
 };
 

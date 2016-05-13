@@ -18,10 +18,10 @@
 #include "Graphics\texture.h"
 
 #include "Graphics\light.h"
+#include "Utils\perlinNoise.h"
 
 int main(int argc, char** argv)
 {
-
 	Window window(1280, 720, "Don't be square!");
 	Level level(window);
 

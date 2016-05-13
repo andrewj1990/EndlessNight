@@ -10,6 +10,10 @@ Projectile::Projectile(int x, int y, const int& damage, Level& level, IncreaseDa
 	m_Sprite = new Sprite(glm::vec3(m_X, m_Y, 0), glm::vec2(32, 32), glm::vec4(1, 1, 1, 1));
 	//m_Sprite->setTexture(TextureManager::get("PlayerSpriteIdle"));
 	m_Sprite->setTexture(TextureManager::get("Textures/Bullet.png", 0, 0));
+	shadow = std::unique_ptr<Sprite>(new Sprite(glm::vec3(m_X, m_Y, 0), glm::vec2(64, 64), glm::vec4(1, 1, 1, 1)));
+	shadow->setTexture(TextureManager::get("Textures/BulletGlow.png", 0, 0));
+	//addToLevel(shadow.get());
+	//m_Sprite = new Sprite(glm::vec3(m_X, m_Y, 0), glm::vec2(32, 32), glm::vec4(1, 1, 1, 1));
 	addToLevel(m_Sprite);
 }
 
@@ -47,6 +51,7 @@ void Projectile::update(float timeElapsed)
 	if (!collision())
 	{
 		m_Sprite->addDirection(m_Dx * timeElapsed, m_Dy * timeElapsed);
+		shadow->addDirection(m_Dx * timeElapsed, m_Dy * timeElapsed);
 		m_X += m_Dx * timeElapsed;
 		m_Y += m_Dy * timeElapsed;
 		//m_Sprite->setPosition(m_X, m_Y);

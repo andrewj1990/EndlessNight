@@ -39,4 +39,6 @@ private:
 
 	IncreaseDamageFunc damageFunc;
 
+	std::unique_ptr<Sprite> shadow;
+
 };

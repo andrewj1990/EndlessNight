@@ -28,8 +28,11 @@ Level::Level(Window& window)
 
 	// TEXTURES //
 	TextureManager::add(new Texture("Textures/Bullet.png"));
+	TextureManager::add(new Texture("Textures/BulletGlow.png"));
+	TextureManager::add(new Texture("Textures/Enemy.png"));
 	TextureManager::add(new Texture("Textures/Top.png"));
 	TextureManager::add(new Texture("Textures/PlayerSpritesheet10.png"));
+
 	//TextureManager::add(new Texture("Textures/Right.png"));
 	//TextureManager::add(new Texture("Textures/Bottom.png"));
 	//TextureManager::add(new Texture("Textures/Left.png"));
@@ -52,6 +55,56 @@ Level::Level(Window& window)
 	m_Offset = glm::vec2(0.0f, 0.0f);
 	m_Ortho = glm::ortho(0.0f, 1280.0f, 0.0f, 720.0f, -1.0f, 1.0f);
 	m_Layer = new Layer(m_Shader, m_Ortho);
+
+	PerlinNoise testNoise;
+	double r = 0;
+	double g = 0;
+	double b = 0;
+	for (int x = 0; x < 200; x += 1)
+	{
+		for (int y = 0; y < 200; y += 1)
+		{
+			double val = testNoise.calcPerlinNoise(x, y) + 0.5;
+			if (val < -2)
+			{
+				r = 0;
+				g = 0;
+				b = 0.5;
+			}
+			else if (val < 0)
+			{
+				r = 0;
+				g = 0;
+				b = 1;
+			}
+			else if (val > 2)
+			{
+				r = 0.5;
+				g = 0.5;
+				b = 0;
+			}
+			else if (val > 1)
+			{
+				r = 0;
+				g = 0.75;
+				b = 0;
+			}
+			else if (val > 0)
+			{
+				r = 0;
+				g = 0.5;
+				b = 0;
+			}
+			else
+			{
+				r = 0;
+				g = 1;
+				b = 0;
+			}
+
+			m_Layer->add(new Sprite(glm::vec3(x * 100, y * 100, 0), glm::vec2(100, 100), glm::vec4(r, g, b, 1)));
+		}
+	}
 
 	//Background = new Sprite(glm::vec3(0, 0, 0), glm::vec2(1200, 1000), new Texture("Textures/Background.png"));
 	//m_Layer->add(Background);
@@ -83,6 +136,7 @@ Level::Level(Window& window)
 
 	//m_Enemies.push_back(std::unique_ptr<Enemy>(new Enemy(50, 50, *this)));
 	addEnemy(50, 50, 50);
+
 }
 
 void Level::update(float timeElapsed)

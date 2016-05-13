@@ -4,6 +4,7 @@ Enemy::Enemy(const int& x, const int& y, const int& size, const Player& player, 
 	: Entity(x, y, level), m_Size(size), m_Health(100), m_Player(player), count(0)
 {
 	m_Sprite = new Sprite(glm::vec3(x, y, 1), glm::vec2(m_Size, m_Size), glm::vec4(0.4f, 0.2f, 0, 1));
+	m_Sprite->setTexture(TextureManager::get("Textures/Enemy.png", 0, 0));
 
 	m_Level.getLayer().add(m_Sprite);
 
@@ -31,7 +32,7 @@ void Enemy::update(float timeElapsed)
 
 	m_Angle += angleDiff * timeElapsed;
 
-	std::cout << "player angle : " << m_PlayerAngle << ", current angle : " << m_Angle << "\n";
+	//std::cout << "player angle : " << m_PlayerAngle << ", current angle : " << m_Angle << "\n";
 
 	m_Dx = std::cosf(m_Angle * 3.14 / 180);
 	m_Dy = std::sinf(m_Angle * 3.14 / 180);

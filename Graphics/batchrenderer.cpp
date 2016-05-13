@@ -3,6 +3,8 @@
 BatchRenderer::BatchRenderer()
 	: m_IndexCount(0)
 {
+	m_TransformationStack.push_back(glm::mat4(1.0));
+	//m_TransformationBack = std::make_unique<glm::mat4>(&m_TransformationStack.back());
 	init();
 }
 
@@ -119,7 +121,8 @@ void BatchRenderer::submit(const Renderable& renderable)
 	color = a << 24 | b << 16 | g << 8 | r;
 
 	//m_Buffer->vertex = positions[0];
-	m_Buffer->vertex = positions.size() > 0 ? positions[0] : position;
+	//m_Buffer->vertex = positions.size() > 0 ? positions[0] : position;
+	m_Buffer->vertex = multiply(m_TransformationStack.back(), positions.size() > 0 ? positions[0] : position);
 	//m_Buffer->vertex = position;
 	m_Buffer->uv = uv[0];
 	m_Buffer->tid = ts;
@@ -127,7 +130,8 @@ void BatchRenderer::submit(const Renderable& renderable)
 	++m_Buffer;
 
 	//m_Buffer->vertex = positions[1];
-	m_Buffer->vertex = positions.size() > 0 ? positions[1] : glm::vec3(position.x, position.y + size.y, position.z);
+	//m_Buffer->vertex = positions.size() > 0 ? positions[1] : glm::vec3(position.x, position.y + size.y, position.z);
+	m_Buffer->vertex = multiply(m_TransformationStack.back(), positions.size() > 0 ? positions[1] : glm::vec3(position.x, position.y + size.y, position.z));
 	//m_Buffer->vertex = glm::vec3(position.x, position.y + size.y, position.z);
 	m_Buffer->uv = uv[1];
 	m_Buffer->tid = ts;
@@ -135,7 +139,8 @@ void BatchRenderer::submit(const Renderable& renderable)
 	++m_Buffer;
 
 	//m_Buffer->vertex = positions[2];
-	m_Buffer->vertex = positions.size() > 0 ? positions[2] : glm::vec3(position.x + size.x, position.y + size.y, position.z);
+	//m_Buffer->vertex = positions.size() > 0 ? positions[2] : glm::vec3(position.x + size.x, position.y + size.y, position.z);
+	m_Buffer->vertex = multiply(m_TransformationStack.back(), positions.size() > 0 ? positions[2] : glm::vec3(position.x + size.x, position.y + size.y, position.z));
 	//m_Buffer->vertex = glm::vec3(position.x + size.x, position.y + size.y, position.z);
 	m_Buffer->uv = uv[2];
 	m_Buffer->tid = ts;
@@ -143,7 +148,7 @@ void BatchRenderer::submit(const Renderable& renderable)
 	++m_Buffer;
 
 	//m_Buffer->vertex = positions[3];
-	m_Buffer->vertex = positions.size() > 0 ? positions[3] : glm::vec3(position.x + size.x, position.y, position.z);
+	m_Buffer->vertex = multiply(m_TransformationStack.back(), positions.size() > 0 ? positions[3] : glm::vec3(position.x + size.x, position.y, position.z));
 	//m_Buffer->vertex = glm::vec3(position.x + size.x, position.y, position.z);
 	m_Buffer->uv = uv[3];
 	m_Buffer->tid = ts;
@@ -284,3 +289,13 @@ void BatchRenderer::flush()
 	m_IndexCount = 0;
 	m_TextureSlots.clear();
 }
+
+glm::vec3 BatchRenderer::multiply(const glm::mat4 & matrix, const glm::vec3 vector)
+{
+	return glm::vec3(
+		matrix[0].x * vector.x + matrix[0].y * vector.y + matrix[0].z * vector.z + matrix[0].w,
+		matrix[1].x * vector.x + matrix[1].y * vector.y + matrix[1].z * vector.z + matrix[1].w,
+		matrix[2].x * vector.x + matrix[2].y * vector.y + matrix[2].z * vector.z + matrix[2].w
+		);
+}
+

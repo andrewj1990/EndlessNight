@@ -24,6 +24,7 @@
 #include "../Graphics/label.h"
 #include "../Graphics/font_manager.h"
 #include "../Entity/damage_counter.h"
+#include "../Utils/perlinNoise.h"
 
 class Player;
 class Enemy;
