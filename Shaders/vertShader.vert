@@ -8,6 +8,7 @@ layout(location = 3) in vec4 color;
 uniform mat4 pr_matrix;
 uniform mat4 vw_matrix = mat4(1.0);
 uniform mat4 ml_matrix = mat4(1.0);
+uniform vec2 mouse_pos;
 
 out DATA
 {
@@ -20,7 +21,8 @@ out DATA
 
 void main()
 {
-	gl_Position = pr_matrix * vw_matrix * ml_matrix * position;
+	//vec4 newPos = vec4(position.x + sin(mouse_pos.x), position.y + cos(mouse_pos.y), position.z, position.w);
+	gl_Position = pr_matrix * vw_matrix * ml_matrix * position;//newPos;
 	vs_out.uv = uv;
 	vs_out.tid = tid;
 	vs_out.position = ml_matrix * position;

@@ -4,7 +4,7 @@
 #include "../Graphics/font_manager.h"
 
 Level::Level(Window& window)
-	: m_Window(window), m_Shader("Shaders/vertShader.vert", "Shaders/fragShader.frag")
+	: m_Window(window), m_Shader("Shaders/vertShader.vert", "Shaders/fragShader.frag"), m_BGMoved(false), m_TileSize(16)
 {
 	SpriteSheet* spritesheet = new SpriteSheet("Textures/spritesheetTest.png");
 	SpriteSheet* platforms_spritesheet = new SpriteSheet("Textures/Platforms.png");
@@ -57,52 +57,54 @@ Level::Level(Window& window)
 	m_Layer = new Layer(m_Shader, m_Ortho);
 
 	PerlinNoise testNoise;
+	SimplexNoise testSimplex;
 	double r = 0;
 	double g = 0;
 	double b = 0;
-	for (int x = 0; x < 200; x += 1)
+	for (int x = 0; x < window.getWidth() / m_TileSize; x++)
 	{
-		for (int y = 0; y < 200; y += 1)
+		for (int y = 0; y < window.getHeight() / m_TileSize; y++)
 		{
-			double val = testNoise.calcPerlinNoise(x, y) + 0.5;
-			if (val < -2)
+			//float val = testSimplex.octaveNoise(3, 0.5, 1, x, y);
+			float val = m_Simplex.scaledOctaveNoise(5, 0.5, 1, 0, 1, x * 0.005f, y * 0.005f);
+			//std::cout << val << "\n";
+			//double val = testNoise.calcPerlinNoise(x, y);
+			if (val < 0.3)
 			{
 				r = 0;
 				g = 0;
-				b = 0.5;
+				b = 0.4;
 			}
-			else if (val < 0)
+			else if (val < 0.4)
 			{
 				r = 0;
 				g = 0;
-				b = 1;
+				b = 0.8;
 			}
-			else if (val > 2)
+			else if (val < 0.5)
 			{
 				r = 0.5;
 				g = 0.5;
 				b = 0;
 			}
-			else if (val > 1)
+			else if (val < 0.8)
 			{
 				r = 0;
-				g = 0.75;
-				b = 0;
-			}
-			else if (val > 0)
-			{
-				r = 0;
-				g = 0.5;
+				g = 0.4;
 				b = 0;
 			}
 			else
 			{
-				r = 0;
-				g = 1;
-				b = 0;
+				r = 0.9;
+				g = 0.9;
+				b = 0.9;
 			}
 
-			m_Layer->add(new Sprite(glm::vec3(x * 100, y * 100, 0), glm::vec2(100, 100), glm::vec4(r, g, b, 1)));
+			Sprite* sprite = new Sprite(glm::vec3(x * m_TileSize, y * m_TileSize, 0), glm::vec2(m_TileSize, m_TileSize), glm::vec4(r, g, b, 1));
+			std::string tile_pos = std::to_string(x) + "_" + std::to_string(y);
+			m_BackgroundTiles[tile_pos] = sprite;
+			m_Layer->add(sprite);
+			//m_Layer->add(new Sprite(glm::vec3(x * tile_size, y * tile_size, 0), glm::vec2(tile_size, tile_size), glm::vec4(r, g, b, 1)));
 		}
 	}
 
@@ -135,7 +137,7 @@ Level::Level(Window& window)
 	//addPlatform(new Renderable(glm::vec3(0, 0, 1), glm::vec2(window.getWidth()), glm::vec4(0,0,0,1)));
 
 	//m_Enemies.push_back(std::unique_ptr<Enemy>(new Enemy(50, 50, *this)));
-	addEnemy(50, 50, 50);
+	addEnemy(50, 50, 32);
 
 }
 
@@ -228,9 +230,16 @@ void Level::update(float timeElapsed)
 
 void Level::render()
 {
+	updateBackground();
+
 	m_Label->position.x = m_Offset.x + 15;
 	m_Label->position.y = m_Offset.y + m_Window.getHeight() - 45;
 	m_Shader.setUniform2f("light_pos", glm::vec2(m_Player->getCenterX(), m_Player->getCenterY()));
+
+	double x;
+	double y;
+	m_Window.getMousePos(x, y);
+	m_Shader.setUniform2f("mouse_pos", glm::vec2(x, y));
 	m_Layer->render();
 }
 
@@ -274,10 +283,64 @@ void Level::addDamageText(const std::string& text, const int& x, const int& y)
 
 void Level::moveCamera(const float& x, const float& y)
 {
+	m_BGMoved = true;
 	m_Offset.x += x;
 	m_Offset.y += y;
 	//std::cout << "offsetX : " << m_Offset.x << ", offsetY : " << m_Offset.y << "\n";
 
 	m_Ortho = glm::translate(m_Ortho, glm::vec3(-x, -y, 0));
 	m_Layer->setProjectionMatrix(m_Ortho);
+}
+
+void Level::updateBackground()
+{
+	if (!m_BGMoved) return;
+
+	m_BGMoved = false;
+	double r = 0;
+	double g = 0;
+	double b = 0;
+	for (int x = 0; x < m_Window.getWidth() / m_TileSize; x++)
+	{
+		for (int y = 0; y < m_Window.getHeight() / m_TileSize; y++)
+		{
+			float val = m_Simplex.scaledOctaveNoise(5, 0.5, 1, 0, 1, (x + m_Offset.x) * 0.005f, (y + m_Offset.y) * 0.005f);
+			if (val < 0.3)
+			{
+				r = 0;
+				g = 0;
+				b = 0.4;
+			}
+			else if (val < 0.4)
+			{
+				r = 0;
+				g = 0;
+				b = 0.8;
+			}
+			else if (val < 0.5)
+			{
+				r = 0.5;
+				g = 0.5;
+				b = 0;
+			}
+			else if (val < 0.8)
+			{
+				r = 0;
+				g = 0.4;
+				b = 0;
+			}
+			else
+			{
+				r = 0.9;
+				g = 0.9;
+				b = 0.9;
+			}
+
+			std::string tile_pos = std::to_string(x) + "_" + std::to_string(y);
+			m_BackgroundTiles[tile_pos]->setPosition(x * m_TileSize + m_Offset.x, y * m_TileSize + m_Offset.y);
+			m_BackgroundTiles[tile_pos]->setColor(r, g, b);
+			//m_Layer->add(new Sprite(glm::vec3(x * tile_size, y * tile_size, 0), glm::vec2(tile_size, tile_size), glm::vec4(r, g, b, 1)));
+		}
+	}
+
 }

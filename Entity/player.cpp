@@ -8,7 +8,7 @@ Player::Player(const int& x, const int& y, Level& level)
 	m_ProjectileDelay = 0;
 	m_Width = 10;
 	m_Height = 10;
-	m_PlayerSpeed = 3.0;
+	m_PlayerSpeed = 1.0;
 
 	//m_PlayerSpriteSheet = std::unique_ptr<SpriteSheet>(new SpriteSheet("Textures/PlayerSpritesheet4.png"));
 	TextureManager::add(new Texture(m_PlayerSpriteSheet, "PlayerSpriteSheet", 0, 0, 32, 32));
@@ -38,11 +38,20 @@ void Player::update(float timeElapsed)
 	//double dy = -m_PlayerSpeed;
 	double dy = 0;
 
-	//if (glfwGetKey(m_Level.getWindow(), GLFW_KEY_W)) {
-	if (glfwGetKey(m_Level.getWindow(), GLFW_KEY_SPACE)) {
-		dy += m_PlayerSpeed + 10;
-		m_Level.addParticle(new Particle(getCenterX(), getCenterY(), m_Level));
-		m_Level.addParticle(new Particle(getCenterX(), getCenterY(), m_Level));
+	if (glfwGetKey(m_Level.getWindow(), GLFW_KEY_LEFT_SHIFT))
+	{
+		m_PlayerSpeed = 2.0;
+	}
+	else
+	{
+		m_PlayerSpeed = 1.0;
+	}
+
+	if (glfwGetKey(m_Level.getWindow(), GLFW_KEY_W)) {
+	//if (glfwGetKey(m_Level.getWindow(), GLFW_KEY_SPACE)) {
+		dy += m_PlayerSpeed;
+		//m_Level.addParticle(new Particle(getCenterX(), getCenterY(), m_Level));
+		//m_Level.addParticle(new Particle(getCenterX(), getCenterY(), m_Level));
 	}
 	if (glfwGetKey(m_Level.getWindow(), GLFW_KEY_S)) {
 		dy -= m_PlayerSpeed;

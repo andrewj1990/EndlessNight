@@ -25,6 +25,7 @@
 #include "../Graphics/font_manager.h"
 #include "../Entity/damage_counter.h"
 #include "../Utils/perlinNoise.h"
+#include "../Utils/simplexNoise.h"
 
 class Player;
 class Enemy;
@@ -57,6 +58,8 @@ public:
 
 	//const float playerX() { return m_Player->getCenterX(); }
 	//const float playerY() { return m_Player->getCenterY(); }
+private:
+	void updateBackground();
 
 private:
 	Layer* m_Layer;
@@ -79,5 +82,10 @@ private:
 
 	std::vector<std::unique_ptr<Enemy>> m_Enemies;
 	std::vector<std::unique_ptr<DamageCounter>> m_DamageTexts;
+
+	int m_TileSize;
+	std::unordered_map<std::string, Sprite*> m_BackgroundTiles;
+	SimplexNoise m_Simplex;
+	bool m_BGMoved;
 
 };

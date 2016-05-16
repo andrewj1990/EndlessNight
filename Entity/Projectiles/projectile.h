@@ -23,7 +23,7 @@ private:
 	float m_Dy;
 
 	float m_ProjectileSpeed;
-	float m_ProjectileDamage;
+	int m_ProjectileDamage;
 
 	int m_Life;
 

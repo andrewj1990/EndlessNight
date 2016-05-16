@@ -49,7 +49,7 @@ public:
 		renderer.submit(*this);
 	}
 
-	void setColor(int r, int g, int b)
+	void setColor(float r, float g, float b)
 	{
 		m_Colour.r = r;
 		m_Colour.g = g;
