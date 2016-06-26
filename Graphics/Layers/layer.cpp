@@ -74,3 +74,9 @@ void Layer::setProjectionMatrix(const glm::mat4 projectionMatrix)
 	m_Shader.unbind();
 }
 
+void Layer::setModelViewMatrix(const glm::mat4& modelMatrix)
+{
+	m_Shader.bind();
+	m_Shader.setUniformMat4("vw_matrix", modelMatrix);
+	m_Shader.unbind();
+}

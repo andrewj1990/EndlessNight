@@ -290,6 +290,7 @@ void Level::moveCamera(const float& x, const float& y)
 
 	m_Ortho = glm::translate(m_Ortho, glm::vec3(-x, -y, 0));
 	m_Layer->setProjectionMatrix(m_Ortho);
+	//m_Layer->setModelViewMatrix(m_Ortho);
 }
 
 void Level::updateBackground()

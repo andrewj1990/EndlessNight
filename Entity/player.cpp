@@ -106,9 +106,8 @@ void Player::move(const double& dx, const double& dy)
 {
 	if (dx == 0 && dy == 0) return;
 
-	m_Sprite->addDirection(dx, dy);
-
 	m_Level.moveCamera(dx, dy);
+	m_Sprite->addDirection(dx, dy);
 
 	m_X += dx;
 	m_Y += dy;

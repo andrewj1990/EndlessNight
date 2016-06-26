@@ -137,7 +137,12 @@ bool Projectile::collision()
 		const int& w = enemy->getSprite()->getSize().x;
 		const int& h = enemy->getSprite()->getSize().y;
 
-		if (m_X <= px + w && m_X >= px && m_Y >= py && m_Y <= py + h)
+		//if (m_X <= px + w && m_X >= px && m_Y >= py && m_Y <= py + h)
+		//{
+		if (m_X < px + w && m_X > px && m_Y > py && m_Y < py + h ||
+			m_X + m_Width < px + w && m_X + m_Width > px && m_Y > py && m_Y < py + h ||
+			m_X < px + w && m_X > px && m_Y + m_Height > py && m_Y + m_Height < py + h ||
+			m_X + m_Width < px + w && m_X + m_Width > px && m_Y + m_Height > py && m_Y + m_Height < py + h)
 		{
 			glm::vec4 platformColour(0, 1, 1, 1);
 			for (int i = 0; i < 5; ++i)

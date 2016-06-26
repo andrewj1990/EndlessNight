@@ -34,11 +34,11 @@ void Enemy::update(float timeElapsed)
 
 	//std::cout << "player angle : " << m_PlayerAngle << ", current angle : " << m_Angle << "\n";
 
-	m_Dx = std::cosf(m_Angle * 3.14 / 180);
-	m_Dy = std::sinf(m_Angle * 3.14 / 180);
+	m_Dx = std::cosf(m_Angle * 3.14 / 180) / 2;
+	m_Dy = std::sinf(m_Angle * 3.14 / 180) / 2;
 
 	m_Sprite->addDirection(m_Dx, m_Dy);
-
+	//m_Sprite->setPosition(m_Level.getOffset().x + m_Dx, m_Level.getOffset().y + m_Dy);
 
 	//m_Pdx = m_Player.getCenterX() - m_X;
 	//m_Pdy = m_Player.getCenterY() - m_Y;
@@ -58,16 +58,6 @@ void Enemy::update(float timeElapsed)
 
 	m_X += m_Dx;
 	m_Y += m_Dy;
-
-	if (m_X < 0 || m_X > m_Level.getWindowClass().getWidth())
-	{
-		m_Dx *= -1;
-	}
-	
-	if (m_Y < 0 || m_Y > m_Level.getWindowClass().getHeight())
-	{
-		m_Dy *= -1;
-	}
 
 }
 

@@ -22,6 +22,7 @@ public:
 	void render(std::vector<Renderable*> renderables);
 
 	void setProjectionMatrix(const glm::mat4 projectionMatrix);
+	void setModelViewMatrix(const glm::mat4& modelMatrix);
 	glm::mat4 getProjectionMatrix() { return m_ProjectionMatrix; }
 	const std::vector<Renderable*>& getRenderables() const { return m_Renderables; }
 

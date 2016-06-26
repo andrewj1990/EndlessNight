@@ -1,5 +1,6 @@
 #pragma once
 
 #include <FreeImage.h>
+#include <GL\glew.h>
 
-BYTE* loadImage(const char* filename, unsigned int& width, unsigned int& height);
+GLubyte* loadImage(const char* filename, unsigned int& width, unsigned int& height);

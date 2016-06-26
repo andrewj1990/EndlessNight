@@ -1,6 +1,9 @@
 #pragma once
 
 #include <cmath>
+#include <unordered_map>
+#include <string>
+#include <iostream>
 
 class SimplexNoise
 {
@@ -19,6 +22,8 @@ public:
 	float dot(const int* g, const float& x, const float& y, const float& z, const float& w);
 
 private:
+	std::unordered_map<std::string, float> m_CachedNoise;
+
 	const int grad3[12][3] = {
 		{ 1,1,0 },{ -1,1,0 },{ 1,-1,0 },{ -1,-1,0 },
 		{ 1,0,1 },{ -1,0,1 },{ 1,0,-1 },{ -1,0,-1 },
